@@ -1,8 +1,8 @@
 package com.vncodelab.model;
 
-import com.vncodelab.entity.Lab;
+import com.vncodelab.entity.LabF;
 
-public class AjaxResponseBody extends Lab {
+public class AjaxResponseBody extends LabF {
     private String msg;
 
     public String getMsg() {

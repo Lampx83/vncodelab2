@@ -81,8 +81,27 @@ function afterLogin(user) {
 
     $('#profileName').text(user.displayName)
     $('#profileEmail').text(user.email)
-    if (page === "lab")
+
+
+    if (window.location.pathname.startsWith("/lab"))
         enterLab(user);
+    else if (window.location.pathname.startsWith("/mylabs"))
+        loadLabs(user);
+}
+
+function loadLabs(user) {
+    var db = firebase.firestore();
+    db.collection("labs").where("userID", "==", currentUser.uid)
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                var lab = "<a href='lab/" + doc.data().docID + "?room=1' class=\"codelab-card category-web\"><h2>" + doc.data().name + "</h2><h3>" + doc.data().description + "</h3><div class=\"card-footer\"><div class=\"category-icon web-icon\"></div><paper-button class=\"web-bg\">Enter</paper-button></div></a>";
+                $("#cards").prepend(lab);
+            });
+        })
+        .catch((error) => {
+            console.log("Error getting documents: ", error);
+        });
 
 }
 

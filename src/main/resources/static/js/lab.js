@@ -1,7 +1,6 @@
 var refUsers;
 var refChat;
 
-
 $(function () {
     page = "lab";
     $('.toast').toast()

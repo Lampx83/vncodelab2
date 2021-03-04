@@ -41,6 +41,19 @@ public class HomeServiceImpl implements IHomeService {
     }
 
     @Override
+    public Home getInforFirebase(Map<String, Object> objectFirebase) {
+        String footers = (String) objectFirebase.get("footers");
+        String title = (String) objectFirebase.get("title");
+        String logoUrl = (String) objectFirebase.get("logoUrl");
+        String description = (String) objectFirebase.get("description");
+        Home newInfor = new Home(logoUrl, title, footers, description);
+
+
+
+        return newInfor;
+    }
+
+    @Override
     public void saveObjectFirebase(Home home) throws IOException {
         home.setLogoUrl("/images/" + home.getImage().getOriginalFilename());
 
@@ -55,15 +68,6 @@ public class HomeServiceImpl implements IHomeService {
         dbFirestore.collection(FirebaseConstants.COLLECTION_NAME).document(FirebaseConstants.DOCUMENT_NAME).set(home);
     }
 
-    @Override
-    public Home getInforFirebase(Map<String, Object> objectFirebase) {
-        String footers = (String) objectFirebase.get("footers");
-        String title = (String) objectFirebase.get("title");
-        String logoUrl = (String) objectFirebase.get("logoUrl");
-        String description = (String) objectFirebase.get("description");
-        Home newInfor = new Home(logoUrl, title, footers, description);
 
-        return newInfor;
-    }
 
 }

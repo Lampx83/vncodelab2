@@ -114,66 +114,37 @@
     </div>
 
     <div id="mainPanel" class="style-scope paper-header-panel">
-        <div id="mainContainer" class="flex style-scope paper-header-panel">
-            <header id="banner">
-                <div class="site-width">
-                    <h2 class="banner-title">Welcome to VnCodelab</h2>
-                    <div class="banner-description">
-                        <p class="banner-info">
-                             Nơi cung cấp các bài hướng dẫn. Các bài học được viết theo các dạng các bài thực hành (Labs) theo bước, giúp bạn dễ dàng làm theo và hiểu hơn về ngôn ngữ hay công nghệ
-                            <br><a href="https://github.com/googlecodelabs/tools">Tìm hiểu thêm</a>
-                    </div>
-                </div>
-            </header>
+        <div id="mainContainer" class="flex style-scope paper-header-panel mt-5">
+
             <main>
-                <div id="filters" class="site-width layout horizontal center justified">
-                    <div id="sortby">
-                        <paper-tabs selected="0" noink="" role="tablist" tabindex="0" class="x-scope paper-tabs-0">
-                            <a th:each="cate : ${cateList}" th:href="@{/cate/{path}(path=*{cate.getCateID()})}"><span
-                                    th:text="*{cate.getName()}"></span></a>
-                        </paper-tabs>
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> More
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a th:each="cate : ${cateListMore}" class="dropdown-item" th:href="@{/cate/{path}(path=*{cate.getCateID()})}"><span
-                                    th:text="*{cate.getName()}"></span></a>
-                        </div>
-                    </div>
-                </div>
+<!--                <div id="filters" class="site-width layout horizontal center justified ">-->
+<!--                    <div id="sortby">-->
+<!--                        <paper-tabs selected="0" noink="" role="tablist" tabindex="0" class="x-scope paper-tabs-0">-->
+<!--                            <a th:each="cate : ${cateList}" th:href="@{/cate/{path}(path=*{cate.getCateID()})}"><span-->
+<!--                                    th:text="*{cate.getName()}"></span></a>-->
+<!--                        </paper-tabs>-->
+<!--                    </div>-->
+<!--                    <div class="dropdown">-->
+<!--                        <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton"-->
+<!--                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> More-->
+<!--                        </button>-->
+<!--                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">-->
+<!--                            <a th:each="cate : ${cateListMore}" class="dropdown-item" th:href="@{/cate/{path}(path=*{cate.getCateID()})}"><span-->
+<!--                                    th:text="*{cate.getName()}"></span></a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <card-sorter id="cards" class="site-width">
 
-                    <a th:each="lab : ${labList}" th:href="@{/lab/{path}(path=*{lab.getLabID()})}"
-                       class="codelab-card category-web">
-                        <h2 th:text="*{lab.getName()}"></h2>
-                        <h3 th:text="*{lab.getDescription()}"></h3>
-                        <div class="card-footer">
-                            <div class="category-icon web-icon"></div>
-                            <paper-button class="web-bg">Start</paper-button>
-                        </div>
-                    </a>
+
                     <a href="#" class="codelab-card codelab-card-add user d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <img width="65px" height="65px" src="../static/images/add.svg"
                              th:src="@{/images/add.svg}"/>
                     </a>
                 </card-sorter>
             </main>
-            <footer id="footer">
-                <div class="footer-wrapper site-width">
-                    <span th:text="${infor.footers}"></span>
-                </div>
-            </footer>
-            <div class="footerbar">
-                <div class="site-width layout horizontal center justified">
-                    <span>
-                    <a href="https://developers.google.com/site-terms/">Terms</a>
-                    &nbsp; | &nbsp;
-                    <a href="https://www.google.com/intl/en/privacy/">Privacy</a>
-                    </span>
-                </div>
-            </div>
+
+
         </div>
     </div>
 </paper-header-panel>
@@ -195,14 +166,6 @@
                         <input type="text" class="form-control" id="docID" required>
                     </div>
 
-                    <div class="form-group">
-                        <label for="cateID">Category:</label>
-                        <select class="form-control" id="cateID">
-                            <option th:each="cate : ${cateList}" th:value="${cate.getCateID()}"
-                                    th:text="${cate.getName()}"></option>
-                        </select>
-
-                    </div>
                     <div class="form-group">
                         <label for="description" class="col-form-label">Description:</label>
                         <textarea class="form-control" id="description" required></textarea>
@@ -309,12 +272,13 @@
 <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
 
 <script type="text/javascript" src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
 <script type="text/javascript" src="../static/js/avatar.js" th:src="@{/js/avatar.js}"></script>
 <script type="text/javascript" src="../static/js/bootstrap.bundle.js" th:src="@{/js/bootstrap.bundle.js}"></script>
 <script type="text/javascript" src="../static/js/my.js" th:src="@{/js/my.js}"></script>
-<script type="text/javascript" src="../static/js/index.js" th:src="@{/js/index.js}"></script>
+<script type="text/javascript" src="../static/js/mylabs.js" th:src="@{/js/index.js}"></script>
 
 </body>
 </html>
