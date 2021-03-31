@@ -72,8 +72,8 @@ public class MainController {
     public ResponseEntity<?> save(@RequestBody LabF newLab) throws IOException, InterruptedException {
 
 
-        Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/work/bin/claat export " + newLab.getDocID());
-        //Process p = Runtime.getRuntime().exec("~/go/bin/claat export " + newLab.getDocID());
+       // Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
+        Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());
         BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         String line = input.readLine();
         p.waitFor();
