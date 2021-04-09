@@ -1,12 +1,10 @@
 //
 package com.vncodelab.service;
 
-import com.vncodelab.entity.Home;
-import com.vncodelab.entity.LabF;
+import com.vncodelab.entity.Lab;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -21,10 +19,10 @@ import java.util.concurrent.ExecutionException;
  */
 public interface ILabsService {
 
-    List<LabF> getObjectFirebase() throws InterruptedException, ExecutionException;
+    List<Lab> getObjectFirebase() throws InterruptedException, ExecutionException;
 
-    void saveObjectFirebase(LabF lab) throws IOException;
+    void saveObjectFirebase(Lab lab) throws IOException;
 
-    LabF getLab(String docID);
+    Lab getLab(String docID);
 
 }

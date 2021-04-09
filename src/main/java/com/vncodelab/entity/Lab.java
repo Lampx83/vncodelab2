@@ -3,7 +3,7 @@ package com.vncodelab.entity;
 import java.io.Serializable;
 
 
-public class LabF{
+public class Lab {
 
     private String labID;
     private String docID;
@@ -21,7 +21,7 @@ public class LabF{
         this.userID = userID;
     }
 
-    public LabF() {
+    public Lab() {
         // Must have a public no-argument constructor
     }
 

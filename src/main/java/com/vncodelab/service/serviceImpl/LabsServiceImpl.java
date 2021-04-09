@@ -4,7 +4,7 @@ package com.vncodelab.service.serviceImpl;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
-import com.vncodelab.entity.LabF;
+import com.vncodelab.entity.Lab;
 import com.vncodelab.service.ILabsService;
 import org.springframework.stereotype.Service;
 
@@ -27,22 +27,22 @@ import java.util.concurrent.ExecutionException;
 public class LabsServiceImpl implements ILabsService {
 
     @Override
-    public List<LabF> getObjectFirebase() throws InterruptedException, ExecutionException {
+    public List<Lab> getObjectFirebase() throws InterruptedException, ExecutionException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
-        List<LabF> list = new ArrayList<>();
+        List<Lab> list = new ArrayList<>();
         ApiFuture<QuerySnapshot> future = dbFirestore.collection("labs").get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
         for (QueryDocumentSnapshot document : documents) {
-            LabF labF = document.toObject(LabF.class);
-            labF.setLabID(document.getId());
-            list.add(labF);
+            Lab lab = document.toObject(Lab.class);
+            lab.setLabID(document.getId());
+            list.add(lab);
         }
         return list;
     }
 
 
     @Override
-    public void saveObjectFirebase(LabF lab) throws IOException {
+    public void saveObjectFirebase(Lab lab) throws IOException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         dbFirestore.collection("labs").document(lab.getDocID()).set(lab);
 
@@ -50,19 +50,19 @@ public class LabsServiceImpl implements ILabsService {
     }
 
     @Override
-    public LabF getLab(String docID) {
+    public Lab getLab(String docID) {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         DocumentReference docRef = dbFirestore.document("labs/" + docID);
-        LabF labF = null;
+        Lab lab = null;
         ApiFuture<DocumentSnapshot> future = docRef.get();
         try {
             DocumentSnapshot document = future.get();
-            labF = document.toObject(LabF.class);
+            lab = document.toObject(Lab.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return labF;
+        return lab;
     }
 
 }

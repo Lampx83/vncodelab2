@@ -1,12 +1,10 @@
 package com.vncodelab.controller;
 
 import com.google.gson.Gson;
-import com.vncodelab.entity.Home;
-import com.vncodelab.entity.LabF;
+import com.vncodelab.entity.Lab;
 import com.vncodelab.json.LabInfo;
 import com.vncodelab.model.AjaxResponseBody;
 
-import com.vncodelab.service.serviceImpl.HomeServiceImpl;
 import com.vncodelab.service.serviceImpl.LabsServiceImpl;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,14 +20,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.*;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Controller
 public class MainController {
-
-    @Autowired
-    private HomeServiceImpl homeServiceImpl;
 
     @Autowired
     private LabsServiceImpl labsServiceImpl;
@@ -69,7 +63,7 @@ public class MainController {
 //    }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody LabF newLab) throws IOException, InterruptedException {
+    public ResponseEntity<?> save(@RequestBody Lab newLab) throws IOException, InterruptedException {
 
 
         Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
@@ -134,7 +128,7 @@ public class MainController {
 
     @GetMapping("/mylabs")
     public String labs(Model model) throws InterruptedException, ExecutionException {// Hien thi toan bo labs cua nguoi do tu Firebase
-        List<LabF> list = labsServiceImpl.getObjectFirebase();
+        List<Lab> list = labsServiceImpl.getObjectFirebase();
         model.addAttribute("labList", list);
         return "mylabs";
     }
