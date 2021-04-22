@@ -7,6 +7,7 @@ function addLab() {
     lab["description"] = $("#description").val();
     lab["cateID"] = $("#cateID").val();
     lab["userID"] = currentUser.uid;
+    lab["cateID"] = $("#cateID").val();
     $(this).prop("disabled", true);
     $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...');
     $.ajax({

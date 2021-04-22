@@ -27,7 +27,6 @@
 .profile{
     display: flex;
     flex-wrap: wrap;
-
 }
 .profile-info{
     display: flex;
@@ -36,8 +35,6 @@
     justify-content: center;
     flex: 1;
 }
-
-
 
 ::-webkit-scrollbar {
     width: 5px;

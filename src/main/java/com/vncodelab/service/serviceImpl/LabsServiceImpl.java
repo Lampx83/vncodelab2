@@ -8,33 +8,32 @@ import com.vncodelab.entity.Lab;
 import com.vncodelab.service.ILabsService;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * This class is .
- *
- * @Description: .
- * @author: NVAnh
- * @create_date: Feb 19, 2021
- * @version: 1.0
- * @modifer: NVAnh
- * @modifer_date: Feb 19, 2021
- */
 @Service
 public class LabsServiceImpl implements ILabsService {
 
     @Override
-    public List<Lab> getObjectFirebase() throws InterruptedException, ExecutionException {
+    public List<Lab> getFeatureLabsByCate(String cateID) {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         List<Lab> list = new ArrayList<>();
-        ApiFuture<QuerySnapshot> future = dbFirestore.collection("labs").get();
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        ApiFuture<QuerySnapshot> future;
+        if (cateID == null)
+            future = dbFirestore.collection("labs").whereEqualTo("feature", true).get();
+        else
+            future = dbFirestore.collection("labs").whereEqualTo("feature", true).whereEqualTo("cateID", cateID).get();
+        List<QueryDocumentSnapshot> documents = null;
+        try {
+            documents = future.get().getDocuments();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         for (QueryDocumentSnapshot document : documents) {
             Lab lab = document.toObject(Lab.class);
-            lab.setLabID(document.getId());
             list.add(lab);
         }
         return list;
@@ -42,7 +41,7 @@ public class LabsServiceImpl implements ILabsService {
 
 
     @Override
-    public void saveObjectFirebase(Lab lab) throws IOException {
+    public void saveObjectFirebase(Lab lab) {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         dbFirestore.collection("labs").document(lab.getDocID()).set(lab);
 

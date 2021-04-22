@@ -1,17 +1,23 @@
 package com.vncodelab.entity;
 
-import java.io.Serializable;
-
-
 public class Lab {
 
-    private String labID;
     private String docID;
     private String name;
     private String description;
     private String html;
-
     private String userID;
+    private String cateID;
+
+    public Boolean getFeature() {
+        return feature;
+    }
+
+    public void setFeature(Boolean feature) {
+        this.feature = feature;
+    }
+
+    private Boolean feature;
 
     public String getUserID() {
         return userID;
@@ -23,14 +29,6 @@ public class Lab {
 
     public Lab() {
         // Must have a public no-argument constructor
-    }
-
-    public String getLabID() {
-        return labID;
-    }
-
-    public void setLabID(String labID) {
-        this.labID = labID;
     }
 
     public String getDocID() {
@@ -63,5 +61,13 @@ public class Lab {
 
     public void setHtml(String html) {
         this.html = html;
+    }
+
+    public String getCateID() {
+        return cateID;
+    }
+
+    public void setCateID(String cateID) {
+        this.cateID = cateID;
     }
 }

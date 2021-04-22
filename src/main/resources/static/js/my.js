@@ -87,6 +87,7 @@ function afterLogin(user) {
         enterLab(user);
     else if (window.location.pathname.startsWith("/mylabs"))
         loadLabs(user);
+    loadLabs(user);
 }
 
 function loadLabs(user) {
@@ -97,6 +98,8 @@ function loadLabs(user) {
             querySnapshot.forEach((doc) => {
                 var lab = "<a href='lab/" + doc.data().docID + "?room=1' class=\"codelab-card category-web\"><h2>" + doc.data().name + "</h2><h3>" + doc.data().description + "</h3><div class=\"card-footer\"><div class=\"category-icon web-icon\"></div><paper-button class=\"web-bg\">Enter</paper-button></div></a>";
                 $("#cards").prepend(lab);
+                $(".codelab-card-add").removeClass("d-none")
+                $("#spiner-loading-card").addClass("d-none")
             });
         })
         .catch((error) => {

@@ -57,6 +57,7 @@
           th:href="@{/css/login-register.css}" rel="stylesheet"/>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <script src="../static/js/test.js"></script>
 </head>
 
 <body id="app" is="body-bind" class="fullbleed"
@@ -104,10 +105,21 @@
                     </div>
                 </paper-input-container>
             </div>
-            <!--Profile Button-->
-            <img class="ms-2 rounded-circle user d-none p-1 profilePicture" width="41px" height="41px" data-bs-toggle="collapse" data-bs-target="#collapse-profile">
-            <div class="ms-2">
-                <div class="userName user d-none" data-bs-toggle="collapse" data-bs-target="#collapse-profile"></div>
+
+            <div class="dropdown">
+                <img class="ms-2 rounded-circle user d-none p-1 profilePicture" width="41px" height="41px" data-toggle="dropdown" id="dropdownMenuButton1" data-offset="-90,20">
+                <div class="dropdown-menu  shadow-sm dropdown-menu-profile">
+                    <div class="profile-info">
+                        <img class="rounded-circle profilePicture profilelargePicture">
+                        <span id="profileName" class="text-primary"></span>
+                        <span id="profileEmail"></span>
+                        <!--                        <a href="#" class="btn btn-sm btn-primary m-1" id="signout">Đăng xuất</a>-->
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="/mylabs" class="list-group-item list-group-item-action">Lab của tôi</a>
+                        <a href="#" class="list-group-item list-group-item-action text-danger" id="signout">Đăng xuất</a>
+                    </div>
+                </div>
             </div>
             <button id="btnLogin" type="button" class="btn btn-primary d-none">Đăng nhập</button>
         </div>
@@ -120,7 +132,7 @@
                     <h2 class="banner-title">Welcome to VnCodelab</h2>
                     <div class="banner-description">
                         <p class="banner-info">
-                             Nơi cung cấp các bài hướng dẫn. Các bài học được viết theo các dạng các bài thực hành (Labs) theo bước, giúp bạn dễ dàng làm theo và hiểu hơn về ngôn ngữ hay công nghệ
+                            Nơi cung cấp các bài hướng dẫn. Các bài học được viết theo các dạng các bài thực hành (Labs) theo bước, giúp bạn dễ dàng làm theo và hiểu hơn về ngôn ngữ hay công nghệ
                             <br><a href="https://github.com/googlecodelabs/tools">Tìm hiểu thêm</a>
                     </div>
                 </div>
@@ -130,22 +142,23 @@
                     <div id="sortby">
                         <paper-tabs selected="0" noink="" role="tablist" tabindex="0" class="x-scope paper-tabs-0">
                             <a th:each="cate : ${cateList}" th:href="@{/cate/{path}(path=*{cate.getCateID()})}"><span
-                                    th:text="*{cate.getName()}"></span></a>
+                                    th:text="*{cate.getCateName()}"></span></a>
                         </paper-tabs>
                     </div>
+
+
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> More
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a th:each="cate : ${cateListMore}" class="dropdown-item" th:href="@{/cate/{path}(path=*{cate.getCateID()})}"><span
-                                    th:text="*{cate.getName()}"></span></a>
+                            <a th:each="cate : ${cateListMore}" class="dropdown-item" th:href="@{/cate/{path}(path=*{cate.getCateID()})}"><span th:text="*{cate.getCateName()}"></span></a>
                         </div>
                     </div>
                 </div>
                 <card-sorter id="cards" class="site-width">
 
-                    <a th:each="lab : ${labList}" th:href="@{/lab/{path}(path=*{lab.getLabID()})}"
+                    <a th:each="lab : ${labList}" th:href="@{/lab/{path}(path=*{lab.getDocID()})}"
                        class="codelab-card category-web">
                         <h2 th:text="*{lab.getName()}"></h2>
                         <h3 th:text="*{lab.getDescription()}"></h3>
@@ -154,15 +167,15 @@
                             <paper-button class="web-bg">Start</paper-button>
                         </div>
                     </a>
-                    <a href="#" class="codelab-card codelab-card-add user d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        <img width="65px" height="65px" src="../static/images/add.svg"
-                             th:src="@{/images/add.svg}"/>
-                    </a>
+                    <!--                    <a href="#" class="codelab-card codelab-card-add user d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">-->
+                    <!--                        <img width="65px" height="65px" src="../static/images/add.svg"-->
+                    <!--                             th:src="@{/images/add.svg}"/>-->
+                    <!--                    </a>-->
                 </card-sorter>
             </main>
             <footer id="footer">
                 <div class="footer-wrapper site-width">
-                    <span th:text="${infor.footers}"></span>
+                    Copyright @ Vncodelabs 2021</span>
                 </div>
             </footer>
             <div class="footerbar">
@@ -178,52 +191,15 @@
     </div>
 </paper-header-panel>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add Lab</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <form id="add-form">
-                <div class="modal-body">
-
-                    <div class="form-group">
-                        <label for="docID" class="col-form-label">Google Doc Link or ID:</label>
-                        <input type="text" class="form-control" id="docID" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="cateID">Category:</label>
-                        <select class="form-control" id="cateID">
-                            <option th:each="cate : ${cateList}" th:value="${cate.getCateID()}"
-                                    th:text="${cate.getName()}"></option>
-                        </select>
-
-                    </div>
-                    <div class="form-group">
-                        <label for="description" class="col-form-label">Description:</label>
-                        <textarea class="form-control" id="description" required></textarea>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <span class="mr-auto text-danger" id="modal-error"></span>
-                    <button type="submit" class="btn btn-primary" id="add-lab-button" onclick="addLab()">Add</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 <!--MODAL LOGIN-->
-<div class="modal fade login" id="loginModal">
+<div class="modal fade login" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog login animated">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Đăng nhập với</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="box">
@@ -280,18 +256,6 @@
         </div>
     </div>
 </div>
-<!--COLLAPSE PROFILE-->
-<div class="collapse shadow" id="collapse-profile">
-    <div class="profile">
-        <img class="rounded-circle profilePicture p-4">
-        <div class="profile-info">
-            <h6 class="m-1 text-primary" id="profileName"></h6>
-            <span class="m-1" id="profileEmail"></span>
-            <a href="#" class="btn btn-sm btn-primary m-1" id="signout">Đăng xuất</a>
-        </div>
-
-    </div>
-</div>
 
 
 <div class="toast" id="toast" role="alert" aria-live="assertive"
@@ -305,6 +269,7 @@
     </div>
     <div class="toast-body" id="toast-body"></div>
 </div>
+
 
 <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>

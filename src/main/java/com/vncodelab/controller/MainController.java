@@ -1,14 +1,17 @@
 package com.vncodelab.controller;
 
+import com.google.cloud.storage.Blob;
+import com.google.firebase.cloud.StorageClient;
 import com.google.gson.Gson;
 import com.vncodelab.entity.Lab;
 import com.vncodelab.json.LabInfo;
 import com.vncodelab.model.AjaxResponseBody;
-
+import com.vncodelab.others.MyFunc;
 import com.vncodelab.service.serviceImpl.LabsServiceImpl;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.io.*;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class MainController {
@@ -28,88 +32,61 @@ public class MainController {
     @Autowired
     private LabsServiceImpl labsServiceImpl;
 
-//    @PostMapping("/save")
-//    public ResponseEntity<?> save(@RequestBody Lab newLab) throws IOException, InterruptedException {
-//        Lab lab = labRespository.findByDocID(newLab.getDocID());
-//        if (lab == null)
-//            lab = newLab;
-//
-//        Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/bin/claat export " + newLab.getDocID());
-//        BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-//        String line = input.readLine();
-//        p.waitFor();
-//        String arr[] = line.split("\t");
-//        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(arr[1] + "/codelab.json")));
-//        String totalLine = "";
-//        while ((line = br.readLine()) != null) {
-//            totalLine = totalLine + line;
-//        }
-//        LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
-//        lab.setName(labInfo.getTitle());
-//        br = new BufferedReader(new InputStreamReader(new FileInputStream(arr[1] + "/index.html")));
-//        totalLine = "";
-//        while ((line = br.readLine()) != null) {
-//            totalLine = totalLine + line + "\n";
-//        }
-//        lab.setHtml(totalLine);
-//        lab.setCateID(newLab.getCateID());
-//        lab.setDescription(newLab.getDescription());
-//        AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
-//        ajaxResponseBody.setUpdate(labRespository.existsByDocID(newLab.getDocID()));
-//
-//
-//        labRespository.save(lab);
-//        return ResponseEntity.ok().body(ajaxResponseBody);
-//    }
+    @GetMapping("/")
+    public String index(Model model) {
+        List<Lab> list = labsServiceImpl.getFeatureLabsByCate(null);
+        model.addAttribute("labList", list);
+        model.addAttribute("cateList", MyFunc.getCateList());
+        model.addAttribute("cateListMore", MyFunc.getMoreCateList());
+        return "index";
+    }
+
+    @GetMapping("/cate/{cateID}")
+    public String index(Model model, @PathVariable(name = "cateID") String cateID) {
+        List<Lab> list = labsServiceImpl.getFeatureLabsByCate(cateID);
+        model.addAttribute("labList", list);
+        model.addAttribute("cateList", MyFunc.getCateList());
+        model.addAttribute("cateListMore", MyFunc.getMoreCateList());
+        return "index";
+    }
+
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Lab newLab) throws IOException, InterruptedException {
-
-
         Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
-        //Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());
+        //Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
         BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         String line = input.readLine();
         p.waitFor();
-        String arr[] = line.split("\t");
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(arr[1] + "/codelab.json")));
+        String folderName = line.split("\t")[1];
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
         String totalLine = "";
-        while ((line = br.readLine()) != null) {
+        while ((line = br.readLine()) != null)
             totalLine = totalLine + line;
-        }
         LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
         newLab.setName(labInfo.getTitle());
 
-
-        File inputFile = new File(arr[1] + "/index.html");
+        File inputFile = new File(folderName + "/index.html");
         Document doc = Jsoup.parse(inputFile, "UTF-8");
+        Elements img = doc.getElementsByTag("img");
+
+        StorageClient storageClient = StorageClient.getInstance();
+        for (Element el : img) {
+            File file = new File(folderName + "/" + el.attr("src"));
+            InputStream is = new FileInputStream(file);
+            Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + folderName + "/" + file.getName(), is);
+            String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
+            el.attr("src", newUrl);
+        }
 
         Element codelab = doc.getElementsByTag("google-codelab").get(0);
         newLab.setHtml(codelab.toString());
+        labsServiceImpl.saveObjectFirebase(newLab);
+
         AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
         ajaxResponseBody.setUpdate(true);
-
-        labsServiceImpl.saveObjectFirebase(newLab);
         return ResponseEntity.ok().body(ajaxResponseBody);
     }
-//
-//    @GetMapping("/createCate")
-//    public String createCate() {
-//        cateRespository.save(new Cate("Java", ""));
-//        cateRespository.save(new Cate("Swing", ""));
-//        cateRespository.save(new Cate("JSP", ""));
-//        cateRespository.save(new Cate("Servlet", ""));
-//        cateRespository.save(new Cate("JPA", ""));
-//        cateRespository.save(new Cate("Hibernate", ""));
-//        cateRespository.save(new Cate("Spring", ""));
-//        cateRespository.save(new Cate("Android", ""));
-//
-//        cateRespository.save(new Cate("C", "", 1));
-//        cateRespository.save(new Cate("C++", "", 1));
-//        cateRespository.save(new Cate("PHP", "", 1));
-//        cateRespository.save(new Cate("JavaScript", "", 1));
-//        return "done";
-//    }
 
     @GetMapping("/lab/{labID}")
     public String lab(Model model, @PathVariable(name = "labID") String labID) {
@@ -119,41 +96,16 @@ public class MainController {
         return "lab";
     }
 
-
-    @GetMapping("/")
-    public String index(Model model) throws InterruptedException, ExecutionException {
-       // showHome(model, 0);
-        return "index";
-    }
-
     @GetMapping("/mylabs")
     public String labs(Model model) throws InterruptedException, ExecutionException {// Hien thi toan bo labs cua nguoi do tu Firebase
-        List<Lab> list = labsServiceImpl.getObjectFirebase();
-        model.addAttribute("labList", list);
+        model.addAttribute("cateList", MyFunc.getCateList());
         return "mylabs";
     }
 
-//    @GetMapping("/cate/{cateID}")
-//    public String cate(Model model, @PathVariable(name = "cateID") int cateID) throws InterruptedException, ExecutionException {
-//        showHome(model, cateID);
-//        return "index";
-//    }
 
-//    void showHome(Model model, int cateID) throws ExecutionException, InterruptedException {
-//        Map<String, Object> infor = homeServiceImpl.getObjectFirebase();
-//        Home newInfor = homeServiceImpl.getInforFirebase(infor);
-//        model.addAttribute("infor", newInfor);
-//        if (cateID == 0)
-//            model.addAttribute("labList", labRespository.findAll());
-//        else
-//            model.addAttribute("labList", labRespository.findAllByCateID(cateID));
-//        model.addAttribute("cateList", cateRespository.findAllByType(0));
-//        model.addAttribute("cateListMore", cateRespository.findAllByType(1));
-//
-//    }
-
-    @GetMapping("/test")
-    public String test() {
-        return "test";
+    public static void main(String[] args) throws IOException, InterruptedException {
+        Lab newLab = new Lab();
+        newLab.setDocID("11gRpdzlXHIwZ__YS0N9yNBo9E7vjyDgZ_0-wnQvCUDA");
+        new MainController().save(newLab);
     }
 }

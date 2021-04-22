@@ -17,6 +17,7 @@ public class FirebaseService {
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(new ClassPathResource("/firebase/vncodelab2-firebase-adminsdk-q7yo7-280f7c5f40.json").getInputStream()))
                     .setDatabaseUrl("https://vncodelab2-default-rtdb.firebaseio.com/")
+                    .setStorageBucket("vncodelab2.appspot.com")
                     .build();
 
             FirebaseApp.initializeApp(options);
