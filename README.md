@@ -1,7 +1,12 @@
 #Deploy
 Hướng dẫn cách deploy ứng dụng trên Google Cloud
 ##Compute engine
-###Stop port 80
+###Vào thư mục vncodelab2
+```
+cd vncodelab2
+git pull
+```
+###Stop port 80 (bỏ dấu source)
 ```
 sudo kill -9 $(sudo lsof -t -i:80)
 ```
