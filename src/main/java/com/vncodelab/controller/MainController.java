@@ -103,9 +103,9 @@ public class MainController {
     }
 
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        Lab newLab = new Lab();
-        newLab.setDocID("11gRpdzlXHIwZ__YS0N9yNBo9E7vjyDgZ_0-wnQvCUDA");
-        new MainController().save(newLab);
-    }
+//    public static void main(String[] args) throws IOException, InterruptedException {
+//        Lab newLab = new Lab();
+//        newLab.setDocID("11gRpdzlXHIwZ__YS0N9yNBo9E7vjyDgZ_0-wnQvCUDA");
+//        new MainController().save(newLab);
+//    }
 }
