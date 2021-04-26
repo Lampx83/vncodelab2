@@ -24,6 +24,16 @@
     background: white;
 }
 
+@media (max-width: 600px) {
+    #collapse-online{
+        width: 100%;
+        right: 0px;
+
+
+    }
+}
+
+
 .profile{
     display: flex;
     flex-wrap: wrap;

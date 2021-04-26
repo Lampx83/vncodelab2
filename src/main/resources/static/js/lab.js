@@ -15,6 +15,7 @@ $(function () {
     $('.steps ol li').click(function (e) {
         updateStep($(this).index());
     });
+
     var firstEnterRoom = true
     $('#btnRoom').click(function () {
         if (firstEnterRoom) {
@@ -29,7 +30,6 @@ $(function () {
         $('#drawer').hide();
         $('#btnLogin').show()
     }
-    $('#btnRoom').hide();
     $("#next-step").click(function () {
         var curStep = new URL(window.location.href).hash.split("#")[1];
         updateStep(Number(curStep))
@@ -38,7 +38,12 @@ $(function () {
         var curStep = new URL(window.location.href).hash.split("#")[1];
         updateStep(Number(curStep))
     });
+    showFunction();
 });
+
+function showFunction(){
+  //  $('#btnRoom').hide();
+}
 
 function enterLab(user) {
     if (!getRoomID()) {

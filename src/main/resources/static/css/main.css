@@ -417,10 +417,12 @@ ul {
     margin: 0px !important;
     padding: 0px;
 }
-#profileEmail{
+
+#profileEmail {
     font-size: 13px;
     margin-bottom: 10px;
 }
+
 
 .dropdown-menu-profile:before {
     position: absolute;
@@ -459,9 +461,6 @@ ul {
     white-space: nowrap;
 }
 
-#btnRoom {
-    margin-left: 10px;
-}
 
 #btnMore {
     margin-left: 10px;
@@ -743,9 +742,23 @@ a.codelab-card:hover {
     color: currentcolor
 }
 
+.hideSmall {
+    display: initial;
+}
+
+
+#btnRiseHand:active,#btnRiseHand.active {
+    background-color: #FFC10A !important;
+    border-color: #FFC10A !important;
+}
+
 @media (max-width: 600px) {
     .layout.horizontal {
         justify-content: space-between;
+    }
+
+    .hideSmall {
+        display: none;
     }
 }
 

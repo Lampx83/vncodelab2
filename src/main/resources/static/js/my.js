@@ -87,7 +87,7 @@ function afterLogin(user) {
         enterLab(user);
     else if (window.location.pathname.startsWith("/mylabs"))
         loadLabs(user);
-    loadLabs(user);
+
 }
 
 function loadLabs(user) {
