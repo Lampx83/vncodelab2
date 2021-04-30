@@ -82,7 +82,7 @@ function afterLogin(user) {
     $('#profileName').text(user.displayName)
     $('#profileEmail').text(user.email)
 
-
+    enterLab(user);
     if (window.location.pathname.startsWith("/lab"))
         enterLab(user);
     else if (window.location.pathname.startsWith("/mylabs"))

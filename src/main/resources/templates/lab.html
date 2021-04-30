@@ -30,7 +30,6 @@
     <!--Room button-->
     <button id="btnRiseHand" type="button" class="btn btn-secondary ml-2" data-toggle="button">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="16" height="16" fill="#ffffff">
-
             <circle cx="21.732" cy="5.5" r="1.5"/>
             <circle cx="17.732" cy="2.5" r="1.5"/>
             <circle cx="13.732" cy="1.5" r="1.5"/>
@@ -39,12 +38,11 @@
 		c-0.276,0-0.5-0.224-0.5-0.5V1.5h-3V11c0,0.276-0.224,0.5-0.5,0.5s-0.5-0.224-0.5-0.5V3.5h-3V16l-2.025-2.771
 		c-0.6-0.925-1.771-1.235-2.629-0.705c-0.855,0.542-1.067,1.724-0.475,2.646c0,0,3.266,4.943,4.658,7.059S11.408,26,15.625,26
 		c6.982,0,7.607-5.392,7.607-7s0-13.5,0-13.5H20.232z"/>
-
         </svg>
 
         <span class="hideSmall">Giơ tay</span>
     </button>
-    <button id="btnSubmit" type="button" class="btn btn-danger ml-2">
+    <button id="btnSubmit" type="button" class="btn btn-danger ml-2" data-toggle="modal" data-target="#uploadModal">
         <?xml version="1.0" encoding="iso-8859-1"?>
         <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" viewBox="0 0 36.375 36.376">
             <path d="M33.938,25.626v8.25c0,1.382-1.119,2.5-2.5,2.5h-26.5c-1.381,0-2.5-1.118-2.5-2.5v-8.25c0-1.381,1.119-2.5,2.5-2.5
@@ -231,6 +229,26 @@
             <a href="#" class="btn btn-sm btn-primary m-1" id="signout">Đăng xuất</a>
         </div>
 
+    </div>
+</div>
+
+<!-- MODAL UPLOAD -->
+<div id="uploadModal"  class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nộp bài</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method='post' action='' enctype="multipart/form-data">
+                    <input type='file' name='file' id='file'>
+                    <input type='button' class='btn btn-info center' value='Upload' id='btn_upload'>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 

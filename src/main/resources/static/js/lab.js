@@ -1,5 +1,8 @@
 var refUsers;
 var refChat;
+var chatroom;
+var sendTo;
+var riseHand = false;
 
 $(function () {
     page = "lab";
@@ -23,7 +26,13 @@ $(function () {
             firstEnterRoom = false;
         }
     })
-    $('.steps ol li a').append("<span class=\"badge badge-secondary bg-secondary my-badge invisible\" onclick=\"mclick(this)\" onmouseover=\"hoverdiv(this,1)\" onmouseout=\"hoverdiv(this,0)\">0</span>")
+
+    $('#btnRiseHand').click(function () {
+        riseHand = !$("#btnRiseHand").hasClass("active");
+        var curStep = new URL(window.location.href).hash.split("#")[1];
+        updateStep(Number(curStep))
+    })
+    $('.steps ol li a').append("<span class=\"badge badge-secondary bg-secondary my-badge invisible\" onmouseover=\"hoverDiv(this,1)\" onmouseout=\"hoverdiv(this,0)\">0</span>")
     $('#btnLogin').hide()
     if (getRoomID()) {  //Neu co phong thi an
         $('#main').hide();
@@ -38,12 +47,7 @@ $(function () {
         var curStep = new URL(window.location.href).hash.split("#")[1];
         updateStep(Number(curStep))
     });
-    showFunction();
 });
-
-function showFunction(){
-  //  $('#btnRoom').hide();
-}
 
 function enterLab(user) {
     if (!getRoomID()) {
@@ -164,16 +168,6 @@ function logoutRoom() {
         refChat.off();
 }
 
-//Chat
-var chatroom;
-var sendTo;
-
-function showmess(e) {
-    e.preventDefault();
-    alert("d")
-    return false;
-}
-
 function showChat(me, uid) {
     sendTo = uid;
     if (refChat != null)
@@ -277,17 +271,16 @@ function updateStep(step) {
             name: $("#profileName").text(),
             photo: currentUser.photoURL
         };
+
+        if (riseHand) {
+            change[currentUser.uid].isRise = true;
+        }
+
         refUsers.update(change);
     }
 }
 
-function createRoom() {
-    firebase.database().ref('labs/' + docID + "/" + makeid(6)).set({
-        create_time: firebase.database.ServerValue.TIMESTAMP
-    });
-}
-
-function hoverdiv(e, state) {
+function hoverDiv(e, state) {
     if (state === 1) {
         var left = 40 + $(e).offset().left + "px";
         var top = $(e).offset().top + "px";
@@ -302,15 +295,14 @@ function hoverdiv(e, state) {
     console.log(e)
 }
 
-function mclick(e) {
-    console.log("clic")
-}
-
 function getRoomID() {
+    return 1; //TODO test
     return (new URL(window.location.href)).searchParams.get('room')
+
 }
 
 function getLabID() {
+    return 1; //TODO test
     var arr = (new URL(window.location.href)).pathname.split("/");
     return arr[arr.length - 1]
 }
