@@ -27,7 +27,6 @@ $(function () {
             firstEnterRoom = false;
         }
     })
-
     $('#btnRiseHand').click(function () {
         riseHand = !$("#btnRiseHand").hasClass("active");
         var curStep = new URL(window.location.href).hash.split("#")[1];
@@ -53,18 +52,21 @@ $(function () {
         ev.preventDefault();
         $("#msg").html("")
         var db = firebase.firestore();
-        db.collection("rooms").doc(getRoomID()).collection("submits").doc(currentUser.uid).collection("steps").doc("" + getSelectedStep())
+        db.collection("rooms").doc(getRoomID()).collection("submits").doc(currentUser.uid)
             .get()
             .then((doc) => {
                 if (doc.exists) {
                     var url = "";
-                    var obj = doc.data();
-                    for (let i = 0; i < obj.fileNames.length; i++) {
-                        url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
+                    var obj = getSubmittedCurrentStep(getSelectedStep(), doc.data().steps);
+                    if (obj != null) {
+                        for (let i = 0; i < obj.fileNames.length; i++) {
+                            url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
+                        }
+                        $("#msg").html("<p>File đã nộp: <br>" + url);
                     }
-                    $("#msg").html("<p>File đã nộp: <br>" + url);
                 }
                 $("#upload-spinner").addClass("d-none");
+                $("#btn_upload").removeClass("d-none");
             })
             .catch((error) => {
                 console.log("Error getting documents: ", error);
@@ -76,8 +78,8 @@ $(function () {
     $('#btn_upload').click(function () {
         $("#upload-spinner").removeClass("d-none");
         $("#upload-form").addClass("d-none");
-
-        var formData = new FormData($(this).parents('form')[0]);
+        $("#btn_upload").addClass("d-none");
+        var formData = new FormData($("#upload-form")[0]);
         formData.append("userID", currentUser.uid);
         formData.append("userName", currentUser.displayName);
         formData.append("step", getSelectedStep());
@@ -94,14 +96,14 @@ $(function () {
                 $("#upload-form").removeClass("d-none");
                 $("#msg").html(response);
                 $("#upload-form").trigger("reset");
-
+                $("#btn_upload").removeClass("d-none");
             },
             error: function (response) {
                 $("#msg").html("Có lỗi xảy ra!");
                 $("#upload-spinner").addClass("d-none");
                 $("#upload-form").removeClass("d-none");
                 $("#upload-form").trigger("reset");
-
+                $("#btn_upload").removeClass("d-none");
             }
         });
     });
@@ -129,7 +131,6 @@ $(function () {
             });
 
         });
-        console.log(s);
         $("#reportModal").modal("show");
     });
 
@@ -141,6 +142,14 @@ $(function () {
     });
 
 });
+
+function getSubmittedCurrentStep(step, arr) {
+    for (const e of arr) {
+        if (e.step === "" + step)
+            return e;
+    }
+    return null;
+}
 
 function isSubmited(step, arr) {
     for (const e of arr) {
@@ -428,7 +437,7 @@ function hoverDiv(e, state) {
 }
 
 function getRoomID() {
-    return "WmKeL3"; //TODO test
+    //return "WmKeL3"; //TODO test
     // return (new URL(window.location.href)).searchParams.get('room')
     var arr = (new URL(window.location.href)).pathname.split("/");
     return arr[arr.length - 1]

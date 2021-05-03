@@ -84,8 +84,16 @@ public class MainController {
         ArrayList<HashMap> submitedSteps = null;
 
         if (document.exists()) {
-            if (document.getData().get("steps") != null)
+            if (document.getData().get("steps") != null) {
                 submitedSteps = (ArrayList<HashMap>) document.getData().get("steps");
+                Iterator itr = submitedSteps.iterator();
+                while (itr.hasNext()) {
+                    HashMap hash = (HashMap) itr.next();
+                    if (hash.get("step").equals("" + step))
+                        itr.remove();
+                }
+            }
+
         }
         if (submitedSteps == null) {
             submitedSteps = new ArrayList<>();
@@ -97,12 +105,7 @@ public class MainController {
         mapSubmit.put("fileLinks", fileLinks);
         submitedSteps.add(mapSubmit);
 
-        Collections.sort(submitedSteps, new Comparator<HashMap>() {
-            @Override
-            public int compare(HashMap o1, HashMap o2) {
-                return o1.get("step").toString().compareTo(o2.get("step").toString());
-            }
-        });
+        Collections.sort(submitedSteps, Comparator.comparing(o -> o.get("step").toString()));
 
         HashMap map = new HashMap<>();
         map.put("userName", userName);
