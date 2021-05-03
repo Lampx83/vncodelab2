@@ -82,9 +82,9 @@ function afterLogin(user) {
     $('#profileName').text(user.displayName)
     $('#profileEmail').text(user.email)
 
-    enterLab(user);
-    if (window.location.pathname.startsWith("/lab"))
-        enterLab(user);
+     enterRoom(user);  //TODO test
+    if (window.location.pathname.startsWith("/room"))
+        enterRoom(user);
     else if (window.location.pathname.startsWith("/mylabs"))
         loadLabs(user);
 
@@ -96,7 +96,7 @@ function loadLabs(user) {
         .get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                var lab = "<a href='lab/" + doc.data().docID + "?room=1' class=\"codelab-card category-web\"><h2>" + doc.data().name + "</h2><h3>" + doc.data().description + "</h3><div class=\"card-footer\"><div class=\"category-icon web-icon\"></div><paper-button class=\"web-bg\">Enter</paper-button></div></a>";
+                var lab = "<lab  class=\"codelab-card category-web\"><h2>" + doc.data().name + "</h2><h3>" + doc.data().description + "</h3><div class=\"card-footer\"><div class=\"category-icon web-icon\"></div><a href='#' onclick=\"createRoom('" + doc.data().docID + "')\" type=\"button\" class=\"btn btn-primary\">Tạo phòng</a></div></lab>";
                 $("#cards").prepend(lab);
                 $(".codelab-card-add").removeClass("d-none")
                 $("#spiner-loading-card").addClass("d-none")
@@ -105,7 +105,26 @@ function loadLabs(user) {
         .catch((error) => {
             console.log("Error getting documents: ", error);
         });
+}
 
+function createRoom(docID) {
+    var room = {}
+    room["docID"] = docID;
+    room["createdBy"] = currentUser.uid;
+    room["roomID"] = makeid(6);
+    $.ajax({
+        url: "/createRoom",
+        type: "POST",
+        data: JSON.stringify(room),
+        dataType: "json",
+        contentType: "application/json",
+        success: function (response) {
+            window.location.href = "/room/" + room["roomID"];
+        },
+        error: function (e) {
+            console.log(e)
+        }
+    })
 }
 
 function showRegisterForm() {
@@ -281,4 +300,36 @@ var TimeAgo = (function () {
 
     return self;
 }());
+
+function addLab() {
+    var lab = {}
+    lab["docID"] = $("#docID").val();
+    lab["description"] = $("#description").val();
+    lab["cateID"] = $("#cateID").val();
+    lab["userID"] = currentUser.uid;
+    $(this).prop("disabled", true);
+    $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...');
+    $.ajax({
+        url: "/save",
+        type: "POST",
+        data: JSON.stringify(lab),
+        dataType: "json",
+        contentType: "application/json",
+        success: function (data) {
+            $('#toast-title').text("Done")
+            $('#toast-body').text("Lab has been added")
+            $('#toast').toast('show')
+            $('#exampleModal').modal('hide')
+            $("#docID").text("")
+            $("#description").text("")
+            $('#add-lab-button').prop("disabled", false)
+            $('#add-lab-button').html('Add')
+        },
+        error: function (e) {
+            $('#add-lab-button').prop("disabled", false)
+            $('#add-lab-button').html('Add')
+            $('#modal-error').text('Please check your input!')
+        }
+    })
+}
 

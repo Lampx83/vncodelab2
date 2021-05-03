@@ -3,6 +3,7 @@ var refChat;
 var chatroom;
 var sendTo;
 var riseHand = false;
+var currentDocID;
 
 $(function () {
     page = "lab";
@@ -32,7 +33,7 @@ $(function () {
         var curStep = new URL(window.location.href).hash.split("#")[1];
         updateStep(Number(curStep))
     })
-    $('.steps ol li a').append("<span class=\"badge badge-secondary bg-secondary my-badge invisible\" onmouseover=\"hoverDiv(this,1)\" onmouseout=\"hoverdiv(this,0)\">0</span>")
+    $('.steps ol li a').append("<span class=\"badge badge-secondary bg-secondary my-badge invisible\" onmouseover=\"hoverDiv(this,1)\" onmouseout=\"hoverDiv(this,0)\">0</span>")
     $('#btnLogin').hide()
     if (getRoomID()) {  //Neu co phong thi an
         $('#main').hide();
@@ -47,18 +48,148 @@ $(function () {
         var curStep = new URL(window.location.href).hash.split("#")[1];
         updateStep(Number(curStep))
     });
+
+    $("#btnSubmit").click(function (ev) {
+        ev.preventDefault();
+        $("#msg").html("")
+        var db = firebase.firestore();
+        db.collection("rooms").doc(getRoomID()).collection("submits").doc(currentUser.uid).collection("steps").doc("" + getSelectedStep())
+            .get()
+            .then((doc) => {
+                if (doc.exists) {
+                    var url = "";
+                    var obj = doc.data();
+                    for (let i = 0; i < obj.fileNames.length; i++) {
+                        url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
+                    }
+                    $("#msg").html("<p>File đã nộp: <br>" + url);
+                }
+                $("#upload-spinner").addClass("d-none");
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
+
+        $("#uploadModal").modal("show");
+    });
+
+    $('#btn_upload').click(function () {
+        $("#upload-spinner").removeClass("d-none");
+        $("#upload-form").addClass("d-none");
+
+        var formData = new FormData($(this).parents('form')[0]);
+        formData.append("userID", currentUser.uid);
+        formData.append("userName", currentUser.displayName);
+        formData.append("step", getSelectedStep());
+        formData.append("room", getRoomID());
+        // AJAX request
+        $.ajax({
+            url: '/upload',
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $("#upload-spinner").addClass("d-none");
+                $("#upload-form").removeClass("d-none");
+                $("#msg").html(response);
+                $("#upload-form").trigger("reset");
+
+            },
+            error: function (response) {
+                $("#msg").html("Có lỗi xảy ra!");
+                $("#upload-spinner").addClass("d-none");
+                $("#upload-form").removeClass("d-none");
+                $("#upload-form").trigger("reset");
+
+            }
+        });
+    });
+
+    $("#btnReport").click(function (ev) {
+        var db = firebase.firestore();
+        var s;
+        $("#tbody-report").html("")
+        db.collection("rooms").doc(getRoomID()).collection("submits").onSnapshot((querySnapshot) => {
+            $("#report-spinner").addClass("d-none");
+            $("#table-report").removeClass("d-none");
+
+            querySnapshot.forEach((doc) => { //Duyet tung nguoi dung
+                var s = "";
+
+                for (let i = 0; i < getNumberOfSteps(); i++) {
+                    if (isSubmited(i, doc.data().steps)) {
+                        s = s + "<span class ='labStep blue' >" + (i + 1) + "</span>";
+                    } else {
+                        s = s + "<span class ='labStep' >" + (i + 1) + "</span>";
+                    }
+                }
+
+                $("#tbody-report").append("<tr><td>" + doc.data().userName + "</td><td>" + s + "</td></tr>")
+            });
+
+        });
+        console.log(s);
+        $("#reportModal").modal("show");
+    });
+
+    $(document).on('keydown', function (e) {
+        if (e.keyCode === 37 || e.keyCode === 39) {
+            var curStep = new URL(window.location.href).hash.split("#")[1];
+            updateStep(Number(curStep))
+        }
+    });
+
 });
 
-function enterLab(user) {
+function isSubmited(step, arr) {
+    for (const e of arr) {
+        if (e.step === "" + step)
+            return true;
+    }
+    return false;
+}
+
+function enterRoom(user) {
     if (!getRoomID()) {
         $('#main').show();
         $('#drawer').show();
         $('#btnRoom').show();
     } else {
+        //Ghi log vao storage
+        var db = firebase.firestore();
+        var roomRef = db.collection("rooms").doc(getRoomID());  //Doc thong tin cua Room
+        roomRef.get().then((doc) => {
+            if (doc.exists) {
+                var obj = doc.data();
+                currentDocID = obj.docID;
+                if (obj.createdBy === user.uid) {
+                    $("#btnReport").removeClass("d-none")
+
+                } else {
+                    $("#btnSubmit").removeClass("d-none")
+                    $("#btnRiseHand").removeClass("d-none")
+                }
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
+        //Ghi Logs
+        var userRef = roomRef.collection("logs").doc(currentUser.uid);
+        userRef.set({
+            lastEnter: firebase.firestore.FieldValue.serverTimestamp(),
+            userName: user.displayName,
+            userPhoto: user.photoURL
+        })
+
+        //Check realtime
         $('#main').show();
         $('#drawer').show();
         $('#btnRoom').show();
-        refUsers = firebase.database().ref('/labs/' + getLabID() + '/' + getRoomID() + '/users');
+        refUsers = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/users');
         refUsers.on('value', (snapshot) => {
             const data = snapshot.val();
             var count = []
@@ -72,17 +203,18 @@ function enterLab(user) {
                 count[step].count++;
                 count[step].user = count[step].user + data[uid].name + "<br>";
                 totalUser++;
+
                 //Add to chat room
-                if (currentUser.uid != uid) {
-                    var avatar = "<img src=\"" + data[uid].photo + "\" alt=\"user\" width=\"40\" height=\"40\"  class=\"rounded-circle\">";
-                    if (!data[uid].photo && data[uid].name) {
-                        var avatar = "<div><div class=\"friend\">" + data[uid].name + "</div></div>"
-                    }
-                    $('#usersChat').append("<a href='#' onclick='showChat(this,\"" + uid + "\")' class=\"list-group-item list-group-item-action rounded-0 media uchat\">" + avatar + "<div class=\"media-body\">" + data[uid].name + "</div></a>")
-                    if (!data[uid].photo && data[uid].name) {
-                        $('.friend').nameBadge();
-                    }
+                // if (currentUser.uid != uid) {  //Kh
+                var avatar = "<img src=\"" + data[uid].photo + "\" alt=\"user\" width=\"40\" height=\"40\"  class=\"rounded-circle\">";
+                if (!data[uid].photo && data[uid].name) {
+                    var avatar = "<div><div class=\"friend\">" + data[uid].name + "</div></div>"
                 }
+                $('#usersChat').append("<a href='#' onclick='showChat(this,\"" + uid + "\")' class=\"list-group-item list-group-item-action rounded-0 media uchat\">" + avatar + "<div class=\"media-body\">" + data[uid].name + "</div></a>")
+                if (!data[uid].photo && data[uid].name) {
+                    $('.friend').nameBadge();
+                }
+                // }
             }
             for (let i = 1; i <= getNumberOfSteps(); i++) {
                 if (count[i - 1] == undefined)
@@ -117,7 +249,7 @@ function enterLab(user) {
         });
 
         var firstAll = true;
-        firebase.database().ref('/labs/' + getLabID() + '/' + getRoomID() + '/notifies/all').on('value', (snapshot) => {
+        firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/notifies/all').on('value', (snapshot) => {
             if (!firstAll) {
                 if (!$("#collapse-online").hasClass("show") || ($("#collapse-online").hasClass("show") && sendTo !== "all")) {
                     const data = snapshot.val();
@@ -128,7 +260,7 @@ function enterLab(user) {
             }
             firstAll = false;
         });
-        refUsers = firebase.database().ref('/labs/' + getLabID() + '/' + getRoomID() + '/users');
+        refUsers = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/users');
         var leave = {};
         leave[user.uid] = null;
         var enter = {};
@@ -174,7 +306,7 @@ function showChat(me, uid) {
         refChat.off()
     $('#chatMessages').empty();
     if (uid === "all") {
-        refChat = firebase.database().ref('/labs/' + getLabID() + '/' + getRoomID() + '/chats/all/');
+        refChat = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/chats/all/');
         chatroom = uid;
     } else {
         if (uid > currentUser.uid)
@@ -203,7 +335,7 @@ function sendMessage() {
         refChat.update(change);
         var ref;
         if (sendTo === "all") {
-            ref = firebase.database().ref('/labs/' + getLabID() + '/' + getRoomID() + '/notifies/all')
+            ref = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/notifies/all')
         } else {
             ref = firebase.database().ref('/notifies/' + sendTo)
         }
@@ -250,8 +382,8 @@ function showMessage(data) {
 }
 
 function getNumberOfSteps() {
-    var radioButtons = $(".steps ol li");
-    return radioButtons.length;
+    var steps = $(".steps ol li");
+    return steps.length;
 }
 
 function getSelectedStep() {
@@ -296,14 +428,10 @@ function hoverDiv(e, state) {
 }
 
 function getRoomID() {
-    return 1; //TODO test
-    return (new URL(window.location.href)).searchParams.get('room')
-
-}
-
-function getLabID() {
-    return 1; //TODO test
+    return "WmKeL3"; //TODO test
+    // return (new URL(window.location.href)).searchParams.get('room')
     var arr = (new URL(window.location.href)).pathname.split("/");
     return arr[arr.length - 1]
+
 }
 

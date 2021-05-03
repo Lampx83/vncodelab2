@@ -5,7 +5,6 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.vncodelab.entity.Lab;
-import com.vncodelab.service.ILabsService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,9 +12,9 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Service
-public class LabsServiceImpl implements ILabsService {
+public class LabService {
 
-    @Override
+
     public List<Lab> getFeatureLabsByCate(String cateID) {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         List<Lab> list = new ArrayList<>();
@@ -40,16 +39,13 @@ public class LabsServiceImpl implements ILabsService {
     }
 
 
-    @Override
-    public void saveObjectFirebase(Lab lab) {
+    public void save(Lab lab) {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         dbFirestore.collection("labs").document(lab.getDocID()).set(lab);
-
-
     }
 
-    @Override
-    public Lab getLab(String docID) {
+
+    public Lab getByID(String docID) {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         DocumentReference docRef = dbFirestore.document("labs/" + docID);
         Lab lab = null;

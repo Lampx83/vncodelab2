@@ -17,10 +17,14 @@
 </head>
 <body>
 <lab th:utext="${lab.html}"></lab>
-
+<!--TODO test-->
 <google-codelab codelab-gaid="" id="title" title="Title" environment="web" feedback-link="">
     <google-codelab-step label="Step 1" duration="0"></google-codelab-step>
     <google-codelab-step label="Step 2" duration="0"></google-codelab-step>
+    <google-codelab-step label="Step 3" duration="0"></google-codelab-step>
+    <google-codelab-step label="Step 4" duration="0"></google-codelab-step>
+    <google-codelab-step label="Step 5" duration="0"></google-codelab-step>
+    <google-codelab-step label="Step 6" duration="0"></google-codelab-step>
 </google-codelab>
 
 <div id="divtoshow" style="display: none; z-index: 2000" class="speech-bubble">Noi dung ben trong</div>
@@ -28,7 +32,7 @@
 <div id="topButton">
 
     <!--Room button-->
-    <button id="btnRiseHand" type="button" class="btn btn-secondary ml-2" data-toggle="button">
+    <button id="btnRiseHand" type="button" class="btn btn-secondary ml-2 d-none" data-toggle="button">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="16" height="16" fill="#ffffff">
             <circle cx="21.732" cy="5.5" r="1.5"/>
             <circle cx="17.732" cy="2.5" r="1.5"/>
@@ -39,10 +43,9 @@
 		c-0.6-0.925-1.771-1.235-2.629-0.705c-0.855,0.542-1.067,1.724-0.475,2.646c0,0,3.266,4.943,4.658,7.059S11.408,26,15.625,26
 		c6.982,0,7.607-5.392,7.607-7s0-13.5,0-13.5H20.232z"/>
         </svg>
-
         <span class="hideSmall">Giơ tay</span>
     </button>
-    <button id="btnSubmit" type="button" class="btn btn-danger ml-2" data-toggle="modal" data-target="#uploadModal">
+    <button id="btnSubmit" type="button" class="btn btn-danger ml-2 d-none">
         <?xml version="1.0" encoding="iso-8859-1"?>
         <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" viewBox="0 0 36.375 36.376">
             <path d="M33.938,25.626v8.25c0,1.382-1.119,2.5-2.5,2.5h-26.5c-1.381,0-2.5-1.118-2.5-2.5v-8.25c0-1.381,1.119-2.5,2.5-2.5
@@ -52,6 +55,20 @@
             C9.895,12.743,11.479,12.743,12.456,11.766z"/>
         </svg>
         <span class="hideSmall">Nộp bài</span>
+    </button>
+
+    <button id="btnReport" type="button" class="btn btn-danger ml-2 d-none">
+        <?xml version="1.0" encoding="iso-8859-1"?>
+
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="#ffffff">
+            <path d="M0,0h142.4v142.4H0V0z"/>
+            <path d="M187.7,0h323.9v142.4H187.7V0z"/>
+            <path d="M0,184.8h142.4v142.4H0V184.8z"/>
+            <path d="M187.7,184.8h323.9v142.4H187.7V184.8z"/>
+            <path d="M0,369.6h142.4V512H0V369.6z"/>
+            <path d="M187.7,369.6h323.9V512H187.7V369.6z"/>
+        </svg>
+        <span class="hideSmall">Báo cáo</span>
     </button>
 
     <button id="btnRoom" type="button" class="btn btn-primary ml-2" data-toggle="collapse" data-target="#collapse-online">
@@ -233,7 +250,7 @@
 </div>
 
 <!-- MODAL UPLOAD -->
-<div id="uploadModal"  class="modal" tabindex="-1" role="dialog">
+<div id="uploadModal" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -243,31 +260,67 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method='post' action='' enctype="multipart/form-data">
-                    <input type='file' name='file' id='file'>
-                    <input type='button' class='btn btn-info center' value='Upload' id='btn_upload'>
+                <form method='post' action='' enctype="multipart/form-data" id="upload-form">
+                    <div class="file-upload-wrapper">
+                        <input type='file' name='files' id='files' multiple>
+                    </div>
+                    <input type='button' class='btn btn-info center' value='Nộp file' id='btn_upload'>
                 </form>
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border spinner-border" role="status" id="upload-spinner">
+                    </div>
+                </div>
+                <span id="msg"></span>
             </div>
         </div>
     </div>
 </div>
 
+<!-- MODAL REPORT -->
+<div id="reportModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Báo cáo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border spinner-border" role="status" id="report-spinner">
+                    </div>
+                </div>
+
+                <table class="table table-hover d-none" id="table-report">
+                    <tbody id="tbody-report">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
 <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
 <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-database.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-messaging.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-messaging.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-firestore.js"></script>
 
 
 <script type="text/javascript" src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
 <script type="text/javascript" src="../static/js/avatar.js" th:src="@{/js/avatar.js}"></script>
 <script type="text/javascript" src="../static/js/bootstrap.bundle.js" th:src="@{/js/bootstrap.bundle.js}"></script>
 
-<script type="text/javascript" src="../static/js/my.js" th:src="@{/js/my.js}"></script>
+<script type="text/javascript" src="../static/js/user.js" th:src="@{/js/user.js}"></script>
 <script type="text/javascript" src="../static/js/lab.js" th:src="@{/js/lab.js}"></script>
 
 </body>
