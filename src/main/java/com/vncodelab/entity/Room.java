@@ -4,7 +4,18 @@ public class Room {
 
     private String docID;
     private String createdBy;
+
+    public int getNumberOfStep() {
+        return numberOfStep;
+    }
+
+    public void setNumberOfStep(int numberOfStep) {
+        this.numberOfStep = numberOfStep;
+    }
+
     private String roomID;
+    private int numberOfStep;
+
 
     public String getDocID() {
         return docID;

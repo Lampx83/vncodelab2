@@ -2,8 +2,12 @@ var refUsers;
 var refChat;
 var chatroom;
 var sendTo;
-var riseHand = false;
+var raiseHand = false;
 var currentDocID;
+const HAND_UP = 0;
+const HAND_DOWN = 1;
+var teacher = false;
+var firstReport = true;
 
 $(function () {
     page = "lab";
@@ -27,10 +31,28 @@ $(function () {
             firstEnterRoom = false;
         }
     })
-    $('#btnRiseHand').click(function () {
-        riseHand = !$("#btnRiseHand").hasClass("active");
+    $('#btnRaiseHand').click(function () {
+        raiseHand = !$("#btnRaiseHand").hasClass("active");
         var curStep = new URL(window.location.href).hash.split("#")[1];
         updateStep(Number(curStep))
+
+        //Ghi log vao storageblue
+        var db = firebase.firestore();
+        var userRef = db.collection("rooms").doc(getRoomID()).collection("logs").doc(currentUser.uid).collection("hands")
+        if (raiseHand) {
+            userRef.add({
+                time: firebase.firestore.FieldValue.serverTimestamp(),
+                type: HAND_UP,
+                step: Number(curStep)
+            })
+        } else {
+            userRef.add({
+                time: firebase.firestore.FieldValue.serverTimestamp(),
+                type: HAND_DOWN,
+                step: Number(curStep)
+            })
+        }
+
     })
     $('.steps ol li a').append("<span class=\"badge badge-secondary bg-secondary my-badge invisible\" onmouseover=\"hoverDiv(this,1)\" onmouseout=\"hoverDiv(this,0)\">0</span>")
     $('#btnLogin').hide()
@@ -57,12 +79,14 @@ $(function () {
             .then((doc) => {
                 if (doc.exists) {
                     var url = "";
-                    var obj = getSubmittedCurrentStep(getSelectedStep(), doc.data().steps);
-                    if (obj != null) {
-                        for (let i = 0; i < obj.fileNames.length; i++) {
-                            url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
+                    if (doc.data().steps != null) {
+                        var obj = getSubmittedCurrentStep(getSelectedStep(), doc.data().steps);
+                        if (obj != null) {
+                            for (let i = 0; i < obj.fileNames.length; i++) {
+                                url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
+                            }
+                            $("#msg").html("<p>File đã nộp: <br>" + url);
                         }
-                        $("#msg").html("<p>File đã nộp: <br>" + url);
                     }
                 }
                 $("#upload-spinner").addClass("d-none");
@@ -71,7 +95,6 @@ $(function () {
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
-
         $("#uploadModal").modal("show");
     });
 
@@ -108,30 +131,138 @@ $(function () {
         });
     });
 
-    $("#btnReport").click(function (ev) {
-        var db = firebase.firestore();
-        var s;
-        $("#tbody-report").html("")
-        db.collection("rooms").doc(getRoomID()).collection("submits").onSnapshot((querySnapshot) => {
-            $("#report-spinner").addClass("d-none");
-            $("#table-report").removeClass("d-none");
 
+    $("#btnReport").click(function (ev) {
+        if (firstReport) {
+            $("#raisehand-tab").click();
+            firstReport = false;
+        } else {
+            //Reload
+            $("#" + $('.nav-tabs .active').attr("id")).click();
+        }
+    });
+
+    $("#raisehand-tab").click(function (ev) {
+        $("#tbody-report-raisehand").html("")
+        var room = {}
+        room["roomID"] = getRoomID();
+        room["numberOfStep"] = getNumberOfSteps();
+
+        $.ajax({
+            url: '/report_raisehand',
+            type: 'post',
+            data: JSON.stringify(room),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                refUsers.get().then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        for (var uid in data) {
+                            var step = data[uid].step;
+                            $('[id^=' + uid + ']').removeClass("yellow")
+                            if (data[uid].isRaise) {
+                                $("#" + uid + "_" + step).addClass("yellow")
+                            }
+                        }
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
+                $("#raisehand-spinner").addClass("d-none");
+                $("#table-report-raisehand").removeClass("d-none");
+                $("#tbody-report-raisehand").html(response.msg)
+            },
+            error: function (response) {
+                $("#raisehand-spinner").addClass("d-none");
+                $("#table-report-raisehand").removeClass("d-none");
+                $("#tbody-report-raisehand").html(response.msg)
+            }
+        });
+    });
+
+    $("#practice-tab").click(function (ev) {
+        $("#tbody-report-practice").html("")
+        var room = {}
+        room["roomID"] = getRoomID();
+        room["numberOfStep"] = getNumberOfSteps();
+
+        $.ajax({
+            url: '/report_practice',
+            type: 'post',
+            data: JSON.stringify(room),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                refUsers.get().then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        for (var uid in data) {
+                            var step = data[uid].step;
+                            $('[id^=' + uid + ']').removeClass("yellow")
+                            if (data[uid].isRaise) {
+                                $("#" + uid + "_" + step).addClass("yellow")
+                            }
+                        }
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
+                $("#practice-spinner").addClass("d-none");
+                $("#table-report-practice").removeClass("d-none");
+                $("#tbody-report-practice").html(response.msg)
+            },
+            error: function (response) {
+                $("#practice-spinner").addClass("d-none");
+                $("#table-report-practice").removeClass("d-none");
+                $("#tbody-report-practice").html(response.msg)
+            }
+        });
+    });
+
+    $("#submit-tab").click(function (ev) {
+        var db = firebase.firestore();
+        $("#tbody-report-submit").html("")
+        db.collection("rooms").doc(getRoomID()).collection("submits").onSnapshot((querySnapshot) => {
+            $("#submit-spinner").addClass("d-none");
+            $("#table-report-submit").removeClass("d-none");
+            $("#tbody-report-submit").html("")
             querySnapshot.forEach((doc) => { //Duyet tung nguoi dung
                 var s = "";
-
                 for (let i = 0; i < getNumberOfSteps(); i++) {
-                    if (isSubmited(i, doc.data().steps)) {
-                        s = s + "<span class ='labStep blue' >" + (i + 1) + "</span>";
+                    if (doc.data().steps != null) {
+                        var submitedObjects = getSubmitedObjects(i, doc.data().steps);
+                        if (submitedObjects != null) {
+                            var link = "";
+                            for (let j = 0; j < submitedObjects.fileNames.length; j++) {
+                                let l = submitedObjects.fileNames[j]
+                                link = link + "[<a class='text-primary' href='" + submitedObjects.fileLinks[j] + "'>" + l + "</a>] "
+                            }
+                            s = s + "<td><span class ='labStep blue'>" + (i + 1) + "</span><span class='hideSmall report-detail d-none'>" + link + "</span></td>";
+                        } else {
+                            s = s + "<td><span class ='labStep' >" + (i + 1) + "</span></td>";
+                        }
                     } else {
-                        s = s + "<span class ='labStep' >" + (i + 1) + "</span>";
+                        s = s + "<td><span class ='labStep' >" + (i + 1) + "</span></td>";
                     }
                 }
-
-                $("#tbody-report").append("<tr><td>" + doc.data().userName + "</td><td>" + s + "</td></tr>")
+                $("#tbody-report-submit").append("<tr><td>" + doc.data().userName + "</td>" + s + "</tr>")
+                if ($('#switch-showdetail').is(':checked')) {
+                    $(".report-detail").removeClass("d-none")
+                } else {
+                    $(".report-detail").addClass("d-none")
+                }
             });
-
         });
-        $("#reportModal").modal("show");
+    });
+
+
+    $('#switch-showdetail').click(function (e) {
+        if ($('#switch-showdetail').is(':checked')) {
+            $(".report-detail").removeClass("d-none")
+        } else {
+            $(".report-detail").addClass("d-none")
+        }
     });
 
     $(document).on('keydown', function (e) {
@@ -151,12 +282,12 @@ function getSubmittedCurrentStep(step, arr) {
     return null;
 }
 
-function isSubmited(step, arr) {
+function getSubmitedObjects(step, arr) {
     for (const e of arr) {
         if (e.step === "" + step)
-            return true;
+            return e;
     }
-    return false;
+    return null;
 }
 
 function enterRoom(user) {
@@ -165,7 +296,6 @@ function enterRoom(user) {
         $('#drawer').show();
         $('#btnRoom').show();
     } else {
-        //Ghi log vao storage
         var db = firebase.firestore();
         var roomRef = db.collection("rooms").doc(getRoomID());  //Doc thong tin cua Room
         roomRef.get().then((doc) => {
@@ -173,12 +303,13 @@ function enterRoom(user) {
                 var obj = doc.data();
                 currentDocID = obj.docID;
                 if (obj.createdBy === user.uid) {
-                    $("#btnReport").removeClass("d-none")
-
+                    $("#btnReport").removeClass("d-none")  //Teacher
+                    teacher = true;
                 } else {
                     $("#btnSubmit").removeClass("d-none")
-                    $("#btnRiseHand").removeClass("d-none")
+                    $("#btnRaiseHand").removeClass("d-none")
                 }
+                realtime(user);
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");
@@ -186,7 +317,7 @@ function enterRoom(user) {
         }).catch((error) => {
             console.log("Error getting document:", error);
         });
-        //Ghi Logs
+        //Ghi log vao storage
         var userRef = roomRef.collection("logs").doc(currentUser.uid);
         userRef.set({
             lastEnter: firebase.firestore.FieldValue.serverTimestamp(),
@@ -194,104 +325,120 @@ function enterRoom(user) {
             userPhoto: user.photoURL
         })
 
-        //Check realtime
-        $('#main').show();
-        $('#drawer').show();
-        $('#btnRoom').show();
-        refUsers = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/users');
-        refUsers.on('value', (snapshot) => {
-            const data = snapshot.val();
-            var count = []
-            var totalUser = 0;
-            $('#usersChat').empty()
-            var userinStep = "";
-            for (var uid in data) {
-                var step = data[uid].step;
-                if (count[step] == undefined)
-                    count[step] = {count: 0, user: ""};
-                count[step].count++;
-                count[step].user = count[step].user + data[uid].name + "<br>";
-                totalUser++;
+        var userRef = roomRef.collection("submits").doc(currentUser.uid);
+        userRef.set({
+            userName: user.displayName
+        })
 
-                //Add to chat room
-                // if (currentUser.uid != uid) {  //Kh
-                var avatar = "<img src=\"" + data[uid].photo + "\" alt=\"user\" width=\"40\" height=\"40\"  class=\"rounded-circle\">";
-                if (!data[uid].photo && data[uid].name) {
-                    var avatar = "<div><div class=\"friend\">" + data[uid].name + "</div></div>"
-                }
-                $('#usersChat').append("<a href='#' onclick='showChat(this,\"" + uid + "\")' class=\"list-group-item list-group-item-action rounded-0 media uchat\">" + avatar + "<div class=\"media-body\">" + data[uid].name + "</div></a>")
-                if (!data[uid].photo && data[uid].name) {
-                    $('.friend').nameBadge();
-                }
-                // }
-            }
-            for (let i = 1; i <= getNumberOfSteps(); i++) {
-                if (count[i - 1] == undefined)
-                    $('li:nth-child(' + i + ') > a > span.badge').addClass("invisible")
-                else {
-                    $('li:nth-child(' + i + ') > a > span.badge').removeClass("invisible")
-                    $('li:nth-child(' + i + ') > a > span.badge').text(count[i - 1].count);
-                    $('li:nth-child(' + i + ') > a > span.badge').attr("user", count[i - 1].user)
-                }
-            }
-            $('#numOnline').text(totalUser)
-        });
-
-        var leave = {};
-        leave[currentUser.uid] = null;
-        refUsers.onDisconnect().update(leave).then(function () {
-            console.log("update exit")
-        });
-        updateStep(getSelectedStep());
-        //Listen to Notification
-        var first = true;
-        firebase.database().ref('/notifies/' + currentUser.uid).on('value', (snapshot) => {
-            if (!first) {
-                const data = snapshot.val();
-                if (!$("#collapse-online").hasClass("show") || ($("#collapse-online").hasClass("show") && sendTo !== data.uid)) {
-                    $("#toastTitle").text(data.uname);
-                    $("#toastBody").text(data.message);
-                    $('.toast').toast('show');
-                }
-            }
-            first = false;
-        });
-
-        var firstAll = true;
-        firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/notifies/all').on('value', (snapshot) => {
-            if (!firstAll) {
-                if (!$("#collapse-online").hasClass("show") || ($("#collapse-online").hasClass("show") && sendTo !== "all")) {
-                    const data = snapshot.val();
-                    $("#toastTitle").text("Chat room");
-                    $("#toastBody").text(data.message);
-                    $('.toast').toast('show');
-                }
-            }
-            firstAll = false;
-        });
-        refUsers = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/users');
-        var leave = {};
-        leave[user.uid] = null;
-        var enter = {};
-        var curStep = new URL(window.location.href).hash.split("#")[1];
-        if (!curStep)
-            curStep = -1;
-
-        enter[user.uid] = {
-            step: curStep,
-            time: firebase.database.ServerValue.TIMESTAMP,
-            name: $("#profileName").text(),
-            photo: user.photoURL
-        };
-
-        firebase.database().ref('.info/connected').on('value', function (snapshot) {
-            if (snapshot.val() == false)
-                return;
-            refUsers.onDisconnect().update(leave).then(function () {
-                refUsers.update(enter)
-            });
-        });
     }
+}
+
+function realtime(user) {
+    //Check realtime
+    $('#main').show();
+    $('#drawer').show();
+    $('#btnRoom').show();
+    refUsers = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/users');
+    refUsers.on('value', (snapshot) => {
+        const data = snapshot.val();
+        var count = []
+        var totalUser = 0;
+        $('#usersChat').empty()
+        var userinStep = "";
+        for (var uid in data) {
+            var step = data[uid].step;
+            if (count[step] == undefined)
+                count[step] = {count: 0, user: ""};
+            count[step].count++;
+            count[step].user = count[step].user + data[uid].name + "<br>";
+            totalUser++;
+
+            if (teacher) {  //For Teacher only
+                $('[id^=' + uid + ']').removeClass("yellow")
+                if (data[uid].isRaise) {
+                    $("#" + uid + "_" + step).addClass("yellow")
+                }
+            }
+
+            //Add to chat room
+            // if (currentUser.uid != uid) {  //Kh
+            var avatar = "<img src='" + data[uid].photo + "' alt='user' width='40' height='40'  class='rounded-circle'>";
+            if (!data[uid].photo && data[uid].name) {
+                var avatar = "<div><div class='friend'>" + data[uid].name + "</div></div>"
+            }
+            $('#usersChat').append("<a href='#' onclick='showChat(this,\"" + uid + "\")' class=\"list-group-item list-group-item-action rounded-0 media uchat\">" + avatar + "<div class=\"media-body\">" + data[uid].name + "</div></a>")
+            if (!data[uid].photo && data[uid].name) {
+                $('.friend').nameBadge();
+            }
+            // }
+        }
+        for (let i = 1; i <= getNumberOfSteps(); i++) {
+            if (count[i - 1] == undefined)
+                $('li:nth-child(' + i + ') > a > span.badge').addClass("invisible")
+            else {
+                $('li:nth-child(' + i + ') > a > span.badge').removeClass("invisible")
+                $('li:nth-child(' + i + ') > a > span.badge').text(count[i - 1].count);
+                $('li:nth-child(' + i + ') > a > span.badge').attr("user", count[i - 1].user)
+            }
+        }
+
+        $('#numOnline').text(totalUser)
+    });
+
+    var leave = {};
+    leave[currentUser.uid] = null;
+    refUsers.onDisconnect().update(leave).then(function () {
+        console.log("update exit")
+    });
+    updateStep(getSelectedStep());
+    //Listen to Notification
+    var first = true;
+    firebase.database().ref('/notifies/' + currentUser.uid).on('value', (snapshot) => {
+        if (!first) {
+            const data = snapshot.val();
+            if (!$("#collapse-online").hasClass("show") || ($("#collapse-online").hasClass("show") && sendTo !== data.uid)) {
+                $("#toastTitle").text(data.uname);
+                $("#toastBody").text(data.message);
+                $('.toast').toast('show');
+            }
+        }
+        first = false;
+    });
+
+    var firstAll = true;
+    firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/notifies/all').on('value', (snapshot) => {
+        if (!firstAll) {
+            if (!$("#collapse-online").hasClass("show") || ($("#collapse-online").hasClass("show") && sendTo !== "all")) {
+                const data = snapshot.val();
+                $("#toastTitle").text("Chat room");
+                $("#toastBody").text(data.message);
+                $('.toast').toast('show');
+            }
+        }
+        firstAll = false;
+    });
+    // refUsers = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/users');
+    var leave = {};
+    leave[user.uid] = null;
+    var enter = {};
+    var curStep = new URL(window.location.href).hash.split("#")[1];
+    if (!curStep)
+        curStep = -1;
+
+    enter[user.uid] = {
+        step: curStep,
+        time: firebase.database.ServerValue.TIMESTAMP,
+        name: $("#profileName").text(),
+        photo: user.photoURL
+    };
+
+    firebase.database().ref('.info/connected').on('value', function (snapshot) {
+        if (snapshot.val() == false)
+            return;
+        refUsers.onDisconnect().update(leave).then(function () {
+            refUsers.update(enter)
+        });
+    });
 }
 
 function logoutRoom() {
@@ -403,7 +550,24 @@ function getSelectedStep() {
     }
 }
 
+var oldStep = -1;
+var oldTime = 0;
+
 function updateStep(step) {
+    var db = firebase.firestore();
+    var newTime = Math.floor(Date.now() / 1000);
+    var duration = newTime - oldTime;
+
+    if (duration > 15 && duration < 1800) {
+        var userRef = db.collection("rooms").doc(getRoomID()).collection("logs").doc(currentUser.uid).collection("steps")
+        userRef.add({
+            time: firebase.firestore.FieldValue.serverTimestamp(),
+            enter: step,
+            leave: oldStep,
+            duration: duration
+        })
+    }
+
     if (currentUser != null) {
         var change = {};
         change[currentUser.uid] = {
@@ -413,12 +577,14 @@ function updateStep(step) {
             photo: currentUser.photoURL
         };
 
-        if (riseHand) {
-            change[currentUser.uid].isRise = true;
+        if (raiseHand) {
+            change[currentUser.uid].isRaise = true;
         }
 
         refUsers.update(change);
     }
+    oldStep = step
+    oldTime = Math.floor(Date.now() / 1000);
 }
 
 function hoverDiv(e, state) {
@@ -437,7 +603,7 @@ function hoverDiv(e, state) {
 }
 
 function getRoomID() {
-    //return "WmKeL3"; //TODO test
+    // return "WmKeL3"; //TODO test
     // return (new URL(window.location.href)).searchParams.get('room')
     var arr = (new URL(window.location.href)).pathname.split("/");
     return arr[arr.length - 1]

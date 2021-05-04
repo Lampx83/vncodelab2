@@ -32,7 +32,7 @@
 <div id="topButton">
 
     <!--Room button-->
-    <button id="btnRiseHand" type="button" class="btn btn-secondary ml-2 d-none" data-toggle="button">
+    <button id="btnRaiseHand" type="button" class="btn btn-secondary ml-2 d-none" data-toggle="button">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="16" height="16" fill="#ffffff">
             <circle cx="21.732" cy="5.5" r="1.5"/>
             <circle cx="17.732" cy="2.5" r="1.5"/>
@@ -57,7 +57,7 @@
         <span class="hideSmall">Nộp bài</span>
     </button>
 
-    <button id="btnReport" type="button" class="btn btn-danger ml-2 d-none">
+    <button id="btnReport" type="button" class="btn btn-danger ml-2 d-none" data-toggle="modal" data-target="#reportModal">
         <?xml version="1.0" encoding="iso-8859-1"?>
 
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="#ffffff">
@@ -78,7 +78,7 @@
                   d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
             <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
         </svg>
-        <span class="hideSmall">Thảo luận</span> <span class="badge badge-secondary bg-secondary" id="numOnline">0</span>
+        <span class="hideSmall">Phòng chat</span> <span class="badge badge-secondary bg-secondary" id="numOnline">0</span>
     </button>
 
 
@@ -280,27 +280,63 @@
 </div>
 
 <!-- MODAL REPORT -->
-<div id="reportModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<div id="reportModal" class="modal " tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Báo cáo</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <div class="custom-control custom-switch hideSmall">
+                    <input type="checkbox" class="custom-control-input" id="switch-showdetail">
+                    <label class="custom-control-label" for="switch-showdetail">Hiện chi tiết</label>
+                </div>
             </div>
             <div class="modal-body">
-
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-border spinner-border" role="status" id="report-spinner">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="raisehand-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Giơ tay</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="practice-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Thực hành</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="submit-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Nộp bài</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active pt-3" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <!--TAB RAISEHAND-->
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border spinner-border" role="status" id="raisehand-spinner"></div>
+                        </div>
+                        <table class="table table-borderless d-none" id="table-report-raisehand">
+                            <tbody id="tbody-report-raisehand">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade  pt-3" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <!--TAB PRACTICE-->
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border spinner-border" role="status" id="practice-spinner"></div>
+                        </div>
+                        <table class="table table-borderless d-none" id="table-report-practice">
+                            <tbody id="tbody-report-practice">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade  pt-3" id="contact" role="tabpanel" aria-labelledby="submit-tab">
+                        <!--TAB SUBMITS-->
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border spinner-border" role="status" id="submit-spinner">
+                            </div>
+                        </div>
+                        <table class="table table-borderless d-none" id="table-report-submit">
+                            <tbody id="tbody-report-submit">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <table class="table table-hover d-none" id="table-report">
-                    <tbody id="tbody-report">
 
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>

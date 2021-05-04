@@ -1,16 +1,12 @@
 package com.vncodelab.controller;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.FieldValue;
-import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
 import com.google.firebase.cloud.FirestoreClient;
 import com.google.firebase.cloud.StorageClient;
 import com.google.gson.Gson;
-import com.vncodelab.entity.Lab;
-import com.vncodelab.entity.Room;
+import com.vncodelab.entity.*;
 import com.vncodelab.json.LabInfo;
 import com.vncodelab.model.AjaxResponseBody;
 import com.vncodelab.others.MyFunc;
@@ -113,9 +109,7 @@ public class MainController {
         map.put("steps", submitedSteps);
         userRef.set(map);
 
-        return ResponseEntity.ok().
-
-                body("<p>File đã nộp: <br>" + url);
+        return ResponseEntity.ok().body("<p>File đã nộp: <br>" + url);
 
     }
 
@@ -125,6 +119,94 @@ public class MainController {
             fos.write(multipartFile.getBytes());
         }
         return tempFile;
+    }
+
+    @PostMapping("/report_raisehand")
+    public ResponseEntity<?> report_raisehand(@RequestBody Room room) throws InterruptedException, ExecutionException {
+        Firestore db = FirestoreClient.getFirestore();  //FireStorage
+        ApiFuture<QuerySnapshot> future = db.collection("rooms").document(room.getRoomID()).collection("logs").get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        String s = "";
+        for (DocumentSnapshot document : documents) {
+            TreeMap<Integer, Step> map = new TreeMap<>();
+
+            for (int i = 0; i < room.getNumberOfStep(); i++) {
+                Step step = new Step();
+                map.put(i, step);
+            }
+
+            ApiFuture<QuerySnapshot> future1 = document.getReference().collection("hands").whereEqualTo("type", 0).get();
+            List<QueryDocumentSnapshot> documents1 = future1.get().getDocuments();
+            for (DocumentSnapshot document1 : documents1) {
+                Log log = document1.toObject(Log.class);
+                map.get(log.getStep()).setNumber(1);
+            }
+            User user = document.toObject(User.class);
+            user.setUserID(document.getId());
+            String step = "";
+            for (int i = 0; i < room.getNumberOfStep(); i++) {
+                if (map.get(i).getNumber() == 1) {
+                    step = step + "<td><span class ='labStep blue' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span></td>";
+                } else {
+                    step = step + "<td><span class ='labStep' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span></td>";
+                }
+            }
+
+            s = s + "<tr><td>" + user.getUserName() + "</td><td>" + step + "</td></tr>";
+        }
+        AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
+        ajaxResponseBody.setMsg(s);
+        return ResponseEntity.ok().body(ajaxResponseBody);
+    }
+
+    @PostMapping("/report_practice")
+    public ResponseEntity<?> report_practice(@RequestBody Room room) throws InterruptedException, ExecutionException {
+        Firestore db = FirestoreClient.getFirestore();  //FireStorage
+        ApiFuture<QuerySnapshot> future = db.collection("rooms").document(room.getRoomID()).collection("logs").get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        String s = "";
+        for (DocumentSnapshot document : documents) {
+            TreeMap<Integer, Step> map = new TreeMap<>();
+
+            for (int i = 0; i < room.getNumberOfStep(); i++) {
+                Step step = new Step();
+                map.put(i, step);
+            }
+
+            ApiFuture<QuerySnapshot> future1 = document.getReference().collection("steps").get();
+            List<QueryDocumentSnapshot> documents1 = future1.get().getDocuments();
+            for (DocumentSnapshot document1 : documents1) {
+                Log log = document1.toObject(Log.class);
+                Step cStep = map.get(log.getLeave());
+                if (log.getDuration() > 0) {
+                    System.out.println();
+                }
+                cStep.setNumber(cStep.getNumber() + log.getDuration());
+            }
+            User user = document.toObject(User.class);
+            user.setUserID(document.getId());
+            String step = "";
+            for (int i = 0; i < room.getNumberOfStep(); i++) {
+                if (map.get(i).getNumber() > 10 * 60) {
+                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize3' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='hideSmall report-detail d-none'>" + map.get(i).getNumber() / 60 + "</span></td>";
+                } else if (map.get(i).getNumber() > 6 * 60) {
+                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize2' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='hideSmall report-detail d-none'>" + map.get(i).getNumber() / 60 + "</span></td>";
+                } else if (map.get(i).getNumber() > 3 * 60) {
+                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize1' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='hideSmall report-detail d-none'>" + map.get(i).getNumber() / 60 + "</span></td>";
+                } else {
+                    step = step + "<td class='tdcenter'><span class ='labStep' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='hideSmall report-detail d-none'>" + map.get(i).getNumber() / 60 + "</span></td>";
+                }
+            }
+
+            s = s + "<tr><td>" + user.getUserName() + "</td><td>" + step + "</td></tr>";
+        }
+
+        AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
+        ajaxResponseBody.setMsg(s);
+        return ResponseEntity.ok().
+
+                body(ajaxResponseBody);
+
     }
 
     @PostMapping("/save")
@@ -166,11 +248,11 @@ public class MainController {
     @GetMapping("/lab/{labID}")
     public String lab(Model model, @PathVariable(name = "labID") String labID, @RequestParam("room") String room, @RequestParam("createdBy") String createdBy) {
         model.addAttribute("lab", labService.getByID(labID));
-        Firestore dbFirestore = FirestoreClient.getFirestore();  //FireStorage
+        Firestore db = FirestoreClient.getFirestore();  //FireStorage
         HashMap map = new HashMap();
         map.put("createdBy", createdBy);
         map.put("labID", labID);
-        dbFirestore.collection("rooms").document(room).set(map);
+        db.collection("rooms").document(room).set(map);
         return "lab";
     }
 

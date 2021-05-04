@@ -746,6 +746,24 @@ a.codelab-card:hover {
     display: initial;
 }
 
+.labStepSize1{
+    width: 32px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+}
+
+.labStepSize2{
+    width: 38px !important;
+    height: 38px !important;
+    line-height: 38px !important;
+}
+
+.labStepSize3{
+    width: 42px !important;
+    height: 42px !important;
+    line-height: 42px !important;
+}
+
 .labStep {
     display: inline-block;
     font-style: normal;
@@ -768,9 +786,15 @@ a.codelab-card:hover {
 .blue {
     background-color: #007bff;
 }
+.yellow {
+    background-color: #FFC10A;
+}
+.tdcenter{
+    vertical-align: middle !important;
+}
 
 
-#btnRiseHand:active, #btnRiseHand.active {
+#btnRaiseHand:active, #btnRaiseHand.active {
     background-color: #FFC10A !important;
     border-color: #FFC10A !important;
 }

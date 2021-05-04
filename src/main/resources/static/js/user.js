@@ -82,7 +82,7 @@ function afterLogin(user) {
     $('#profileName').text(user.displayName)
     $('#profileEmail').text(user.email)
 
-     //enterRoom(user);  //TODO test
+    // enterRoom(user);  //TODO test
     if (window.location.pathname.startsWith("/room"))
         enterRoom(user);
     else if (window.location.pathname.startsWith("/mylabs"))
