@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -211,10 +212,31 @@ public class MainController {
 
     }
 
+
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Lab newLab) throws IOException, InterruptedException {
-        // Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
-        Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
+        String docID = newLab.getDocID();
+        if (docID.contains("docs.google.com")) {
+            URL url = new URL(docID);
+            String path = url.getPath();
+            String[] arr = path.split("/");
+            int maxLength = 0;
+            String longestString = null;
+            for (String s : arr) {
+                if (s.length() > maxLength) {
+                    maxLength = s.length();
+                    longestString = s;
+                }
+            }
+            newLab.setDocID(longestString);
+        } else if (docID.contains("codelabs-preview.appspot.com")) {
+            Map<String, String> map = MyFunc.getQueryMap(new URL(docID).getQuery());
+            if (map.get("file_id")!=null) {
+                newLab.setDocID(map.get("file_id"));
+            }
+        }
+   //     Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
+         Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
         BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         String line = input.readLine();
         p.waitFor();

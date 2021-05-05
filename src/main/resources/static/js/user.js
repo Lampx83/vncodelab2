@@ -31,13 +31,13 @@ $(function () {
     })
 
     firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
+        if (user) {  //Neu dang nhap roi
             currentUser = user;
             afterLogin(user);
             presence(user);
-
-        } else {
+        } else { //Neu chua dang nhap
             $('#btnLogin').removeClass("d-none")
+            $('#loginModal').modal('show')
         }
     });
 });
@@ -70,10 +70,10 @@ function afterLogin(user) {
     $('#loginModal').modal('hide')
     $('#btnLogin').addClass("d-none")
     if (user.photoURL) {
-        $('.profilePicture').attr("src", user.photoURL)
+        $('#profilePicture').attr("src", user.photoURL)
         $(".userName").hide();
     } else {
-        $('.profilePicture').hide();
+        $('#profilePicture').hide();
         $(".userName").show();
         $(".userName").text(user.displayName)
         $(".userName").nameBadge()
@@ -98,9 +98,9 @@ function loadLabs(user) {
             querySnapshot.forEach((doc) => {
                 var lab = "<lab  class=\"codelab-card category-web\"><h2>" + doc.data().name + "</h2><h3>" + doc.data().description + "</h3><div class=\"card-footer\"><div class=\"category-icon web-icon\"></div><a href='#' onclick=\"createRoom('" + doc.data().docID + "')\" type=\"button\" class=\"btn btn-primary\">Tạo phòng</a></div></lab>";
                 $("#cards").prepend(lab);
-                $(".codelab-card-add").removeClass("d-none")
-                $("#spiner-loading-card").addClass("d-none")
             });
+            $(".codelab-card-add").removeClass("d-none")
+            $("#spiner-loading-card").addClass("d-none")
         })
         .catch((error) => {
             console.log("Error getting documents: ", error);
