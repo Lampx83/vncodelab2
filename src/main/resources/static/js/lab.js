@@ -326,9 +326,13 @@ function enterRoom(user) {
         })
 
         var userRef = roomRef.collection("submits").doc(currentUser.uid);
-        userRef.set({
-            userName: user.displayName
-        })
+        userRef.get().then((docSnapshot) => {
+            if (!docSnapshot.exists) {
+                userRef.set({
+                    userName: user.displayName
+                })
+            }
+        });
 
     }
 }
