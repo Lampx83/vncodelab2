@@ -37,7 +37,10 @@ $(function () {
             presence(user);
         } else { //Neu chua dang nhap
             $('#btnLogin').removeClass("d-none")
-            $('#loginModal').modal('show')
+            if (((window.location.pathname.startsWith("/room")) || (window.location.pathname.startsWith("/mylabs")))) //Bat buoc phai dang nhap
+                $('#loginModal').modal('show')  //Hien form dang nhap
+
+            afterNotLogin();
         }
     });
 });
@@ -83,11 +86,21 @@ function afterLogin(user) {
     $('#profileEmail').text(user.email)
 
     // enterRoom(user);  //TODO test
+    // loadLabs(user); //TODO test
     if (window.location.pathname.startsWith("/room"))
         enterRoom(user);
     else if (window.location.pathname.startsWith("/mylabs"))
         loadLabs(user);
+    else if (window.location.pathname.startsWith("/lab"))
+        enterLab();
+}
 
+function afterNotLogin() {
+    if (window.location.pathname.startsWith("/room")) {
+        $('#main').hide();
+        $('#drawer').hide();
+    } else if (window.location.pathname.startsWith("/lab"))
+        enterLab();
 }
 
 function loadLabs(user) {
@@ -96,7 +109,7 @@ function loadLabs(user) {
         .get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                var lab = "<lab  class=\"codelab-card category-web\"><h2>" + doc.data().name + "</h2><h3>" + doc.data().description + "</h3><div class=\"card-footer\"><div class=\"category-icon web-icon\"></div><a href='#' onclick=\"createRoom('" + doc.data().docID + "')\" type=\"button\" class=\"btn btn-primary\">Tạo phòng</a></div></lab>";
+                var lab = "<lab  class=\"codelab-card category-web\"><h2><a href = '/lab/" + doc.data().docID + "'>" + doc.data().name + "</a></h2><h3>" + doc.data().description + "</h3><div class=\"card-footer\"><div class=\"category-icon web-icon\"></div><a href='#' onclick=\"createRoom('" + doc.data().docID + "')\" type=\"button\" class=\"btn btn-primary\">Tạo phòng</a></div></lab>";
                 $("#cards").prepend(lab);
             });
             $(".codelab-card-add").removeClass("d-none")

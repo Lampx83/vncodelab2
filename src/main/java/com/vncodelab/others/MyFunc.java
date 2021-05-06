@@ -12,6 +12,7 @@ public class MyFunc {
         List<Category> cateList = new ArrayList<>();
         cateList.add(new Category("Java", "Java"));
         cateList.add(new Category("Servlet", "Servlet"));
+        cateList.add(new Category("JSP", "JSP"));
         cateList.add(new Category("NodeJS", "NodeJS"));
         cateList.add(new Category("Khác", "Khác"));
         return cateList;

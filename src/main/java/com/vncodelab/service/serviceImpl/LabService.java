@@ -2,6 +2,7 @@
 package com.vncodelab.service.serviceImpl;
 
 import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.vncodelab.entity.Lab;
@@ -39,9 +40,10 @@ public class LabService {
     }
 
 
-    public void save(Lab lab) {
+    public Timestamp save(Lab lab) throws ExecutionException, InterruptedException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
-        dbFirestore.collection("labs").document(lab.getDocID()).set(lab);
+        ApiFuture<WriteResult> addLabRef = dbFirestore.collection("labs").document(lab.getDocID()).set(lab);
+        return addLabRef.get().getUpdateTime();
     }
 
 

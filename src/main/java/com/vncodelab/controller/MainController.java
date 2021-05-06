@@ -1,6 +1,7 @@
 package com.vncodelab.controller;
 
 import com.google.api.core.ApiFuture;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
 import com.google.firebase.cloud.FirestoreClient;
@@ -44,6 +45,74 @@ public class MainController {
         model.addAttribute("cateList", MyFunc.getCateList());
         model.addAttribute("cateListMore", MyFunc.getMoreCateList());
         return "index";
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<?> save(@RequestBody Lab newLab) {
+        try {
+            String docID = newLab.getDocID();
+            if (docID.contains("docs.google.com")) {
+                URL url = new URL(docID);
+                String path = url.getPath();
+                String[] arr = path.split("/");
+                int maxLength = 0;
+                String longestString = null;
+                for (String s : arr) {
+                    if (s.length() > maxLength) {
+                        maxLength = s.length();
+                        longestString = s;
+                    }
+                }
+                newLab.setDocID(longestString);
+            } else if (docID.contains("codelabs-preview.appspot.com")) {
+                Map<String, String> map = MyFunc.getQueryMap(new URL(docID).getQuery());
+                if (map.get("file_id") != null) {
+                    newLab.setDocID(map.get("file_id"));
+                }
+            }
+          //  Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
+             Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
+            BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            String line = input.readLine();
+            p.waitFor();
+            String folderName = line.split("\t")[1];
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
+            String totalLine = "";
+            while ((line = br.readLine()) != null)
+                totalLine = totalLine + line;
+            LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
+            newLab.setName(labInfo.getTitle());
+
+            File inputFile = new File(folderName + "/index.html");
+            Document doc = Jsoup.parse(inputFile, "UTF-8");
+            Elements img = doc.getElementsByTag("img");
+
+
+            //Save to Storage
+            StorageClient storageClient = StorageClient.getInstance();  //Storage
+            for (Element el : img) {
+                File file = new File(folderName + "/" + el.attr("src"));
+                InputStream is = new FileInputStream(file);
+                Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + folderName + "/" + file.getName(), is);
+                String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
+                el.attr("src", newUrl);
+            }
+
+            //Save to Fire Store
+            Element codelab = doc.getElementsByTag("google-codelab").get(0);
+            newLab.setHtml(codelab.toString());
+            Timestamp timestamp = labService.save(newLab);
+
+
+
+            AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
+            ajaxResponseBody.setMsg(timestamp.toString());
+            ajaxResponseBody.setUpdate(true);
+            return ResponseEntity.ok().body(ajaxResponseBody);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     @GetMapping("/cate/{cateID}")
@@ -213,70 +282,9 @@ public class MainController {
     }
 
 
-    @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody Lab newLab) throws IOException, InterruptedException {
-        String docID = newLab.getDocID();
-        if (docID.contains("docs.google.com")) {
-            URL url = new URL(docID);
-            String path = url.getPath();
-            String[] arr = path.split("/");
-            int maxLength = 0;
-            String longestString = null;
-            for (String s : arr) {
-                if (s.length() > maxLength) {
-                    maxLength = s.length();
-                    longestString = s;
-                }
-            }
-            newLab.setDocID(longestString);
-        } else if (docID.contains("codelabs-preview.appspot.com")) {
-            Map<String, String> map = MyFunc.getQueryMap(new URL(docID).getQuery());
-            if (map.get("file_id")!=null) {
-                newLab.setDocID(map.get("file_id"));
-            }
-        }
-   //     Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
-         Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
-        BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-        String line = input.readLine();
-        p.waitFor();
-        String folderName = line.split("\t")[1];
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
-        String totalLine = "";
-        while ((line = br.readLine()) != null)
-            totalLine = totalLine + line;
-        LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
-        newLab.setName(labInfo.getTitle());
-
-        File inputFile = new File(folderName + "/index.html");
-        Document doc = Jsoup.parse(inputFile, "UTF-8");
-        Elements img = doc.getElementsByTag("img");
-
-        StorageClient storageClient = StorageClient.getInstance();  //Storage
-        for (Element el : img) {
-            File file = new File(folderName + "/" + el.attr("src"));
-            InputStream is = new FileInputStream(file);
-            Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + folderName + "/" + file.getName(), is);
-            String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
-            el.attr("src", newUrl);
-        }
-
-        Element codelab = doc.getElementsByTag("google-codelab").get(0);
-        newLab.setHtml(codelab.toString());
-        labService.save(newLab);
-        AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
-        ajaxResponseBody.setUpdate(true);
-        return ResponseEntity.ok().body(ajaxResponseBody);
-    }
-
     @GetMapping("/lab/{labID}")
-    public String lab(Model model, @PathVariable(name = "labID") String labID, @RequestParam("room") String room, @RequestParam("createdBy") String createdBy) {
+    public String lab(Model model, @PathVariable(name = "labID") String labID) {
         model.addAttribute("lab", labService.getByID(labID));
-        Firestore db = FirestoreClient.getFirestore();  //FireStorage
-        HashMap map = new HashMap();
-        map.put("createdBy", createdBy);
-        map.put("labID", labID);
-        db.collection("rooms").document(room).set(map);
         return "lab";
     }
 

@@ -56,11 +56,9 @@ $(function () {
     })
     $('.steps ol li a').append("<span class=\"badge badge-secondary bg-secondary my-badge invisible\" onmouseover=\"hoverDiv(this,1)\" onmouseout=\"hoverDiv(this,0)\">0</span>")
     $('#btnLogin').hide()
-    if (getRoomID()) {  //Neu co phong thi an
-        $('#main').hide();
-        $('#drawer').hide();
-        $('#btnLogin').show()
-    }
+    // if (getRoomID()) {  //Neu co phong thi an
+    //
+    // }
     $("#next-step").click(function () {
         var curStep = new URL(window.location.href).hash.split("#")[1];
         updateStep(Number(curStep))
@@ -290,51 +288,57 @@ function getSubmitedObjects(step, arr) {
     return null;
 }
 
+function enterLab() {
+    $('#main').show();
+    $('#drawer').show();
+    $('#btnLogin').hide()
+}
+
 function enterRoom(user) {
-    if (!getRoomID()) {
-        $('#main').show();
-        $('#drawer').show();
-        $('#btnRoom').show();
-    } else {
-        var db = firebase.firestore();
-        var roomRef = db.collection("rooms").doc(getRoomID());  //Doc thong tin cua Room
-        roomRef.get().then((doc) => {
-            if (doc.exists) {
-                var obj = doc.data();
-                currentDocID = obj.docID;
-                if (obj.createdBy === user.uid) {
-                    $("#btnReport").removeClass("d-none")  //Teacher
-                    teacher = true;
-                } else {
-                    $("#btnSubmit").removeClass("d-none")
-                    $("#btnRaiseHand").removeClass("d-none")
-                }
-                realtime(user);
+    $("#btnRoom").removeClass("d-none")
+    $('#main').show();
+    $('#drawer').show();
+    $('#btnLogin').hide()
+
+    var db = firebase.firestore();
+    var roomRef = db.collection("rooms").doc(getRoomID());  //Doc thong tin cua Room
+    roomRef.get().then((doc) => {
+        if (doc.exists) {
+            var obj = doc.data();
+            currentDocID = obj.docID;
+            if (obj.createdBy === user.uid) {
+                $("#btnReport").removeClass("d-none")  //Teacher
+                teacher = true;
             } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
+                $("#btnSubmit").removeClass("d-none")
+                $("#btnRaiseHand").removeClass("d-none")
             }
-        }).catch((error) => {
-            console.log("Error getting document:", error);
-        });
-        //Ghi log vao storage
-        var userRef = roomRef.collection("logs").doc(currentUser.uid);
-        userRef.set({
-            lastEnter: firebase.firestore.FieldValue.serverTimestamp(),
-            userName: user.displayName,
-            userPhoto: user.photoURL
-        })
+            realtime(user);
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+    //Ghi log vao storage
+    var userRef = roomRef.collection("logs").doc(currentUser.uid);
+    userRef.set({
+        lastEnter: firebase.firestore.FieldValue.serverTimestamp(),
+        userName: user.displayName,
+        userPhoto: user.photoURL
+    })
 
-        var userRef = roomRef.collection("submits").doc(currentUser.uid);
-        userRef.get().then((docSnapshot) => {
-            if (!docSnapshot.exists) {
-                userRef.set({
-                    userName: user.displayName
-                })
-            }
-        });
+    var userRef = roomRef.collection("submits").doc(currentUser.uid);
+    userRef.get().then((docSnapshot) => {
+        if (!docSnapshot.exists) {
+            userRef.set({
+                userName: user.displayName
+            })
+        }
+    });
 
-    }
+
 }
 
 function realtime(user) {
@@ -449,11 +453,9 @@ function logoutRoom() {
     var leave = {};
     leave[currentUser.uid] = null;
     refUsers.update(leave);
-    if (getRoomID()) {
-        $('#main').hide();
-        $('#drawer').hide();
-        $('#btnRoom').hide();
-    }
+    $('#main').hide();
+    $('#drawer').hide();
+    $('#btnRoom').hide();
     if (refUsers)
         refUsers.off();
     if (refChat)
@@ -590,6 +592,7 @@ function updateStep(step) {
     oldStep = step
     oldTime = Math.floor(Date.now() / 1000);
 }
+
 
 function hoverDiv(e, state) {
     if (state === 1) {
