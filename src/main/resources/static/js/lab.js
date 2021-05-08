@@ -169,7 +169,12 @@ $(function () {
                 });
                 $("#raisehand-spinner").addClass("d-none");
                 $("#table-report-raisehand").removeClass("d-none");
-                $("#tbody-report-raisehand").html(response.msg)
+                $("#tbody-report-raisehand").html(response.msg);
+                if ($('#switch-showdetail').is(':checked')) {
+                    $(".report-detail").removeClass("d-none")
+                } else {
+                    $(".report-detail").addClass("d-none")
+                }
             },
             error: function (response) {
                 $("#raisehand-spinner").addClass("d-none");
@@ -208,7 +213,12 @@ $(function () {
                 });
                 $("#practice-spinner").addClass("d-none");
                 $("#table-report-practice").removeClass("d-none");
-                $("#tbody-report-practice").html(response.msg)
+                $("#tbody-report-practice").html(response.msg);
+                if ($('#switch-showdetail').is(':checked')) {
+                    $(".report-detail").removeClass("d-none")
+                } else {
+                    $(".report-detail").addClass("d-none")
+                }
             },
             error: function (response) {
                 $("#practice-spinner").addClass("d-none");
@@ -244,7 +254,9 @@ $(function () {
                         s = s + "<td><span class ='labStep' >" + (i + 1) + "</span></td>";
                     }
                 }
-                $("#tbody-report-submit").append("<tr><td>" + doc.data().userName + "</td>" + s + "</tr>")
+                let tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + doc.id + "\")'>Xóa</a> </div></td>";
+
+                $("#tbody-report-submit").append("<tr  id='tr-report-" + doc.id + "'><td>" + doc.data().userName + "</td>" + s + tdThreeDots + "</tr>")
                 if ($('#switch-showdetail').is(':checked')) {
                     $(".report-detail").removeClass("d-none")
                 } else {
@@ -306,7 +318,7 @@ function enterRoom(user) {
         if (doc.exists) {
             var obj = doc.data();
             currentDocID = obj.docID;
-            if (obj.createdBy === user.uid) {
+            if (obj.userID === user.uid) {
                 $("#btnReport").removeClass("d-none")  //Teacher
                 teacher = true;
             } else {
@@ -321,7 +333,7 @@ function enterRoom(user) {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-    //Ghi log vao storage
+    //Ghi log vao firestore
     var userRef = roomRef.collection("logs").doc(currentUser.uid);
     userRef.set({
         lastEnter: firebase.firestore.FieldValue.serverTimestamp(),
@@ -614,6 +626,26 @@ function getRoomID() {
     // return (new URL(window.location.href)).searchParams.get('room')
     var arr = (new URL(window.location.href)).pathname.split("/");
     return arr[arr.length - 1]
+}
 
+function deleteUserReport(userID) {  //Hàm này có dùng nhé không được xóa
+    var room = {}
+    $("#tr-report-" + userID).remove();
+    room["roomID"] = getRoomID();
+    room["userID"] = userID;
+    $.ajax({
+        url: "/deleteUserReport",
+        type: "POST",
+        data: JSON.stringify(room),
+        dataType: "json",
+        contentType: "application/json",
+        success: function (data) {
+
+        },
+        error: function (e) {
+
+
+        }
+    })
 }
 

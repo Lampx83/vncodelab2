@@ -42,22 +42,13 @@
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
-    <link href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
 
+    <link href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
     <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet"/>
     <link href="../static/css/login-register.css" th:href="@{/css/login-register.css}" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link href="../static/css/chat.css" th:href="@{/css/chat.css}" rel="stylesheet"/>
 
-    <link href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}"
-          rel="stylesheet"/>
-    <link href="../static/css/main.css" th:href="@{/css/main.css}"
-          rel="stylesheet"/>
-    <link href="../static/css/login-register.css"
-          th:href="@{/css/login-register.css}" rel="stylesheet"/>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-    <script src="../static/js/test.js"></script>
 </head>
 
 <body id="app" is="body-bind" class="fullbleed"
@@ -172,10 +163,6 @@
                             <paper-button class="web-bg">Start</paper-button>
                         </div>
                     </a>
-                    <!--                    <a href="#" class="codelab-card codelab-card-add user d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">-->
-                    <!--                        <img width="65px" height="65px" src="../static/images/add.svg"-->
-                    <!--                             th:src="@{/images/add.svg}"/>-->
-                    <!--                    </a>-->
                 </card-sorter>
             </main>
             <footer id="footer">
@@ -261,7 +248,9 @@
         </div>
     </div>
 </div>
-
+<script>
+    var page = "index";
+</script>
 
 <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>

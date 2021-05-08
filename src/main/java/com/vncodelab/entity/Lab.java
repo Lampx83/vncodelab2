@@ -9,6 +9,8 @@ public class Lab {
     private String userID;
     private String cateID;
 
+
+
     public Boolean getFeature() {
         return feature;
     }

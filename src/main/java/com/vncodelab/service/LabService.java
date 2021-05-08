@@ -1,14 +1,14 @@
 //
-package com.vncodelab.service.serviceImpl;
+package com.vncodelab.service;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import com.vncodelab.entity.Lab;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -40,12 +40,38 @@ public class LabService {
     }
 
 
-    public Timestamp save(Lab lab) throws ExecutionException, InterruptedException {
+    public void save(Lab lab) {
         Firestore dbFirestore = FirestoreClient.getFirestore();
-        ApiFuture<WriteResult> addLabRef = dbFirestore.collection("labs").document(lab.getDocID()).set(lab);
-        return addLabRef.get().getUpdateTime();
+        dbFirestore.collection("labs").document(lab.getDocID()).set(lab);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("lastUsed", FieldValue.serverTimestamp());
+        map.put("description", lab.getDescription());
+        map.put("userID", lab.getUserID());
+        dbFirestore.collection("labs").document(lab.getDocID()).collection("users").document(lab.getUserID()).set(map);
     }
 
+    public void delete(Lab lab) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+
+        //Kiểm tra xem có bao nhiêu người?
+        CollectionReference collection = db.collection("labs").document(lab.getDocID()).collection("users");
+        ApiFuture<QuerySnapshot> future = collection.get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        int numberOfUser = documents.size();
+
+        //Xoa nguoi dung khoi danh sach su dung labs
+        collection.document(lab.getUserID()).delete();
+        if (numberOfUser == 1) { //Neu chi con 1 nguoi
+            //Xoa trong firestore labs
+            db.collection("labs").document(lab.getDocID()).delete();
+        }
+        //Xoa rooms
+        Query query = db.collection("rooms").whereEqualTo("docID", lab.getDocID());
+        ApiFuture<QuerySnapshot> querySnapshot = query.get();
+        for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
+            document.getReference().delete();
+        }
+    }
 
     public Lab getByID(String docID) {
         Firestore dbFirestore = FirestoreClient.getFirestore();

@@ -1,9 +1,20 @@
 package com.vncodelab.entity;
 
+import com.google.cloud.Timestamp;
+
 public class Log {
     private int step;
     private int duration;
     private int enter;
+    private Timestamp lastEnter;
+
+    public Timestamp getLastEnter() {
+        return lastEnter;
+    }
+
+    public void setLastEnter(Timestamp lastEnter) {
+        this.lastEnter = lastEnter;
+    }
 
     public int getEnter() {
         return enter;

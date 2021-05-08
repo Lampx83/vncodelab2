@@ -576,17 +576,23 @@ a.codelab-card:hover {
     content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M20.21,17.64l-6.15-8.22V5.57h2.57V3H6.35v2.57h2.57v3.86l-6.3,8.4c-0.44,0.6-0.5,1.41-0.15,2.08C2.8,20.58,3.49,21,4.24,21h14.5c1.11,0,2.01-0.9,2.01-2.01C20.75,18.48,20.53,18,20.21,17.64z' fill='%2301579b'/></svg>")
 }
 
-
-.codelab-card h2 {
+.codelab-card card-header {
     -ms-flex: 1 0 auto;
     -webkit-flex: 1 0 auto;
     -webkit-font-smoothing: antialiased;
-    color: #4285f4;
-    flex: 1 0 auto;
+
+    display: flex;
     padding: 16px 16px 0;
+}
+
+.codelab-card h2 {
+    width: 100px;
     font-family: sans-serif;
     font-size: 25px;
+    color: #4285f4;
     line-height: 25px;
+    display: inline;
+    flex: 1 0 auto;
 }
 
 .codelab-card h3 {
@@ -666,11 +672,6 @@ a.codelab-card:hover {
     min-width: 400px;
 }
 
-.dropdown-menu .dropdown-item {
-    display: inline-block;
-    width: 100%;
-    padding: 10px 5px;
-}
 
 .container .dropdown .dropdown-menu a:hover {
     color: #fff;

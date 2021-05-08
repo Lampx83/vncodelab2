@@ -1,7 +1,6 @@
 package com.vncodelab.controller;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
 import com.google.firebase.cloud.FirestoreClient;
@@ -11,8 +10,8 @@ import com.vncodelab.entity.*;
 import com.vncodelab.json.LabInfo;
 import com.vncodelab.model.AjaxResponseBody;
 import com.vncodelab.others.MyFunc;
-import com.vncodelab.service.serviceImpl.LabService;
-import com.vncodelab.service.serviceImpl.RoomService;
+import com.vncodelab.service.LabService;
+import com.vncodelab.service.RoomService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -47,8 +46,8 @@ public class MainController {
         return "index";
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody Lab newLab) {
+    @PostMapping("/createLab")
+    public ResponseEntity<?> createLab(@RequestBody Lab newLab) throws IOException, InterruptedException {
         try {
             String docID = newLab.getDocID();
             if (docID.contains("docs.google.com")) {
@@ -70,8 +69,8 @@ public class MainController {
                     newLab.setDocID(map.get("file_id"));
                 }
             }
-          //  Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
-             Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
+            Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
+            //     Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             String line = input.readLine();
             p.waitFor();
@@ -87,7 +86,6 @@ public class MainController {
             Document doc = Jsoup.parse(inputFile, "UTF-8");
             Elements img = doc.getElementsByTag("img");
 
-
             //Save to Storage
             StorageClient storageClient = StorageClient.getInstance();  //Storage
             for (Element el : img) {
@@ -101,12 +99,21 @@ public class MainController {
             //Save to Fire Store
             Element codelab = doc.getElementsByTag("google-codelab").get(0);
             newLab.setHtml(codelab.toString());
-            Timestamp timestamp = labService.save(newLab);
+            labService.save(newLab);
 
+            return ResponseEntity.ok().body(newLab);
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 
+    @PostMapping("/deleteLab")
+    public ResponseEntity<?> deleteLab(@RequestBody Lab lab) {
+        try {
+            labService.delete(lab);
             AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
-            ajaxResponseBody.setMsg(timestamp.toString());
             ajaxResponseBody.setUpdate(true);
             return ResponseEntity.ok().body(ajaxResponseBody);
         } catch (Exception ex) {
@@ -114,6 +121,20 @@ public class MainController {
         }
         return null;
     }
+
+    @PostMapping("/deleteRoom")
+    public ResponseEntity<?> deleteRoom(@RequestBody Room room) {
+        try {
+            roomService.delete(room);
+            AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
+            ajaxResponseBody.setUpdate(true);
+            return ResponseEntity.ok().body(ajaxResponseBody);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
 
     @GetMapping("/cate/{cateID}")
     public String index(Model model, @PathVariable(name = "cateID") String cateID) {
@@ -209,20 +230,21 @@ public class MainController {
             List<QueryDocumentSnapshot> documents1 = future1.get().getDocuments();
             for (DocumentSnapshot document1 : documents1) {
                 Log log = document1.toObject(Log.class);
-                map.get(log.getStep()).setNumber(1);
+                map.get(log.getStep()).setNumber(map.get(log.getStep()).getNumber() + 1);
             }
             User user = document.toObject(User.class);
             user.setUserID(document.getId());
             String step = "";
             for (int i = 0; i < room.getNumberOfStep(); i++) {
-                if (map.get(i).getNumber() == 1) {
-                    step = step + "<td><span class ='labStep blue' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span></td>";
+                String detail = "<span class='hideSmall report-detail d-none'>" + map.get(i).getNumber() + "</span>";
+                if (map.get(i).getNumber() >= 1) {
+                    step = step + "<td><span class ='labStep blue' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span>" + detail + "</td>";
                 } else {
-                    step = step + "<td><span class ='labStep' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span></td>";
+                    step = step + "<td><span class ='labStep' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span>" + detail + "</td>";
                 }
             }
-
-            s = s + "<tr><td>" + user.getUserName() + "</td><td>" + step + "</td></tr>";
+            String tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + user.getUserID() + "\")'>Xóa</a> </div></td>";
+            s = s + "<tr id='tr-report-" + user.getUserID() + "' ><td>" + user.getUserName() + "</td><td>" + step + "</td>" + tdThreeDots + "</tr>";
         }
         AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
         ajaxResponseBody.setMsg(s);
@@ -269,8 +291,8 @@ public class MainController {
                     step = step + "<td class='tdcenter'><span class ='labStep' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='hideSmall report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
                 }
             }
-
-            s = s + "<tr><td>" + user.getUserName() + "</td><td>" + step + "</td></tr>";
+            String tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + user.getUserID() + "\")'>Xóa</a> </div></td>";
+            s = s + "<tr id='tr-report-" + user.getUserID() + "'><td>" + user.getUserName() + "</td><td>" + step + "</td>" + tdThreeDots + "</tr>";
         }
 
         AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
@@ -278,7 +300,6 @@ public class MainController {
         return ResponseEntity.ok().
 
                 body(ajaxResponseBody);
-
     }
 
 
@@ -309,6 +330,13 @@ public class MainController {
         return "mylabs";
     }
 
+    @PostMapping("/deleteUserReport")
+    public ResponseEntity<?> deleteUserReport(@RequestBody Room room) throws ExecutionException, InterruptedException {
+        roomService.deleteUserReport(room);
+        AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
+        ajaxResponseBody.setUpdate(true);
+        return ResponseEntity.ok().body(ajaxResponseBody);
+    }
 
 //    public static void main(String[] args) throws IOException, InterruptedException {
 //        Lab newLab = new Lab();

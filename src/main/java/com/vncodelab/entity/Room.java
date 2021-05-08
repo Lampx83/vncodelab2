@@ -1,13 +1,17 @@
 package com.vncodelab.entity;
 
+import com.google.cloud.Timestamp;
+
 public class Room {
 
     private String docID;
-    private String createdBy;
+    private String userID;
+    private Timestamp createTime;
 
     public int getNumberOfStep() {
         return numberOfStep;
     }
+
 
     public void setNumberOfStep(int numberOfStep) {
         this.numberOfStep = numberOfStep;
@@ -25,12 +29,12 @@ public class Room {
         this.docID = docID;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getRoomID() {

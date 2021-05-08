@@ -1,7 +1,5 @@
 package com.vncodelab.model;
 
-import com.vncodelab.entity.Lab;
-
 public class AjaxResponseBody {
     private String msg;
 
