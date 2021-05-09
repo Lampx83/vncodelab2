@@ -1,7 +1,19 @@
 package com.vncodelab.entity;
 
+import com.google.cloud.Timestamp;
+
 public class User {
     private String userName;
+
+    private Timestamp lastEnter;
+
+    public Timestamp getLastEnter() {
+        return lastEnter;
+    }
+
+    public void setLastEnter(Timestamp lastEnter) {
+        this.lastEnter = lastEnter;
+    }
 
     public String getUserID() {
         return userID;

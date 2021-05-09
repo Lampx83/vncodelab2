@@ -1,13 +1,33 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-    <meta name="theme-color" content="#4F7DC9">
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>VN Codelabs</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description" content="Nơi cung cấp các bài hướng dẫn. Các bài học được viết theo các dạng các bài thực hành (Labs) theo bước, giúp bạn dễ dàng làm theo và hiểu hơn về ngôn ngữ lập trình, công nghệ, giải pháp v.v...">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="generator" content="VnCodelab">
+    <meta name="application-name" content="VnCodelab">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#455a64">
+    <meta name="apple-mobile-web-app-title" content="VnCodelab">
+    <meta name="msapplication-TileColor" content="#455a64">
+    <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+    <meta name="theme-color" content="#455a64">
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZBW2LH2GQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-XZBW2LH2GQ');
+    </script>
+
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+
     <link href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
     <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet"/>
     <link href="../static/css/login-register.css" th:href="@{/css/login-register.css}" rel="stylesheet"/>
@@ -19,7 +39,7 @@
 <lab th:utext="${lab.html}"></lab>
 <!--&lt;!&ndash;TODO test&ndash;&gt;-->
 <!--<google-codelab codelab-gaid="" id="title" title="Title" environment="web" feedback-link="">-->
-<!--    <google-codelab-step label="Step 1" duration="0"></google-codelab-step>-->
+<!--    <google-codelab-step label="Step 1" duration="0">abc</google-codelab-step>-->
 <!--    <google-codelab-step label="Step 2" duration="0"></google-codelab-step>-->
 <!--    <google-codelab-step label="Step 3" duration="0"></google-codelab-step>-->
 <!--    <google-codelab-step label="Step 4" duration="0"></google-codelab-step>-->
@@ -30,7 +50,7 @@
 <div id="divtoshow" style="display: none; z-index: 2000" class="speech-bubble">Noi dung ben trong</div>
 <!--TOP BUTTON-->
 <div id="topButton">
-    <div class="site-width layout horizontal" style="  justify-content: flex-end;">
+    <div class="layout horizontal" style="  justify-content: flex-end;">
         <!--Room button-->
         <button id="btnRaiseHand" type="button" class="btn btn-secondary ml-2 d-none" data-toggle="button">
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="16" height="16" fill="#ffffff">

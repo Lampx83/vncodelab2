@@ -236,11 +236,14 @@ ul {
     list-style: none;
     padding: 0
 }
+#cate-dropdown{
+    margin-right: 16px;
+}
 
 .site-width {
     margin: 0 auto;
-    max-width: 1024px;
-    width: 90vw
+    max-width: 1080px;
+    width: 95vw
 }
 
 #banner {
@@ -480,7 +483,11 @@ a #login:hover {
     background-color: #4285f4
 }
 
-.codelab-card.category-web {
+.codelab-card-inside.card-feature {
+    border-bottom-color: #4285f4
+}
+
+.codelab-card-inside:hover {
     border-bottom-color: #4285f4
 }
 
@@ -498,43 +505,53 @@ a #login:hover {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    min-height: 155px;
+
 }
 
 
 .codelab-card {
-    -ms-flex: 1 0 330px;
+    -ms-flex: 1 0 360px;
     -ms-flex-direction: column;
-    -webkit-flex: 1 0 330px;
+    -webkit-flex: 1 0 360px;
+    padding: 8px;
+    max-width: 360px;
+    flex: 1 0 360px;
+    position: relative;
+    display: flex;
+}
+
+.codelab-card-inside {
     -webkit-flex-direction: column;
     background-color: #fff;
     border-bottom: 2px solid transparent;
     border-radius: 3px;
     box-shadow: 0 1px rgba(0, 0, 0, .15);
-    flex: 1 0 330px;
     flex-direction: column;
-    margin: 0 16px 16px 0;
-    max-width: 330px;
-    position: relative
+    height: 100%; overflow: auto;
+    width: 100%; overflow: auto;
+    display: flex;
+
 }
 
 .codelab-card-add {
     background-color: #eee;
     align-items: center;
+    display: flex;
     justify-content: center;
     border-radius: 10px;
     border: 2px dashed silver;
+    height: 100%; overflow: auto;
+    width: 100%; overflow: auto;
+    min-height: 140px;
 }
+
+
 
 a.codelab-card:hover {
     text-decoration: none;
     border-bottom-color: #71a445
 }
 
-
-.codelab-card img {
-    margin-right: 4px
-}
 
 .codelab-card .card-header {
     padding: 16px 16px 0
@@ -603,7 +620,7 @@ a.codelab-card:hover {
     flex: 1 0 auto;
     padding: 16px 16px 0;
     font-size: 16px;
-    line-height: 25px;
+    line-height: 23px;
     overflow: hidden;
 
 }
@@ -800,6 +817,49 @@ a.codelab-card:hover {
     border-color: #FFC10A !important;
 }
 
+
+@media (min-width: 600px) {
+    #banner .banner-title,
+    #banner paper-button {
+        margin-bottom: 16px
+    }
+
+    .banner-info {
+        line-height: 32px;
+        margin-right: 32px
+    }
+
+    .banner-info a {
+        text-decoration: underline
+    }
+
+    .banner-description {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex
+    }
+
+    .banner-description .banner-info {
+        -ms-flex: 1;
+        -webkit-flex: 1;
+        flex: 1
+    }
+
+    #searchbar {
+        background-color: #546e7a;
+        transition: background-color .4s cubic-bezier(0, 0, .2, 1);
+        width: 100%
+    }
+
+    #searchbar:hover {
+        background-color: #78909c
+    }
+
+    .logo-devs {
+        margin: 5px 32px 0 0
+    }
+}
+
 @media (max-width: 600px) {
     .layout.horizontal {
         justify-content: space-between;
@@ -808,9 +868,6 @@ a.codelab-card:hover {
     .hideSmall {
         display: none;
     }
-}
-
-@media (max-width: 600px) {
     #banner {
         line-height: 16px;
         padding: 16px 0
@@ -870,53 +927,7 @@ a.codelab-card:hover {
     .filters {
         width: 100%
     }
-}
 
-@media (min-width: 600px) {
-    #banner .banner-title,
-    #banner paper-button {
-        margin-bottom: 16px
-    }
-
-    .banner-info {
-        line-height: 32px;
-        margin-right: 32px
-    }
-
-    .banner-info a {
-        text-decoration: underline
-    }
-
-    .banner-description {
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: flex
-    }
-
-    .banner-description .banner-info {
-        -ms-flex: 1;
-        -webkit-flex: 1;
-        flex: 1
-    }
-}
-
-@media (min-width: 600px) {
-    #searchbar {
-        background-color: #546e7a;
-        transition: background-color .4s cubic-bezier(0, 0, .2, 1);
-        width: 100%
-    }
-
-    #searchbar:hover {
-        background-color: #78909c
-    }
-
-    .logo-devs {
-        margin: 5px 32px 0 0
-    }
-}
-
-@media (max-width: 600px) {
     #searchbar paper-input-container {
         display: none
     }
@@ -929,9 +940,7 @@ a.codelab-card:hover {
         margin-right: 8px;
         width: 40px
     }
-}
 
-@media (max-width: 600px) {
     #footer {
         padding: 24px 0
     }
@@ -945,9 +954,7 @@ a.codelab-card:hover {
     #footer .link-list {
         margin: 0 0 24px
     }
-}
 
-@media (max-width: 600px) {
     #cards {
         -ms-flex-align: center;
         -ms-flex-direction: column;
@@ -958,12 +965,11 @@ a.codelab-card:hover {
     }
 
     .codelab-card {
-        -ms-flex: 1 0 200px;
-        -webkit-flex: 1 0 200px;
-        flex: 1 0 200px;
-        margin: 0 0 16px;
+        -ms-flex: 1 0 120px;
+        -webkit-flex: 1 0 120px;
+        flex: 1 0 120px;
         max-width: 100%;
-        min-width: 280px;
+
         width: 100%
     }
 
@@ -978,38 +984,21 @@ a.codelab-card:hover {
     }
 }
 
-@media (min-width: 600px) and (max-width: 750px) {
+@media (min-width: 600px) and (max-width: 900px) {
     .codelab-card {
-        flex: 0 0 49%;
-        margin: 0% 2% 2% 0;
-
-    }
-
-    .codelab-card:nth-of-type(2n) {
-        margin-right: 0
+        flex: 0 0 50%;
+        max-width: 450px !important;
     }
 }
 
 
-@media (min-width: 751px) and (max-width: 1136px) {
+@media (min-width: 901px) and (max-width: 1136px) {
     .codelab-card {
-        -ms-flex: 0 0 32%;
-        -webkit-flex: 0 0 32%;
-        flex: 0 0 32%;
-        margin: 0 2% 2% 0
-    }
-
-    .codelab-card:nth-of-type(3n) {
-        margin-right: 0
+        -ms-flex: 0 0 33%;
+        -webkit-flex: 0 0 33%;
+        flex: 0 0 33%;
     }
 }
-
-@media (min-width: 1136px) {
-    .codelab-card:nth-of-type(3n) {
-        margin-right: 0
-    }
-}
-
 
 .iron-icon-0 {
     display: -ms-inline-flexbox;
@@ -1854,7 +1843,7 @@ iron-dropdown {
 }
 
 .paper-tabs-0 a {
-    padding-left: 20px;
+    padding-left: 16px;
 }
 
 .files input {

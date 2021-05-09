@@ -3,8 +3,7 @@
 <head>
     <title>VN Codelabs</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="description"
-          content="Google Developers Codelabs provide a guided, tutorial, hands-on coding experience. Most codelabs will step you through the process of building a small application, or adding a new feature to an existing application. They cover a wide range of topics such as Android Wear, Google Compute Engine, Project Tango, and Google APIs on iOS.">
+    <meta name="description" content="Nơi cung cấp các bài hướng dẫn. Các bài học được viết theo các dạng các bài thực hành (Labs) theo bước, giúp bạn dễ dàng làm theo và hiểu hơn về ngôn ngữ lập trình, công nghệ, giải pháp v.v...">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="generator" content="VnCodelab">
     <meta name="application-name" content="VnCodelab">
@@ -14,30 +13,16 @@
     <meta name="msapplication-TileColor" content="#455a64">
     <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
     <meta name="theme-color" content="#455a64">
-    <meta name="og:type" property="og:type" content="website">
-    <meta name="og:title" property="og:title" content="VnCodelab">
-    <meta name="og:description" property="og:description"
-          content="Google Developers Codelabs provide a guided, tutorial, hands-on coding experience. Most codelabs will step you through the process of building a small application, or adding a new feature to an existing application. They cover a wide range of topics such as Android Wear, Google Compute Engine, Project Tango, and Google APIs on iOS.">
-    <meta name="og:url" property="og:url" content="https://vncodelab.com/">
-    <meta name="og:site_name" property="og:site_name" content="VnCodelab">
-    <meta name="og:determiner" property="og:determiner" content="the">
-    <meta name="og:locale" property="og:locale" content="en_US">
-    <meta name="og:image" property="og:image" content="/images/og-image.png">
-    <meta name="og:image:url" property="og:image:url" content="/images/og-image.png">
-    <meta name="og:image:type" property="og:image:type" content="image/png">
-    <meta name="og:image:width" property="og:image:width" content="1200">
-    <meta name="og:image:height" property="og:image:height" content="1200">
-    <meta name="og:image:alt" property="og:image:alt" content="VnCodelab">
-    <meta name="twitter:card" property="twitter:card" content="summary_large_image">
-    <meta name="twitter:domain" property="twitter:domain" content="codelabs.developers.google.com">
-    <meta name="twitter:title" property="twitter:title" content="VnCodelab">
-    <meta name="twitter:site" property="twitter:site" content="@googledevs">
-    <meta name="twitter:creator" property="twitter:creator" content="@googledevs">
-    <meta name="twitter:description" property="twitter:description"
-          content="Google Developers Codelabs provide a guided, tutorial, hands-on coding experience. Most codelabs will step you through the process of building a small application, or adding a new feature to an existing application. They cover a wide range of topics such as Android Wear, Google Compute Engine, Project Tango, and Google APIs on iOS.">
-    <meta name="twitter:image" property="twitter:image" content="/images/og-image.png">
-    <meta name="twitter:url" property="twitter:url" content="https://vncodelab.appspot.com/">
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZBW2LH2GQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-XZBW2LH2GQ');
+    </script>
 
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
@@ -59,7 +44,7 @@
 
     <div id="mainToolbar" class="paper-header" style="margin-top: 0px;">
 
-        <div class="site-width layout horizontal" >
+        <div class="site-width layout horizontal">
             <a href="/"> <img src="../static/images/developers-logo.svg"
                               th:src="@{/images/developers-logo.svg}" class="logo-icon"
                               alt="Google Developers Logo"> <img
@@ -128,41 +113,32 @@
                     <h2 class="banner-title">Welcome to VnCodelab</h2>
                     <div class="banner-description">
                         <p class="banner-info">
-                            Nơi cung cấp các bài hướng dẫn. Các bài học được viết theo các dạng các bài thực hành (Labs) theo bước, giúp bạn dễ dàng làm theo và hiểu hơn về ngôn ngữ hay công nghệ
-                            <br><a href="https://github.com/googlecodelabs/tools">Tìm hiểu thêm</a>
+                            Nơi cung cấp các bài hướng dẫn. Các bài học được viết theo các dạng các bài thực hành (Labs) theo bước, giúp bạn dễ dàng làm theo và hiểu hơn về ngôn ngữ lập trình, công nghệ, giải pháp v.v...
+                            <br><a href="/lab/1f4139H4ZBLEPsd9S8_txs6h5NYmhPyU3El_doSLSCwg">Hướng dẫn</a>
                     </div>
                 </div>
             </header>
             <main>
                 <div id="filters" class="site-width layout horizontal center justified">
                     <div id="sortby">
-                        <paper-tabs selected="0" noink="" role="tablist" tabindex="0" class="x-scope paper-tabs-0">
-                            <a th:each="cate : ${cateList}" th:href="@{/cate/{path}(path=*{cate.getCateID()})}"><span
-                                    th:text="*{cate.getCateName()}"></span></a>
+                        <paper-tabs id="cate-tab" selected="0" noink="" role="tablist" tabindex="0" class="x-scope paper-tabs-0">
+                            <a href="#" class='text-primary d-none' onclick="filterCate('all')" id="tab-all">Tất cả</a>
                         </paper-tabs>
                     </div>
 
-
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> More
+                    <div class="dropdown d-none" id="cate-dropdown">
+                        <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Thêm
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a th:each="cate : ${cateListMore}" class="dropdown-item" th:href="@{/cate/{path}(path=*{cate.getCateID()})}"><span th:text="*{cate.getCateName()}"></span></a>
+                        <div class="dropdown-menu" id="cate-tab-expand" aria-labelledby="dropdownMenuButton">
                         </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border spinner-border" role="status" id="spiner-loading-card">
                     </div>
                 </div>
                 <card-sorter id="cards" class="site-width">
 
-                    <a th:each="lab : ${labList}" th:href="@{/lab/{path}(path=*{lab.getDocID()})}"
-                       class="codelab-card category-web">
-                        <h2 th:text="*{lab.getName()}"></h2>
-                        <h3 th:text="*{lab.getDescription()}"></h3>
-                        <div class="card-footer">
-                            <div class="category-icon web-icon"></div>
-                            <paper-button class="web-bg">Start</paper-button>
-                        </div>
-                    </a>
                 </card-sorter>
             </main>
             <footer id="footer">
@@ -252,9 +228,11 @@
     var page = "index";
 </script>
 
-<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-messaging.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-firestore.js"></script>
 
 <script type="text/javascript" src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
 <script type="text/javascript" src="../static/js/avatar.js" th:src="@{/js/avatar.js}"></script>

@@ -11,6 +11,9 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var currentUser;
 $(function () {
+    $("#add-form").submit(function (event) {
+        createLab();
+    });
     $('#btnLogin').click(function (e) {
         openLoginModal();
     });
@@ -43,6 +46,10 @@ $(function () {
         }
     });
     $('.toast').toast()
+
+    if (page === "index") {
+        loadFeatureLabs()
+    }
 });
 
 function logOut() {
@@ -102,8 +109,43 @@ function afterNotLogin() {
         enterLab();
 }
 
-function getLabCard(lab) {
-    return "<lab class='codelab-card category-web' id='" + lab.docID + "'><card-header><h2><a href = '/lab/" + lab.docID + "'>" + lab.name + "</a></h2><div class='dropdown'><a href='#' class='bi bi-three-dots-vertical' data-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteLab(\"" + lab.docID + "\")'>Xóa</a> </div></div></card-header><h3>" + lab.description + "</h3><div class='card-footer'><div class='category-icon web-icon'></div><a href='#' onclick=\"loadRooms('" + lab.docID + "')\" type='button' class='btn btn-primary'>Phòng học</a></div></lab>";
+function createLabCard(lab, mylabs) {
+    //Kiem tra xem da dua cate do len hay chua
+    var hasCate = false;
+    for (const element of $("#cate-tab").children()) {
+        if ($(element).text() === lab.cateID.trim()) {
+            hasCate = true;
+            break;
+        }
+    }
+    for (const element of $("#cate-tab-expand").children()) {
+        if ($(element).text() === lab.cateID.trim()) {
+            hasCate = true;
+            break;
+        }
+    }
+    if (!hasCate) {
+        $("#tab-all").removeClass("d-none")
+        if ($("#cate-tab").children().length < 6)
+            $("#cate-tab").append("<a href='#' onclick='filterCate(\"" + lab.cateID.trim() + "\")' class='text-primary'>" + lab.cateID.trim() + "</a>")
+        else {
+            $("#cate-tab-expand").append("<a href='#' class='dropdown-item' onclick='filterCate(\"" + lab.cateID.trim() + "\")' class='text-primary'>" + lab.cateID.trim() + "</a><span")
+            $("#cate-dropdown").removeClass("d-none")
+        }
+    }
+    if (mylabs)
+        return "<lab class = 'codelab-card codelab-card-item filter-cate-" + lab.cateID.trim() + "' id='" + lab.docID + "'><card class = 'codelab-card-inside " + ((lab.feature != null) ? 'card-feature' : '') + "'><card-header><h2><a href = '/lab/" + lab.docID + "'>" + lab.name + "</a></h2><div><a href='#' class='bi bi-three-dots-vertical' data-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteLab(\"" + lab.docID + "\")'>Xóa</a> </div></div></card-header><h3>" + lab.description + "</h3><div class='card-footer'><a class='text-primary align-middle text-uppercase' href='#' onclick='filterCate(\"" + lab.cateID.trim() + "\")'>" + lab.cateID + "</a><a href='#' onclick=\"loadRooms('" + lab.docID + "')\" type='button' class='btn btn-primary'>Phòng học</a></div></card></lab>";
+    else
+        return "<lab class = 'codelab-card codelab-card-item filter-cate-" + lab.cateID.trim() + "' id='" + lab.docID + "'><card class = 'codelab-card-inside'><card-header><h2><a href = '/lab/" + lab.docID + "'>" + lab.name + "</a></h2></div></card-header><h3>" + lab.description + "</h3><div class='card-footer'><a class='text-primary align-middle text-uppercase' href='#' onclick='filterCate(\"" + lab.cateID.trim() + "\")'>" + lab.cateID + "</a></div></card></lab>";
+}
+
+function filterCate(cateID) {
+    if (cateID === "all") {
+        $(".codelab-card-item").show();
+    } else {
+        $(".codelab-card-item").hide();
+        $(".filter-cate-" + cateID).show();
+    }
 }
 
 function loadLabs(user) {
@@ -120,7 +162,7 @@ function loadLabs(user) {
                         if (doc.exists) {
                             var lab = doc.data();
                             lab.description = description;
-                            $("#cards").prepend(getLabCard(lab));
+                            $("#cards").prepend(createLabCard(lab, true));
                         } else {
                             // doc.data() will be undefined in this case
                             console.log("No such document!");
@@ -128,9 +170,7 @@ function loadLabs(user) {
                     }).catch((error) => {
                         console.log("Error getting document:", error);
                     });
-
                 }
-
             });
             $(".codelab-card-add").removeClass("d-none")
             $("#spiner-loading-card").addClass("d-none")
@@ -138,6 +178,26 @@ function loadLabs(user) {
         .catch((error) => {
             console.log("Error getting documents: ", error);
         });
+}
+
+function loadFeatureLabs() {
+    var db = firebase.firestore();
+    db.collection("labs").where("feature", "==", true)
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                if (doc.exists) {
+                    var lab = doc.data();
+                    $("#cards").prepend(createLabCard(lab, false));
+                } else {
+                    console.log("No such document!");
+                }
+            });
+            $(".codelab-card-add").removeClass("d-none")
+            $("#spiner-loading-card").addClass("d-none")
+        }).catch((error) => {
+        console.log("Error getting documents: ", error);
+    });
 }
 
 function loadRooms(docID) {
@@ -381,7 +441,7 @@ function createLab() {
     var lab = {}
     lab["docID"] = $("#docID").val();
     lab["description"] = $("#description").val();
-    lab["cateID"] = $("#cateID").val();
+    lab["cateID"] = $("#cateID").val().trim();
     lab["userID"] = currentUser.uid;
 
     $("#add-lab-button").prop("disabled", true);
@@ -393,7 +453,7 @@ function createLab() {
         dataType: "json",
         contentType: "application/json",
         success: function (lab) {
-            $("#codelab-card-add").before(getLabCard(lab));
+            $("#codelab-card-add").before(createLabCard(lab, true));
             //Loading
             $("#add-lab-button").prop("disabled", false);
             $("#add-lab-button").html('Thêm');

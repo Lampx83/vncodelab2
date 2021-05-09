@@ -6,14 +6,14 @@ public class Log {
     private int step;
     private int duration;
     private int enter;
-    private Timestamp lastEnter;
+    private Timestamp time;
 
     public Timestamp getLastEnter() {
-        return lastEnter;
+        return time;
     }
 
-    public void setLastEnter(Timestamp lastEnter) {
-        this.lastEnter = lastEnter;
+    public void setLastEnter(Timestamp time) {
+        this.time = time;
     }
 
     public int getEnter() {

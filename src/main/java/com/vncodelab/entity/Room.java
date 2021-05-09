@@ -12,7 +12,6 @@ public class Room {
         return numberOfStep;
     }
 
-
     public void setNumberOfStep(int numberOfStep) {
         this.numberOfStep = numberOfStep;
     }
