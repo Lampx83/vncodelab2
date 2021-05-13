@@ -10,10 +10,13 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 var currentUser;
+
+$("#add-form").submit(function (e) {
+    e.preventDefault();
+});
+
 $(function () {
-    $("#add-form").submit(function (event) {
-        createLab();
-    });
+
     $('#btnLogin').click(function (e) {
         openLoginModal();
     });
@@ -46,6 +49,22 @@ $(function () {
         }
     });
     $('.toast').toast()
+    if (page === "mylabs") {
+        $("#cards").disableSelection();
+        $("#cards").sortable({
+            update: function (event, ui) {
+                var db = firebase.firestore();
+                for (let i = 0; i < $("#cards").children().length; i++) {
+                    let id = $("#cards").children()[i].id
+                    if (id !== "codelab-card-add" && !$("#" + id).hasClass("d-none")) {
+                        db.collection("labs").doc(id).collection("users").doc(currentUser.uid).update({order: i});
+                        db.collection("labs").doc(id).update({order: i});
+                    }
+                }
+            },
+            cancel: "#codelab-card-add"
+        });
+    }
 
     if (page === "index") {
         loadFeatureLabs()
@@ -141,28 +160,27 @@ function createLabCard(lab, mylabs) {
 
 function filterCate(cateID) {
     if (cateID === "all") {
-        $(".codelab-card-item").show();
+        $(".codelab-card-item").removeClass("d-none");
     } else {
-        $(".codelab-card-item").hide();
-        $(".filter-cate-" + cateID).show();
+        $(".codelab-card-item").addClass("d-none");
+        $(".filter-cate-" + cateID).removeClass("d-none");
     }
 }
 
 function loadLabs(user) {
     var db = firebase.firestore();
-    db.collectionGroup("users").where("userID", "==", currentUser.uid)
+    db.collectionGroup("users").where("userID", "==", currentUser.uid).orderBy("order")
         .get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 if (doc.exists) {
                     var description = doc.data().description;
                     var docRef = db.collection("labs").doc(doc.ref.parent.parent.id);
-
                     docRef.get().then((doc) => {
                         if (doc.exists) {
                             var lab = doc.data();
                             lab.description = description;
-                            $("#cards").prepend(createLabCard(lab, true));
+                            $("#codelab-card-add").before(createLabCard(lab, true));
                         } else {
                             // doc.data() will be undefined in this case
                             console.log("No such document!");
@@ -182,23 +200,47 @@ function loadLabs(user) {
 
 function loadFeatureLabs() {
     var db = firebase.firestore();
-    db.collection("labs").where("feature", "==", true)
-        .get()
-        .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                if (doc.exists) {
-                    var lab = doc.data();
-                    $("#cards").prepend(createLabCard(lab, false));
-                } else {
-                    console.log("No such document!");
-                }
-            });
-            $(".codelab-card-add").removeClass("d-none")
-            $("#spiner-loading-card").addClass("d-none")
-        }).catch((error) => {
-        console.log("Error getting documents: ", error);
-    });
+    let cateID = getUrlParameter("cateID");
+    if (cateID)
+        db.collection("labs").where("cateID", "==", cateID).where("feature", "==", true).orderBy("order").get().then((querySnapshot) => {
+            loadLabByQuerySnapshot(querySnapshot);
+        });
+    else
+        db.collection("labs").where("feature", "==", true).orderBy("order").get().then((querySnapshot) => {
+            loadLabByQuerySnapshot(querySnapshot);
+        });
 }
+
+function loadLabByQuerySnapshot(querySnapshot) {
+    querySnapshot.forEach((doc) => {
+        if (doc.exists) {
+            var lab = doc.data();
+            $("#cards").append(createLabCard(lab, false));
+        } else {
+            console.log("No such document!");
+        }
+    });
+    $(".codelab-card-add").removeClass("d-none")
+    $("#spiner-loading-card").addClass("d-none")
+}
+
+
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return typeof sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+    return false;
+};
+
 
 function loadRooms(docID) {
     $("rooms-spinner").removeClass("d-none");
@@ -438,33 +480,63 @@ var TimeAgo = (function () {
 }());
 
 function createLab() {
-    var lab = {}
-    lab["docID"] = $("#docID").val();
-    lab["description"] = $("#description").val();
-    lab["cateID"] = $("#cateID").val().trim();
-    lab["userID"] = currentUser.uid;
 
-    $("#add-lab-button").prop("disabled", true);
-    $("#add-lab-button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang thêm...');
-    $.ajax({
-        url: "/createLab",
-        type: "POST",
-        data: JSON.stringify(lab),
-        dataType: "json",
-        contentType: "application/json",
-        success: function (lab) {
-            $("#codelab-card-add").before(createLabCard(lab, true));
-            //Loading
-            $("#add-lab-button").prop("disabled", false);
-            $("#add-lab-button").html('Thêm');
-            $('#addLabModal').modal('hide')
-        },
-        error: function (e) {
-            $('#modal-error').text('Không thể thêm bài Lab')
-            $("#add-lab-button").prop("disabled", false);
-            $("#add-lab-button").html('Thêm');
-        }
-    })
+    //Kiểm tra thông tin
+    var valid = true;
+    if ($("#docID").val().trim() === "" || (!$("#docID").val().includes("docs.google.com") && !$("#docID").val().includes("codelabs-preview.appspot.com") && $("#docID").val().length != 44)) {
+        $("#docID").addClass("is-invalid")
+        valid = false
+    } else {
+        $("#docID").removeClass("is-invalid")
+        $("#docID").addClass("is-valid")
+    }
+
+    if ($("#cateID").val().trim() === "") {
+        $("#cateID").addClass("is-invalid")
+        valid = false
+    } else {
+        $("#cateID").removeClass("is-invalid");
+        $("#cateID").addClass("is-valid")
+    }
+
+    if ($("#description").val().trim() === "") {
+        $("#description").addClass("is-invalid")
+        valid = false
+    } else {
+        $("#description").removeClass("is-invalid")
+        $("#description").addClass("is-valid")
+    }
+
+
+    if (valid) {
+        var lab = {}
+        lab["docID"] = $("#docID").val();
+        lab["description"] = $("#description").val();
+        lab["cateID"] = $("#cateID").val().trim();
+        lab["userID"] = currentUser.uid;
+        $("#add-lab-button").html('');
+        $("#add-lab-button").prop("disabled", true);
+        $("#add-lab-button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang thêm...');
+        $.ajax({
+            url: "/createLab",
+            type: "POST",
+            data: JSON.stringify(lab),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (lab) {
+                $("#codelab-card-add").before(createLabCard(lab, true));
+                //Loading
+                $("#add-lab-button").prop("disabled", false);
+                $("#add-lab-button").html('Thêm');
+                $('#addLabModal').modal('hide')
+            },
+            error: function (e) {
+                $('#modal-error').text('Không thể thêm bài Lab')
+                $("#add-lab-button").prop("disabled", false);
+                $("#add-lab-button").html('Thêm');
+            }
+        })
+    }
 }
 
 function deleteLab(docID) {

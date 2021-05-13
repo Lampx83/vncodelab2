@@ -39,6 +39,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link href="../static/css/chat.css" th:href="@{/css/chat.css}" rel="stylesheet"/>
 
+    <script type="text/javascript" src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 
 <body id="app" is="body-bind" class="fullbleed" style="padding-top: 0px;">
@@ -124,6 +126,7 @@
                     <div class="spinner-border spinner-border" role="status" id="spiner-loading-card">
                     </div>
                 </div>
+
                 <card-sorter id="cards" class="site-width">
                     <a href='#' class='codelab-card' data-toggle='modal' data-target='#addLabModal' id="codelab-card-add">
                         <card class='codelab-card-add d-none'>
@@ -214,17 +217,18 @@
                 </button>
             </div>
 
-            <form id="add-form" action="#">
+            <form id="add-form" class="needs-validation" novalidate>
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <label for="docID" class="col-form-label">Link (hoặc ID) của bài thực hành:</label>
-                        <input type="text" class="form-control" id="docID" required>
+                        <label for="docID" class="col-form-label">Link của bài thực hành:</label>
+                        <input type="text" class="form-control" id="docID">
                     </div>
 
                     <div class="form-group">
                         <label for="cateID" class="col-form-label">Chủ đề:</label>
                         <select class="form-control" id="cateID">
+                            <option style="display:none">
                             <option th:each="cate : ${cateList}" th:value="${cate.getCateID()}" th:text="${cate.getCateName()}"></option>
                         </select>
                     </div>
@@ -237,7 +241,7 @@
                 </div>
                 <div class="modal-footer">
                     <span class="mr-auto text-danger" id="modal-error"></span>
-                    <button type="submit" class="btn btn-primary" id="add-lab-button">Thêm</button>
+                    <button type="button" class="btn btn-primary" id="add-lab-button" onclick="createLab()">Thêm</button>
                 </div>
             </form>
         </div>
@@ -313,9 +317,15 @@
 <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-messaging.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-firestore.js"></script>
 
-<script type="text/javascript" src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+
 <script type="text/javascript" src="../static/js/avatar.js" th:src="@{/js/avatar.js}"></script>
 <script type="text/javascript" src="../static/js/bootstrap.bundle.js" th:src="@{/js/bootstrap.bundle.js}"></script>
 <script type="text/javascript" src="../static/js/user.js" th:src="@{/js/user.js}"></script>
+
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
 </body>
 </html>

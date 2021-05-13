@@ -5,21 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Bootstrap 4 Toasts Vertically Stacked</title>
     <link href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <script type="text/javascript" src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-    <style>
-        .bs-example{
-            margin: 20px;
-        }
-    </style>
-    <script>
-        $('.toast').toast(option)
-        function a() {
-            $(".toast").toast('show');
-        }
-    </script>
 </head>
 <body>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/mOhHAurubZM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+<div class="row" id="sortable">
+    <div class="col-md-3" style="">
+        <div class="card-sub"><img class="card-img-top img-fluid" src="https://i.imgur.com/QwIYa8y.jpg" alt="Card image cap">
+            <div class="card-block">
+                <h4 class="card-title">Product 1</h4>
+                <p class="card-text">For what reason would it be advisable for me to think about business content?</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" style="">
+        <div class="card-sub"><img class="card-img-top img-fluid" src="https://i.imgur.com/QwIYa8y.jpg" alt="Card image cap">
+            <div class="card-block">
+                <h4 class="card-title">Product 2</h4>
+                <p class="card-text">For what reason would it be advisable for me to think about business content.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" draggable="false" style="">
+        <div class="card-sub"><img class="card-img-top img-fluid" src="https://i.imgur.com/QwIYa8y.jpg" alt="Card image cap" draggable="false">
+            <div class="card-block">
+                <h4 class="card-title">Product 3</h4>
+                <p class="card-text">For what reason would it be advisable for me to think about business content</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3" style="">
+        <div class="card-sub"><img class="card-img-top img-fluid" src="https://i.imgur.com/IglVN9o.jpg" alt="Card image cap">
+            <div class="card-block">
+                <h4 class="card-title">Product 4</h4>
+                <p class="card-text">For what reason would it be advisable for me to think about business content</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
 
 
 <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
@@ -27,9 +56,16 @@
 <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
 
-<script type="text/javascript" src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+
 <script type="text/javascript" src="../static/js/avatar.js" th:src="@{/js/avatar.js}"></script>
 <script type="text/javascript" src="../static/js/bootstrap.bundle.js" th:src="@{/js/bootstrap.bundle.js}"></script>
 <script type="text/javascript" src="../static/js/user.js" th:src="@{/js/user.js}"></script>
-</body>
+
+<script>
+    $(document).ready(function () {
+        $("#sortable").sortable();
+        $("#sortable").disableSelection();
+    });
+</script>
+
 </html>
