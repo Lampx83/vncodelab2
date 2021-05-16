@@ -11,15 +11,19 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var currentUser;
 
-$("#add-form").submit(function (e) {
-    e.preventDefault();
-});
 
 $(function () {
 
-    $('#btnLogin').click(function (e) {
-        openLoginModal();
+    $("#add-form").submit(function (e) {
+        e.preventDefault();
     });
+
+    $('#input-search').keypress(function (e) {
+        if (e.which == 13) {//
+            loadFeatureLabs()
+        }
+    });
+
     $('a#google_login').click(function (e) {
         var provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth()
@@ -65,6 +69,30 @@ $(function () {
             cancel: "#codelab-card-add"
         });
     }
+    availableTags = []
+    $("#input-search").autocomplete({
+        source: availableTags,
+        position: {
+            my: "left-8 top+10"
+        },
+        select: function (e, ui) {
+            if (ui.item.id.length == 44)
+                window.location.replace("/lab/" + ui.item.id);
+            else
+                filterCate(ui.item.id)
+        },
+        autoFocus: true
+    });
+
+    $("#input-search").keydown(function (event) {
+        if (event.keyCode == 13) {
+            if ($(".selector").val().length == 0) {
+                event.preventDefault();
+                return false;
+            }
+        }
+    });
+
 
     if (page === "index") {
         loadFeatureLabs()
@@ -128,6 +156,8 @@ function afterNotLogin() {
         enterLab();
 }
 
+var availableTags = []
+
 function createLabCard(lab, mylabs) {
     //Kiem tra xem da dua cate do len hay chua
     var hasCate = false;
@@ -144,18 +174,24 @@ function createLabCard(lab, mylabs) {
         }
     }
     if (!hasCate) {
-        $("#tab-all").removeClass("d-none")
+        if ($("#cate-tab").children().length > 2)
+            $("#tab-all").removeClass("d-none")
         if ($("#cate-tab").children().length < 6)
             $("#cate-tab").append("<a href='#' onclick='filterCate(\"" + lab.cateID.trim() + "\")' class='text-primary'>" + lab.cateID.trim() + "</a>")
         else {
             $("#cate-tab-expand").append("<a href='#' class='dropdown-item' onclick='filterCate(\"" + lab.cateID.trim() + "\")' class='text-primary'>" + lab.cateID.trim() + "</a><span")
             $("#cate-dropdown").removeClass("d-none")
         }
+        availableTags.push({"value": "- " + lab.cateID.trim() + " -", "id": lab.cateID})
     }
+    availableTags.push({"value": lab.name.trim(), "id": lab.docID.trim()})
+
     if (mylabs)
         return "<lab class = 'codelab-card codelab-card-item filter-cate-" + lab.cateID.trim() + "' id='" + lab.docID + "'><card class = 'codelab-card-inside " + ((lab.feature != null) ? 'card-feature' : '') + "'><card-header><h2><a href = '/lab/" + lab.docID + "'>" + lab.name + "</a></h2><div><a href='#' class='bi bi-three-dots-vertical' data-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteLab(\"" + lab.docID + "\")'>Xóa</a> </div></div></card-header><h3>" + lab.description + "</h3><div class='card-footer'><a class='text-primary align-middle text-uppercase' href='#' onclick='filterCate(\"" + lab.cateID.trim() + "\")'>" + lab.cateID + "</a><a href='#' onclick=\"loadRooms('" + lab.docID + "')\" type='button' class='btn btn-primary'>Phòng học</a></div></card></lab>";
     else
         return "<lab class = 'codelab-card codelab-card-item filter-cate-" + lab.cateID.trim() + "' id='" + lab.docID + "'><card class = 'codelab-card-inside'><card-header><h2><a href = '/lab/" + lab.docID + "'>" + lab.name + "</a></h2></div></card-header><h3>" + lab.description + "</h3><div class='card-footer'><a class='text-primary align-middle text-uppercase' href='#' onclick='filterCate(\"" + lab.cateID.trim() + "\")'>" + lab.cateID + "</a></div></card></lab>";
+
+
 }
 
 function filterCate(cateID) {
@@ -168,6 +204,8 @@ function filterCate(cateID) {
 }
 
 function loadLabs(user) {
+
+
     var db = firebase.firestore();
     db.collectionGroup("users").where("userID", "==", currentUser.uid).orderBy("order")
         .get()
@@ -199,6 +237,7 @@ function loadLabs(user) {
 }
 
 function loadFeatureLabs() {
+
     var db = firebase.firestore();
     let cateID = getUrlParameter("cateID");
     if (cateID)
@@ -212,6 +251,7 @@ function loadFeatureLabs() {
 }
 
 function loadLabByQuerySnapshot(querySnapshot) {
+    $("#cards").empty();
     querySnapshot.forEach((doc) => {
         if (doc.exists) {
             var lab = doc.data();
@@ -571,6 +611,5 @@ function deleteLab(docID) {
             }
         })
     })
-
-
 }
+

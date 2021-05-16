@@ -144,7 +144,11 @@ body.fullbleed {
 body {
     color: #5c5c5c;
     font-size: 16px;
-    line-height: 24px
+    line-height: 24px;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -236,7 +240,8 @@ ul {
     list-style: none;
     padding: 0
 }
-#cate-dropdown{
+
+#cate-dropdown {
     margin-right: 16px;
 }
 
@@ -332,7 +337,7 @@ ul {
     -ms-flex-pack: center;
     -webkit-justify-content: center;
     justify-content: center;
-    padding: 24px 0
+    padding: 24px 0 16px 0px;
 }
 
 #sortby paper-tabs {
@@ -413,6 +418,12 @@ ul {
 
 #searchbar paper-input-container label {
     opacity: .5
+}
+
+.dropdown-menu-profile-lab {
+    width: 220px !important;
+    margin: 0px !important;
+    padding: 0px;
 }
 
 .dropdown-menu-profile {
@@ -527,8 +538,10 @@ a #login:hover {
     border-radius: 3px;
     box-shadow: 0 1px rgba(0, 0, 0, .15);
     flex-direction: column;
-    height: 100%; overflow: auto;
-    width: 100%; overflow: auto;
+    height: 100%;
+    overflow: auto;
+    width: 100%;
+    overflow: auto;
     display: flex;
 
 }
@@ -540,11 +553,12 @@ a #login:hover {
     justify-content: center;
     border-radius: 10px;
     border: 2px dashed silver;
-    height: 100%; overflow: auto;
-    width: 100%; overflow: auto;
+    height: 100%;
+    overflow: auto;
+    width: 100%;
+    overflow: auto;
     min-height: 140px;
 }
-
 
 
 a.codelab-card:hover {
@@ -710,7 +724,9 @@ a.codelab-card:hover {
 #footer {
     background-color: #424242;
     font-size: 13px;
-    padding: 40px 0
+    padding: 40px 0;
+
+
 }
 
 #footer li,
@@ -753,7 +769,7 @@ a.codelab-card:hover {
     background-color: #616161;
     color: #fff;
     font-size: 13px;
-    padding: 10px 0
+    padding: 5px 0
 }
 
 .footerbar a {
@@ -764,19 +780,19 @@ a.codelab-card:hover {
     display: initial;
 }
 
-.labStepSize1{
+.labStepSize1 {
     width: 32px !important;
     height: 32px !important;
     line-height: 32px !important;
 }
 
-.labStepSize2{
+.labStepSize2 {
     width: 38px !important;
     height: 38px !important;
     line-height: 38px !important;
 }
 
-.labStepSize3{
+.labStepSize3 {
     width: 42px !important;
     height: 42px !important;
     line-height: 42px !important;
@@ -804,10 +820,12 @@ a.codelab-card:hover {
 .blue {
     background-color: #007bff;
 }
+
 .yellow {
     background-color: #FFC10A;
 }
-.tdcenter{
+
+.tdcenter {
     vertical-align: middle !important;
 }
 
@@ -868,6 +886,7 @@ a.codelab-card:hover {
     .hideSmall {
         display: none;
     }
+
     #banner {
         line-height: 16px;
         padding: 16px 0
@@ -1903,4 +1922,13 @@ iron-dropdown {
     font-weight: 600;
     text-transform: capitalize;
     text-align: center;
+}
+
+.ui-autocomplete {
+    margin-top: 30px !important;
+}
+.end-web {
+
+    margin-top: auto;
+
 }

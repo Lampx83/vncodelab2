@@ -5,47 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Bootstrap 4 Toasts Vertically Stacked</title>
     <link href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
-    <script type="text/javascript" src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+    <script>
+        $( function() {
+            var availableTags = [
+                "ActionScript",
+                "AppleScript",
+                "Asp",
+                "BASIC",
+                "C",
+                "C++",
+                "Clojure",
+                "COBOL",
+                "ColdFusion",
+                "Erlang",
+                "Fortran",
+                "Groovy",
+                "Haskell",
+                "Java",
+                "JavaScript",
+                "Lisp",
+                "Perl",
+                "PHP",
+                "Python",
+                "Ruby",
+                "Scala",
+                "Scheme"
+            ];
+            $( "#tags" ).autocomplete({
+                source: availableTags
+            });
+        } );
+    </script>
 </head>
 <body>
 
 
-<div class="row" id="sortable">
-    <div class="col-md-3" style="">
-        <div class="card-sub"><img class="card-img-top img-fluid" src="https://i.imgur.com/QwIYa8y.jpg" alt="Card image cap">
-            <div class="card-block">
-                <h4 class="card-title">Product 1</h4>
-                <p class="card-text">For what reason would it be advisable for me to think about business content?</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3" style="">
-        <div class="card-sub"><img class="card-img-top img-fluid" src="https://i.imgur.com/QwIYa8y.jpg" alt="Card image cap">
-            <div class="card-block">
-                <h4 class="card-title">Product 2</h4>
-                <p class="card-text">For what reason would it be advisable for me to think about business content.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3" draggable="false" style="">
-        <div class="card-sub"><img class="card-img-top img-fluid" src="https://i.imgur.com/QwIYa8y.jpg" alt="Card image cap" draggable="false">
-            <div class="card-block">
-                <h4 class="card-title">Product 3</h4>
-                <p class="card-text">For what reason would it be advisable for me to think about business content</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3" style="">
-        <div class="card-sub"><img class="card-img-top img-fluid" src="https://i.imgur.com/IglVN9o.jpg" alt="Card image cap">
-            <div class="card-block">
-                <h4 class="card-title">Product 4</h4>
-                <p class="card-text">For what reason would it be advisable for me to think about business content</p>
-            </div>
-        </div>
-    </div>
-</div>
+    <input id="tags">
 
 
 </body>
