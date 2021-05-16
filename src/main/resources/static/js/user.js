@@ -160,24 +160,32 @@ var availableTags = []
 
 function createLabCard(lab, mylabs) {
     //Kiem tra xem da dua cate do len hay chua
+
     var hasCate = false;
-    for (const element of $("#cate-tab").children()) {
-        if ($(element).text() === lab.cateID.trim()) {
-            hasCate = true;
-            break;
+    if (lab.cateID === "Khác") {
+        $("#tab-other").removeClass("d-none")
+        hasCate = true;
+    }else{
+        for (const element of $("#cate-tab").children()) {
+            if ($(element).text() === lab.cateID.trim()) {
+                hasCate = true;
+                break;
+            }
+        }
+        for (const element of $("#cate-tab-expand").children()) {
+            if ($(element).text() === lab.cateID.trim()) {
+                hasCate = true;
+                break;
+            }
         }
     }
-    for (const element of $("#cate-tab-expand").children()) {
-        if ($(element).text() === lab.cateID.trim()) {
-            hasCate = true;
-            break;
-        }
-    }
+
     if (!hasCate) {
         if ($("#cate-tab").children().length > 2)
             $("#tab-all").removeClass("d-none")
+
         if ($("#cate-tab").children().length < 6)
-            $("#cate-tab").append("<a href='#' onclick='filterCate(\"" + lab.cateID.trim() + "\")' class='text-primary'>" + lab.cateID.trim() + "</a>")
+            $("#tab-all").after("<a href='#' onclick='filterCate(\"" + lab.cateID.trim() + "\")' class='text-primary'>" + lab.cateID.trim() + "</a>")
         else {
             $("#cate-tab-expand").append("<a href='#' class='dropdown-item' onclick='filterCate(\"" + lab.cateID.trim() + "\")' class='text-primary'>" + lab.cateID.trim() + "</a><span")
             $("#cate-dropdown").removeClass("d-none")
@@ -204,7 +212,6 @@ function filterCate(cateID) {
 }
 
 function loadLabs(user) {
-
 
     var db = firebase.firestore();
     db.collectionGroup("users").where("userID", "==", currentUser.uid).orderBy("order")
@@ -547,7 +554,6 @@ function createLab() {
         $("#description").addClass("is-valid")
     }
 
-
     if (valid) {
         var lab = {}
         lab["docID"] = $("#docID").val();
@@ -569,6 +575,10 @@ function createLab() {
                 $("#add-lab-button").prop("disabled", false);
                 $("#add-lab-button").html('Thêm');
                 $('#addLabModal').modal('hide')
+                $('#add-form').trigger("reset");
+                $("#docID").removeClass("is-valid")
+                $("#description").removeClass("is-valid")
+                $("#cateID").removeClass("is-valid")
             },
             error: function (e) {
                 $('#modal-error').text('Không thể thêm bài Lab')

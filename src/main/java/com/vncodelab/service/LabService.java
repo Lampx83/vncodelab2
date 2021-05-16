@@ -47,6 +47,7 @@ public class LabService {
         map.put("lastUsed", FieldValue.serverTimestamp());
         map.put("description", lab.getDescription());
         map.put("userID", lab.getUserID());
+        map.put("order", 999);
         dbFirestore.collection("labs").document(lab.getDocID()).collection("users").document(lab.getUserID()).set(map);
     }
 

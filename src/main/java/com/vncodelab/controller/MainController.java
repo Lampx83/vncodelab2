@@ -12,6 +12,7 @@ import com.vncodelab.model.AjaxResponseBody;
 import com.vncodelab.others.MyFunc;
 import com.vncodelab.service.LabService;
 import com.vncodelab.service.RoomService;
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -65,8 +66,8 @@ public class MainController {
                     newLab.setDocID(map.get("file_id"));
                 }
             }
-            Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
-            //    Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
+           // Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
+               Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             String line = input.readLine();
             p.waitFor();
@@ -92,6 +93,7 @@ public class MainController {
                 el.attr("src", newUrl);
             }
 
+            FileUtils.deleteDirectory(new File(folderName));  //Xoa thu muc sau khi xong
             //Save to Fire Store
             Element codelab = doc.getElementsByTag("google-codelab").get(0);
             newLab.setHtml(codelab.toString());
