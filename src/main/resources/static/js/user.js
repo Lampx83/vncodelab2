@@ -24,6 +24,10 @@ $(function () {
         }
     });
 
+    $('#btnLogin').click(function (e) {
+        openLoginModal();
+    });
+
     $('a#google_login').click(function (e) {
         var provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth()
@@ -102,9 +106,6 @@ $(function () {
 function logOut() {
     firebase.auth().signOut().then(() => {
         $('.user').addClass("d-none");
-        $('#btnLogin').click(function (e) {
-            openLoginModal();
-        });
         $('#btnLogin').text("Đăng nhập");
         $('#btnLogin').addClass("rounded")
         $('#profilePicture').addClass("d-none")
