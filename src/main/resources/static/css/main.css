@@ -232,11 +232,10 @@ a {
     text-decoration: none
 }
 
-li,
-ul {
-    list-style: none;
-    padding: 0
-}
+/*li, ul {*/
+/*    list-style: none;*/
+/*    padding: 0*/
+/*}*/
 
 #cate-dropdown {
     margin-right: 16px;
