@@ -209,6 +209,8 @@ function filterCate(cateID) {
         $(".codelab-card-item").addClass("d-none");
         $(".filter-cate-" + cateID).removeClass("d-none");
     }
+
+    $("#cateID").val(cateID);
 }
 
 function loadLabs(user) {

@@ -8,8 +8,15 @@ public class Lab {
     private String html;
     private String userID;
     private String cateID;
+    private int order;
 
+    public int getOrder() {
+        return order;
+    }
 
+    public void setOrder(int order) {
+        this.order = order;
+    }
 
     public Boolean getFeature() {
         return feature;

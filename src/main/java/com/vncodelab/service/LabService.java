@@ -41,8 +41,12 @@ public class LabService {
 
 
     public void save(Lab lab) {
+        //Luu ban ghi cho Lab
         Firestore dbFirestore = FirestoreClient.getFirestore();
+        lab.setOrder(999);
         dbFirestore.collection("labs").document(lab.getDocID()).set(lab);
+
+        //Luu ban ghi cho Users
         HashMap<String, Object> map = new HashMap<>();
         map.put("lastUsed", FieldValue.serverTimestamp());
         map.put("description", lab.getDescription());

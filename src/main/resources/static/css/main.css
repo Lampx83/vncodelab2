@@ -145,10 +145,7 @@ body {
     color: #5c5c5c;
     font-size: 16px;
     line-height: 24px;
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
+
 }
 
 
@@ -248,7 +245,8 @@ ul {
 .site-width {
     margin: 0 auto;
     max-width: 1080px;
-    width: 95vw
+    width: 95vw;
+
 }
 
 #banner {
@@ -1927,8 +1925,4 @@ iron-dropdown {
 .ui-autocomplete {
     margin-top: 30px !important;
 }
-.end-web {
 
-    margin-top: auto;
-
-}
