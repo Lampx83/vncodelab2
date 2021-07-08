@@ -10,6 +10,16 @@ public class Lab {
     private String cateID;
     private int order;
 
+    private boolean insert = true;
+
+    public boolean isInsert() {
+        return insert;
+    }
+
+    public void setInsert(boolean insert) {
+        this.insert = insert;
+    }
+
     public int getOrder() {
         return order;
     }

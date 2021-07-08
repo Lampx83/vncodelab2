@@ -49,9 +49,7 @@
 <paper-header-panel id="main" mode="standard" main="" at-top="" class="x-scope paper-header-panel-0">
     <div id="mainToolbar" class="paper-header" style="margin-top: 0px;">
         <div class="site-width layout horizontal">
-            <a href="/"> <img src="../static/images/developers-logo.svg"
-                              th:src="@{/images/developers-logo.svg}" class="logo-icon"
-                              alt="Google Developers Logo"> <img
+            <a href="/"> <img src="../static/images/developers-logo.svg" th:src="@{/images/developers-logo.svg}" class="logo-icon" alt="Google Developers Logo"> <img
                     src="../static/images/lockup_developers_light_color.svg"
                     th:src="@{/images/lockup_developers_light_color.svg}"
                     class="logo-devs"
@@ -119,7 +117,7 @@
                 </div>
 
                 <card-sorter id="cards" class="site-width">
-                    <a href='#' class='codelab-card' data-toggle='modal' data-target='#addLabModal' id="codelab-card-add">
+                    <a href='#' class='codelab-card' id="codelab-card-add">
                         <card class='codelab-card-add d-none'>
                             <img width='65px' height='65px' src='../static/images/add.svg' th:src='@{/images/add.svg}'/>
                         </card>
@@ -137,8 +135,6 @@
         </div>
     </div>
 </paper-header-panel>
-
-
 
 <!--MODAL LOGIN-->
 <div class="modal fade login" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -223,6 +219,13 @@
                     <div class="form-group">
                         <label for="docID" class="col-form-label">Link của bài thực hành:</label>
                         <input type="text" class="form-control" id="docID">
+                    </div>
+
+                    <div class="form-check d-none" id="updateCheckboxdiv">
+                        <input class="form-check-input" type="checkbox" value="" id="updateCheckbox">
+                        <label class="form-check-label" for="updateCheckbox">
+                            Cập nhật từ Google Docs
+                        </label>
                     </div>
 
                     <div class="form-group">

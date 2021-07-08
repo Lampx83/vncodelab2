@@ -10,10 +10,21 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 var currentUser;
-
+var insertLab = true;  //true mean insert false mean update
 
 $(function () {
 
+    $("#codelab-card-add").click(function (e) {
+        $('#updateCheckboxdiv').addClass("d-none");
+        $('#addLabModal > div > div > div > h5').text("Thêm bài Lab")
+        $('#docID').prop("disabled", false);
+        $('#add-lab-button').text("Thêm");
+        $('#docID').val("")
+        $('#description').val("")
+        $('#addLabModal').modal('show')
+        insertLab = true;
+        $("#updateCheckbox").prop('checked', false);
+    });
     $("#add-form").submit(function (e) {
         e.preventDefault();
     });
@@ -166,7 +177,7 @@ function createLabCard(lab, mylabs) {
     if (lab.cateID === "Khác") {
         $("#tab-other").removeClass("d-none")
         hasCate = true;
-    }else{
+    } else {
         for (const element of $("#cate-tab").children()) {
             if ($(element).text() === lab.cateID.trim()) {
                 hasCate = true;
@@ -196,7 +207,7 @@ function createLabCard(lab, mylabs) {
     availableTags.push({"value": lab.name.trim(), "id": lab.docID.trim()})
 
     if (mylabs)
-        return "<lab class = 'codelab-card codelab-card-item filter-cate-" + lab.cateID.trim() + "' id='" + lab.docID + "'><card class = 'codelab-card-inside " + ((lab.feature != null) ? 'card-feature' : '') + "'><card-header><h2><a href = '/lab/" + lab.docID + "'>" + lab.name + "</a></h2><div><a href='#' class='bi bi-three-dots-vertical' data-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteLab(\"" + lab.docID + "\")'>Xóa</a> </div></div></card-header><h3>" + lab.description + "</h3><div class='card-footer'><a class='text-primary align-middle text-uppercase' href='#' onclick='filterCate(\"" + lab.cateID.trim() + "\")'>" + lab.cateID + "</a><a href='#' onclick=\"loadRooms('" + lab.docID + "')\" type='button' class='btn btn-primary'>Phòng học</a></div></card></lab>";
+        return "<lab class = 'codelab-card codelab-card-item filter-cate-" + lab.cateID.trim() + "' id='" + lab.docID + "'><card class = 'codelab-card-inside " + ((lab.feature != null) ? 'card-feature' : '') + "'><card-header><h2><a href = '/lab/" + lab.docID + "'>" + lab.name + "</a></h2><div><a href='#' class='bi bi-three-dots-vertical' data-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteLab(\"" + lab.docID + "\")'>Xóa</a><a class='dropdown-item' href='#' onclick='editLab(\"" + lab.docID + "\")'>Sửa</a> </div></div></card-header><h3>" + lab.description + "</h3><div class='card-footer'><a class='text-primary align-middle text-uppercase' href='#' onclick='filterCate(\"" + lab.cateID.trim() + "\")'>" + lab.cateID + "</a><a href='#' onclick=\"loadRooms('" + lab.docID + "')\" type='button' class='btn btn-primary'>Phòng học</a></div></card></lab>";
     else
         return "<lab class = 'codelab-card codelab-card-item filter-cate-" + lab.cateID.trim() + "' id='" + lab.docID + "'><card class = 'codelab-card-inside'><card-header><h2><a href = '/lab/" + lab.docID + "'>" + lab.name + "</a></h2></div></card-header><h3>" + lab.description + "</h3><div class='card-footer'><a class='text-primary align-middle text-uppercase' href='#' onclick='filterCate(\"" + lab.cateID.trim() + "\")'>" + lab.cateID + "</a></div></card></lab>";
 
@@ -563,9 +574,10 @@ function createLab() {
         lab["description"] = $("#description").val();
         lab["cateID"] = $("#cateID").val().trim();
         lab["userID"] = currentUser.uid;
+        lab["insert"] = insertLab||$("#updateCheckbox").is(':checked');
         $("#add-lab-button").html('');
         $("#add-lab-button").prop("disabled", true);
-        $("#add-lab-button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang thêm...');
+        $("#add-lab-button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang thực hiện...');
         $.ajax({
             url: "/createLab",
             type: "POST",
@@ -590,6 +602,29 @@ function createLab() {
             }
         })
     }
+}
+
+function editLab(docID) {
+    insertLab = false;
+    $('#updateCheckboxdiv').removeClass("d-none");
+    $('#addLabModal > div > div > div > h5').text("Sửa bài Lab")
+    $('#docID').prop("disabled", true);
+    $('#add-lab-button').text("Cập nhật");
+    $('#docID').val(docID)
+
+    $('#addLabModal').modal('show')
+    var db = firebase.firestore();
+    var docRef = db.collection("labs").doc(docID);
+    docRef.get().then((doc) => {
+        if (doc.exists) {
+            $('#description').val(doc.data().description)
+            $("#cateID").val(doc.data().cateID);
+        } else {
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
 }
 
 function deleteLab(docID) {
