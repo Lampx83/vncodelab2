@@ -86,7 +86,7 @@ public class MainController {
 
             ProcessBuilder builder = new ProcessBuilder();
             builder.command("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());
-            builder.directory(new File(System.getProperty("user.home")));
+           // builder.directory(new File(System.getProperty("user.home")));
             Process p = builder.start();
 
 
