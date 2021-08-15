@@ -1,4 +1,63 @@
-#Deploy
+#Deploy lên server tomcat
+Cập nhật apt
+```
+sudo apt update
+sudo apt upgrade
+```
+Cài git
+```aidl
+sudo apt install git
+```
+
+
+Cài
+```aidl
+sudo apt-get install lsof
+```
+
+Cài maven
+```aidl
+sudo apt install maven
+```
+
+
+Cài golang
+```aidl
+sudo apt install golang
+
+
+
+
+
+
+
+Cài Java
+```
+sudo apt-get install default-jdk
+```
+
+Tải Tomcat
+```
+wget https://mirrors.ocf.berkeley.edu/apache/tomcat/tomcat-9/v9.0.52/bin/apache-tomcat-9.0.52.tar.gz
+```
+Giải nén Tomcat
+```aidl
+tar xzf apache-tomcat-9.0.52.tar.gz
+```
+Chuyển tomcat vào thư mục
+```aidl
+sudo mv apache-tomcat-9.0.50 /usr/local/tomcat9
+```
+
+Thiết lập các biến môi trường
+```aidl
+echo "export CATALINA_HOME="/usr/local/tomcat9"" >> ~/.bashrc
+echo "export JAVA_HOME="/usr/lib/jvm/java-11-oracle"" >> ~/.bashrc
+echo "export JRE_HOME="/usr/lib/jvm/java-11-oracle"" >> ~/.bashrc
+source ~/.bashrc
+```
+
+
 Hướng dẫn cách deploy ứng dụng trên Google Cloud
 ##Compute engine
 ###Vào thư mục vncodelab2
