@@ -40,23 +40,11 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("page", "home");
         return "index";
-    }
-
-    @GetMapping("/mylabs")
-    public String mylabs(Model model) {
-        model.addAttribute("page", "mylabs");
-        return "index";
-    }
-
-    @GetMapping("/roadmap/{roadID}")
-    public String roadmap(Model model, @PathVariable(name = "roadID") String roadID) {
-        return "roadmap";
     }
 
     @PostMapping("/createLab")
-    public ResponseEntity<?> createLab(@RequestBody Lab newLab) {
+    public ResponseEntity<?> createLab(@RequestBody Lab newLab) throws IOException, InterruptedException {
         try {
             String docID = newLab.getDocID();
             if (docID.contains("docs.google.com")) {
@@ -78,34 +66,24 @@ public class MainController {
                     newLab.setDocID(map.get("file_id"));
                 }
             }
-            if (newLab.isInsert()) {
-                System.out.println("Done81");
-                //  Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
-               Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
-                System.out.println("Done82 " + newLab.getDocID());
-                BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-                System.out.println("Done83" + input);
-//                String line = input.readLine();
-//                System.out.println("Done84");
-                p.waitFor();
 
-//                System.out.println("Done87");
-//                String folderName = line.split("\t")[1];
-                String folderName = "Tesst";
-                String line;
-                System.out.println("96");
-                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
-                String totalLine = "";
-                while ((line = br.readLine()) != null)
-                    totalLine = totalLine + line;
-                System.out.println("Done93");
-                LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
-                newLab.setName(labInfo.getTitle());
-                System.out.println("Done96");
-                File inputFile = new File(folderName + "/index.html");
-                Document doc = Jsoup.parse(inputFile, "UTF-8");
-                Elements img = doc.getElementsByTag("img");
-                System.out.println("Done100");
+          //  Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
+             Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
+            BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            String line = input.readLine();
+            p.waitFor();
+            String folderName = line.split("\t")[1];
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
+            String totalLine = "";
+            while ((line = br.readLine()) != null)
+                totalLine = totalLine + line;
+            LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
+            newLab.setName(labInfo.getTitle());
+
+            File inputFile = new File(folderName + "/index.html");
+            Document doc = Jsoup.parse(inputFile, "UTF-8");
+            Elements img = doc.getElementsByTag("img");
+            if (newLab.isInsert()) {
                 //Save to Storage
                 StorageClient storageClient = StorageClient.getInstance();  //Storage
                 for (Element el : img) {
@@ -115,24 +93,18 @@ public class MainController {
                     String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
                     el.attr("src", newUrl);
                 }
+
                 FileUtils.deleteDirectory(new File(folderName));  //Xoa thu muc sau khi xong
-                //Save to Fire Store
-                Element codelab = doc.getElementsByTag("google-codelab").get(0);
-                newLab.setHtml(codelab.toString());
-                labService.save(newLab);
-                return ResponseEntity.ok().body(newLab);
-            } else {  //Update
-                Lab lab = labService.getByID(newLab.getDocID());
-                lab.setOrder(newLab.getOrder());
-                lab.setCateID(newLab.getCateID());
-                lab.setDescription(newLab.getDescription());
-                lab.setFeature(newLab.getFeature());
-                labService.save(lab);
-                return ResponseEntity.ok().body(lab);
             }
+            //Save to Fire Store
+            Element codelab = doc.getElementsByTag("google-codelab").get(0);
+            newLab.setHtml(codelab.toString());
+
+            labService.save(newLab);
+
+            return ResponseEntity.ok().body(newLab);
+
         } catch (Exception ex) {
-            System.out.println("Exception");
-            System.out.println(ex.getMessage());
             ex.printStackTrace();
         }
         return null;
@@ -329,7 +301,9 @@ public class MainController {
 
         AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
         ajaxResponseBody.setMsg(s);
-        return ResponseEntity.ok().body(ajaxResponseBody);
+        return ResponseEntity.ok().
+
+                body(ajaxResponseBody);
     }
 
 
@@ -354,6 +328,11 @@ public class MainController {
         return "lab";
     }
 
+    @GetMapping("/mylabs")
+    public String labs(Model model) throws InterruptedException, ExecutionException {// Hien thi toan bo labs cua nguoi do tu Firebase
+        model.addAttribute("cateList", MyFunc.getCateList());
+        return "mylabs";
+    }
 
     @PostMapping("/deleteUserReport")
     public ResponseEntity<?> deleteUserReport(@RequestBody Room room) throws ExecutionException, InterruptedException {
