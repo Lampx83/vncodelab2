@@ -85,8 +85,8 @@ public class MainController {
              // Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
 
             ProcessBuilder builder = new ProcessBuilder();
-            builder.command( "claat","export", newLab.getDocID());
-           // builder.command("ls");
+          //  builder.command( "claat","export", newLab.getDocID());
+           builder.command("ls");
            // builder.directory(new File(System.getProperty("user.home")));
             Process p = builder.start();
 
