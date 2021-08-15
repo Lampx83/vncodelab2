@@ -85,11 +85,15 @@ public class MainController {
                 System.out.println("Done82 " + newLab.getDocID());
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
                 System.out.println("Done83" + input);
-                String line = input.readLine();
-                System.out.println("Done84");
+//                String line = input.readLine();
+//                System.out.println("Done84");
                 p.waitFor();
-                System.out.println("Done87");
-                String folderName = line.split("\t")[1];
+
+//                System.out.println("Done87");
+//                String folderName = line.split("\t")[1];
+                String folderName = "Tesst";
+                String line;
+                System.out.println("96");
                 BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
                 String totalLine = "";
                 while ((line = br.readLine()) != null)
