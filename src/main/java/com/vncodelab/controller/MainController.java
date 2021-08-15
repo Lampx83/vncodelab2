@@ -29,7 +29,9 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 @Controller
 public class MainController {
@@ -68,29 +70,14 @@ public class MainController {
                 }
             }
           //  Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
-            //   Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
+              Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
 
-            Process proc = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());
-            InputStream stderr = proc.getErrorStream();
-            InputStreamReader isr = new InputStreamReader(stderr);
-            BufferedReader br = new BufferedReader(isr);
+            StreamGobbler streamGobbler =  new StreamGobbler(p.getInputStream(), System.out::println);
+            Executors.newSingleThreadExecutor().submit(streamGobbler);
+            int exitCode = p.waitFor();
+            assert exitCode == 0;
 
-            CompletableFuture.runAsync(() -> {
-                try {
-                    //logger.info("Java java-app stream has been started");
-                    String line = null;
-                    while ( (line = br.readLine()) != null)
-
-                        System.out.println(line);
-
-                    System.out.println(line);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            });
-
-            System.out.println("done");
+            System.out.println("Done");
 
 
        //    Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
@@ -373,4 +360,21 @@ public class MainController {
 //        newLab.setDocID("11gRpdzlXHIwZ__YS0N9yNBo9E7vjyDgZ_0-wnQvCUDA");
 //        new MainController().save(newLab);
 //    }
+
+    private static class StreamGobbler implements Runnable {
+        private InputStream inputStream;
+        private Consumer<String> consumer;
+
+        public StreamGobbler(InputStream inputStream, Consumer<String> consumer) {
+            this.inputStream = inputStream;
+            this.consumer = consumer;
+        }
+
+        @Override
+        public void run() {
+            new BufferedReader(new InputStreamReader(inputStream)).lines().forEach(consumer);
+            System.out.println("run");
+        }
+    }
 }
+
