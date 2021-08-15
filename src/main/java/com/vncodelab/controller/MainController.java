@@ -56,7 +56,7 @@ public class MainController {
     }
 
     @PostMapping("/createLab")
-    public ResponseEntity<?> createLab(@RequestBody Lab newLab) throws IOException, InterruptedException {
+    public ResponseEntity<?> createLab(@RequestBody Lab newLab) {
         try {
             String docID = newLab.getDocID();
             if (docID.contains("docs.google.com")) {
