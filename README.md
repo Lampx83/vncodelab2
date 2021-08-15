@@ -68,6 +68,8 @@ git pull
 ###Stop port 80 (bỏ dấu source)
 ```
 sudo kill -9 $(sudo lsof -t -i:80)
+sudo kill -9 $(sudo lsof -t -i:8080)
+sudo kill -9 $(sudo lsof -t -i:8443)
 ```
 ###Bật dịch vụ Web
 ```
