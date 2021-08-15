@@ -27,11 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 @Controller
 public class MainController {
@@ -59,7 +56,7 @@ public class MainController {
     }
 
     @PostMapping("/createLab")
-    public ResponseEntity<?> createLab(@RequestBody Lab newLab) throws IOException, InterruptedException {
+    public ResponseEntity<?> createLab(@RequestBody Lab newLab) {
         try {
             String docID = newLab.getDocID();
             if (docID.contains("docs.google.com")) {
@@ -81,55 +78,63 @@ public class MainController {
                     newLab.setDocID(map.get("file_id"));
                 }
             }
-          //  Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
-              Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
-
-            StreamGobbler streamGobbler =  new StreamGobbler(p.getInputStream(), System.out::println);
-            Executors.newSingleThreadExecutor().submit(streamGobbler);
-            int exitCode = p.waitFor();
-            assert exitCode == 0;
-
-            System.out.println("Done");
+            if (newLab.isInsert()) {
+                System.out.println("Done81");
 
 
-       //    Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
-          //   Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
-//            BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-//            String line = input.readLine();
-//            p.waitFor();
-//            String folderName = line.split("\t")[1];
-//            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
-//            String totalLine = "";
-//            while ((line = br.readLine()) != null)
-//                totalLine = totalLine + line;
-//            LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
-//            newLab.setName(labInfo.getTitle());
-//
-//            File inputFile = new File(folderName + "/index.html");
-//            Document doc = Jsoup.parse(inputFile, "UTF-8");
-//            Elements img = doc.getElementsByTag("img");
-//            if (newLab.isInsert()) {
-//                //Save to Storage
-//                StorageClient storageClient = StorageClient.getInstance();  //Storage
-//                for (Element el : img) {
-//                    File file = new File(folderName + "/" + el.attr("src"));
-//                    InputStream is = new FileInputStream(file);
-//                    Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + folderName + "/" + file.getName(), is);
-//                    String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
-//                    el.attr("src", newUrl);
-//                }
-//
-//                FileUtils.deleteDirectory(new File(folderName));  //Xoa thu muc sau khi xong
-//            }
-//            //Save to Fire Store
-//            Element codelab = doc.getElementsByTag("google-codelab").get(0);
-//            newLab.setHtml(codelab.toString());
-//
-//            labService.save(newLab);
-//
-//            return ResponseEntity.ok().body(newLab);
-//
+              //  Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
+               Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
+                System.out.println("Done82 " + newLab.getDocID());
+                BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+                System.out.println("Done83" + input);
+//                String line = input.readLine();
+//                System.out.println("Done84");
+                p.waitFor();
+
+//                System.out.println("Done87");
+//                String folderName = line.split("\t")[1];
+                String folderName = "Tesst";
+                String line;
+                System.out.println("96");
+                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
+                String totalLine = "";
+                while ((line = br.readLine()) != null)
+                    totalLine = totalLine + line;
+                System.out.println("Done93");
+                LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
+                newLab.setName(labInfo.getTitle());
+                System.out.println("Done96");
+                File inputFile = new File(folderName + "/index.html");
+                Document doc = Jsoup.parse(inputFile, "UTF-8");
+                Elements img = doc.getElementsByTag("img");
+                System.out.println("Done100");
+                //Save to Storage
+                StorageClient storageClient = StorageClient.getInstance();  //Storage
+                for (Element el : img) {
+                    File file = new File(folderName + "/" + el.attr("src"));
+                    InputStream is = new FileInputStream(file);
+                    Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + folderName + "/" + file.getName(), is);
+                    String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
+                    el.attr("src", newUrl);
+                }
+                FileUtils.deleteDirectory(new File(folderName));  //Xoa thu muc sau khi xong
+                //Save to Fire Store
+                Element codelab = doc.getElementsByTag("google-codelab").get(0);
+                newLab.setHtml(codelab.toString());
+                labService.save(newLab);
+                return ResponseEntity.ok().body(newLab);
+            } else {  //Update
+                Lab lab = labService.getByID(newLab.getDocID());
+                lab.setOrder(newLab.getOrder());
+                lab.setCateID(newLab.getCateID());
+                lab.setDescription(newLab.getDescription());
+                lab.setFeature(newLab.getFeature());
+                labService.save(lab);
+                return ResponseEntity.ok().body(lab);
+            }
         } catch (Exception ex) {
+            System.out.println("Exception");
+            System.out.println(ex.getMessage());
             ex.printStackTrace();
         }
         return null;
@@ -365,21 +370,4 @@ public class MainController {
 //        newLab.setDocID("11gRpdzlXHIwZ__YS0N9yNBo9E7vjyDgZ_0-wnQvCUDA");
 //        new MainController().save(newLab);
 //    }
-
-    private static class StreamGobbler implements Runnable {
-        private InputStream inputStream;
-        private Consumer<String> consumer;
-
-        public StreamGobbler(InputStream inputStream, Consumer<String> consumer) {
-            this.inputStream = inputStream;
-            this.consumer = consumer;
-        }
-
-        @Override
-        public void run() {
-            new BufferedReader(new InputStreamReader(inputStream)).lines().forEach(consumer);
-            System.out.println("run");
-        }
-    }
 }
-
