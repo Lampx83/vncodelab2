@@ -82,8 +82,11 @@ public class MainController {
                 System.out.println("Done81");
                 //  Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
                Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
+                System.out.println("Done82");
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+                System.out.println("Done83");
                 String line = input.readLine();
+                System.out.println("Done84");
                 p.waitFor();
                 System.out.println("Done87");
                 String folderName = line.split("\t")[1];
