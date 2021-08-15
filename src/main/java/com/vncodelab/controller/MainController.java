@@ -68,7 +68,7 @@ public class MainController {
             }
 
           //  Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
-             Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
+             Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             String line = input.readLine();
             p.waitFor();
