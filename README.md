@@ -73,6 +73,7 @@ sudo kill -9 $(sudo lsof -t -i:8443)
 ```
 ###Bật dịch vụ Web
 ```
+sudo mvn spring-boot:run &
 sudo nohup mvn spring-boot:run &
 ```
 ## Google Appengine

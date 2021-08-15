@@ -43,6 +43,7 @@ public class MainController {
         model.addAttribute("page", "home");
         return "index";
     }
+
     @GetMapping("/mylabs")
     public String mylabs(Model model) {
         model.addAttribute("page", "mylabs");
@@ -78,23 +79,26 @@ public class MainController {
                 }
             }
             if (newLab.isInsert()) {
-               // Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
-                     Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
+                System.out.println("Done81");
+                //  Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
+                Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
                 String line = input.readLine();
                 p.waitFor();
+                System.out.println("Done87");
                 String folderName = line.split("\t")[1];
                 BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
                 String totalLine = "";
                 while ((line = br.readLine()) != null)
                     totalLine = totalLine + line;
+                System.out.println("Done93");
                 LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
                 newLab.setName(labInfo.getTitle());
-
+                System.out.println("Done96");
                 File inputFile = new File(folderName + "/index.html");
                 Document doc = Jsoup.parse(inputFile, "UTF-8");
                 Elements img = doc.getElementsByTag("img");
-
+                System.out.println("Done100");
                 //Save to Storage
                 StorageClient storageClient = StorageClient.getInstance();  //Storage
                 for (Element el : img) {
@@ -340,7 +344,6 @@ public class MainController {
         model.addAttribute("lab", labService.getByID(room.getDocID()));
         return "lab";
     }
-
 
 
     @PostMapping("/deleteUserReport")
