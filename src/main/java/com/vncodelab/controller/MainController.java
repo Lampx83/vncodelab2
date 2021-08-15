@@ -91,21 +91,21 @@ public class MainController {
             Process p = builder.start();
 
 
-//            StreamGobbler streamGobbler =  new StreamGobbler(p.getInputStream(), System.out::println);
-//            Executors.newSingleThreadExecutor().submit(streamGobbler);
-//            int exitCode = p.waitFor();
-//            assert exitCode == 0;
-//
-//            System.out.println("Done");
+            StreamGobbler streamGobbler =  new StreamGobbler(p.getInputStream(), System.out::println);
+            Executors.newSingleThreadExecutor().submit(streamGobbler);
+            int exitCode = p.waitFor();
+            assert exitCode == 0;
+
+            System.out.println("Done");
 
 
        //    Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
           //   Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
-
-            BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-            String line = input.readLine();
-            System.out.println(line);
-            p.waitFor();
+//
+//            BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+//            String line = input.readLine();
+//            System.out.println(line);
+//            p.waitFor();
 
 
 //            String folderName = line.split("\t")[1];
