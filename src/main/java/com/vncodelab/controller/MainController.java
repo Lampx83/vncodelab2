@@ -43,7 +43,19 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Model model) {
+        model.addAttribute("page", "home");
         return "index";
+    }
+
+    @GetMapping("/mylabs")
+    public String mylabs(Model model) {
+        model.addAttribute("page", "mylabs");
+        return "index";
+    }
+
+    @GetMapping("/roadmap/{roadID}")
+    public String roadmap(Model model, @PathVariable(name = "roadID") String roadID) {
+        return "roadmap";
     }
 
     @PostMapping("/createLab")
@@ -314,9 +326,7 @@ public class MainController {
 
         AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
         ajaxResponseBody.setMsg(s);
-        return ResponseEntity.ok().
-
-                body(ajaxResponseBody);
+        return ResponseEntity.ok().body(ajaxResponseBody);
     }
 
 
@@ -341,11 +351,6 @@ public class MainController {
         return "lab";
     }
 
-    @GetMapping("/mylabs")
-    public String labs(Model model) throws InterruptedException, ExecutionException {// Hien thi toan bo labs cua nguoi do tu Firebase
-        model.addAttribute("cateList", MyFunc.getCateList());
-        return "mylabs";
-    }
 
     @PostMapping("/deleteUserReport")
     public ResponseEntity<?> deleteUserReport(@RequestBody Room room) throws ExecutionException, InterruptedException {
