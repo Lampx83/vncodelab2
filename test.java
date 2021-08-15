@@ -10,6 +10,7 @@ public class test {
             Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export 1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4");
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             String line = input.readLine();
+            System.out.println("Dong "+ line);
             p.waitFor();
             System.out.println("Done87");
             String folderName = line.split("\t")[1];
