@@ -13,6 +13,7 @@
     <version>1</version>
     <name>VnCodelab</name>
     <description>Vncodelab</description>
+    <packaging>war</packaging>
 
     <dependencies>
         <dependency>

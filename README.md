@@ -26,7 +26,7 @@ Cài golang
 sudo apt install golang
 
 
-
+mv vncodelab-1.war /opt/tomcat/webapps
 
 
 
