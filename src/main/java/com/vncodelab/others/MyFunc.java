@@ -15,6 +15,7 @@ public class MyFunc {
         cateList.add(new Category("JSP", "JSP"));
         cateList.add(new Category("NodeJS", "NodeJS"));
         cateList.add(new Category("MongoDB", "MongoDB"));
+        cateList.add(new Category("Project", "Project"));
         cateList.add(new Category("JPA", "JPA"));
         cateList.add(new Category("Khác", "Khác"));
         return cateList;
@@ -24,7 +25,6 @@ public class MyFunc {
         List<Category> cateList = new ArrayList<>();
         cateList.add(new Category("C", "C"));
         cateList.add(new Category("C++", "C++"));
-
         return cateList;
     }
 

@@ -27,8 +27,8 @@
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
-
-    <link href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet"/>
     <link href="../static/css/login-register.css" th:href="@{/css/login-register.css}" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
@@ -76,7 +76,7 @@
             </svg>
             <span class="hideSmall">Nộp bài</span>
         </button>
-        <button id="btnReport" type="button" class="btn btn-danger ml-2 d-none" data-toggle="modal" data-target="#reportModal">
+        <button id="btnReport" type="button" class="btn btn-danger ms-2 d-none" data-bs-toggle="modal" data-bs-target="#reportModal">
             <?xml version="1.0" encoding="iso-8859-1"?>
 
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="#ffffff">
@@ -89,7 +89,7 @@
             </svg>
             <span class="hideSmall">Báo cáo</span>
         </button>
-        <button id="btnRoom" type="button" class="btn btn-primary ml-2 d-none" data-toggle="collapse" data-target="#collapse-online">
+        <button id="btnRoom" type="button" class="btn btn-primary ms-2 d-none" data-bs-toggle="collapse" data-bs-target="#collapse-online">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
                 <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                 <path fill-rule="evenodd"
@@ -101,23 +101,63 @@
 
         <!--Profile Button-->
 
-        <img class="ms-2 rounded-circle user d-none p-1 profilePicture" id="profilePicture" width="41px" height="41px" data-toggle="dropdown" data-offset="-90,20">
-        <a href="#" data-toggle="dropdown" data-offset="-90,20" class="profilePicture">
-            <div class="ms-2 userName user d-none"></div>
-        </a>
+<!--        <img class="ms-2 rounded-circle user d-none p-1 profilePicture" id="profilePicture" width="41px" height="41px" data-toggle="dropdown" data-offset="-90,20">-->
+<!--        <a href="#" data-toggle="dropdown" data-offset="-90,20" class="profilePicture">-->
+<!--            <div class="ms-2 userName user d-none"></div>-->
+<!--        </a>-->
 
-        <div class="dropdown-menu  shadow-sm dropdown-menu-profile-lab">
-            <div class="profile-info">
-                <span id="profileName" class="text-primary"></span>
-                <span id="profileEmail"></span>
-            </div>
-            <div class="list-group list-group-flush">
-                <a href="/mylabs" class="list-group-item list-group-item-action">Lab của tôi</a>
-                <a href="#" class="list-group-item list-group-item-action text-danger" id="signout">Đăng xuất</a>
+<!--        <div class="dropdown-menu  shadow-sm dropdown-menu-profile-lab">-->
+<!--            <div class="profile-info">-->
+<!--                <span id="profileName" class="text-primary"></span>-->
+<!--                <span id="profileEmail"></span>-->
+<!--            </div>-->
+<!--            <div class="list-group list-group-flush">-->
+<!--                <a href="/mylabs" class="list-group-item list-group-item-action">Lab của tôi</a>-->
+<!--                <a href="#" class="list-group-item list-group-item-action text-danger" id="signout">Đăng xuất</a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <button id="btnLogin" type="button" class="btn btn-primary d-none">Đăng nhập</button>-->
+        <button id="login" type="button" class="guest btn btn-primary ms-3 d-none btn-warning" data-bs-toggle="modal" data-bs-target="#modal-login"><span th:text="#{login}">Login</span></button>
+        <div id="login-spinner" class="spinner-border text-light ms-3" role="status"></div>
+        <div class="dropdown">
+            <img id="avatar" th:src="@{/images/user.svg}" src="../../images/user.svg" data-bs-toggle="dropdown" width="38x" height="38x"
+                 class="user avatar rounded-circle ms-3 d-none dropdown-toggle">
+            <ul class="dropdown-menu dropdown-menu-center text-small" aria-labelledby="dropdownUser1">
+                <li><a class="dropdown-item" href="/mylabs" onclick="loadLabs(currentUser)">My Labs</a></li>
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modal-login">Profile</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#" onclick="firebase.auth().signOut();">Sign out</a></li>
+            </ul>
+        </div>
+        <div class="modal d-block1" id="modal-login" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content shadow">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Login</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="firebaseui-auth-container" class="guest"></div>
+                        <div id="user-signed-in" class="d-none d-flex user">
+                            <div class="flex-grow-1 d-flex justify-content-center">
+                                <img th:src="@{/images/user.svg}" src="../../images/user.svg" width="110px" height="110px" class="avatar rounded-circle">
+                            </div>
+                            <div class="flex-grow-1  d-flex flex-column align-self-center me-4">
+                                <div id="name" class="align-self-center text-primary fs-5">Name</div>
+                                <div id="email" class="align-self-center ">Email</div>
+                                <div id="phone">Phone</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-none user">
+                        <button id="sign-out" type="button" class="btn btn-danger" onclick="firebase.auth().signOut();">Sign out</button>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <button id="btnLogin" type="button" class="btn btn-primary d-none">Đăng nhập</button>
     </div>
 </div>
 
@@ -145,71 +185,6 @@
     </div>
 </div>
 
-<!--MODAL LOGIN-->
-<div class="modal fade login" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog login animated">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Đăng nhập với</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="box">
-                    <div class="content">
-                        <div class="social">
-                            <a id="google_login" class="circle google" href="#">
-                                <i class="bi bi-google"></i>
-                            </a>
-                            <a class="circle ">
-                                <i class="bi bi-facebook"></i>
-                            </a>
-                            <a class="circle ">
-                                <i class="bi bi-twitter"></i>
-                            </a>
-                        </div>
-                        <div class="division">
-                            <div class="line l"></div>
-                            <span>hoặc</span>
-                            <div class="line r"></div>
-                        </div>
-                        <div class="error"></div>
-                        <div class="form loginBox">
-                            <form method="" action="" accept-charset="UTF-8">
-                                <input id="email1" class="form-control" type="text" placeholder="Email" name="email">
-                                <input id="password1" class="form-control" type="password" placeholder="Password" name="password">
-                                <input class="btn btn-default btn-login" type="button" value="Đăng nhập" onclick="loginAjax()">
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="box">
-                    <div class="content registerBox" style="display:none;">
-                        <div class="form">
-                            <form method="" html="{:multipart=>true}" data-remote="true" action="" accept-charset="UTF-8">
-                                <input id="name" class="form-control" type="text" placeholder="Họ và tên" name="name">
-                                <input id="email2" class="form-control" type="text" placeholder="Email" name="email">
-                                <input id="password2" class="form-control" type="password" placeholder="Mật khẩu" name="password">
-                                <input id="password_confirmation" class="form-control" type="password" placeholder="Viết lại mật khẩu" name="password_confirmation">
-                                <input class="btn btn-default btn-register" type="button" value="Đăng ký" name="commit" onclick="createAccount()">
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="forgot login-footer">
-                    <a href="javascript: showRegisterForm();" style="color: #0a53be">Tạo tài khoản</a>
-                </div>
-                <div class="forgot register-footer" style="display:none">
-                    <span>Đã có tài khoản</span>
-                    <a href="javascript: showLoginForm();" style="color: #0a53be">Đăng nhập</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!--TOAST-->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1005">
@@ -306,13 +281,13 @@
             <div class="modal-body">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="raisehand-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Giơ tay</a>
+                        <a class="nav-link active" id="raisehand-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Giơ tay</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="practice-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Thực hành</a>
+                        <a class="nav-link" id="practice-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Thực hành</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="submit-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Nộp bài</a>
+                        <a class="nav-link" id="submit-tab" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Nộp bài</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -348,30 +323,30 @@
                         </table>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
 </div>
 
+<script>
+    var page = "lab"
+</script>
 
 <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
 <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
 <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-messaging.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-firestore.js"></script>
-
+<script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
 
 <script type="text/javascript" src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
 <script type="text/javascript" src="../static/js/avatar.js" th:src="@{/js/avatar.js}"></script>
-<script type="text/javascript" src="../static/js/bootstrap.bundle.js" th:src="@{/js/bootstrap.bundle.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-<script type="text/javascript" src="../static/js/user.js" th:src="@{/js/user.js}"></script>
+<script type="text/javascript" src="../static/js/user.js" th:src="@{/js/main.js}"></script>
 <script type="text/javascript" src="../static/js/lab.js" th:src="@{/js/lab.js}"></script>
 
 </body>

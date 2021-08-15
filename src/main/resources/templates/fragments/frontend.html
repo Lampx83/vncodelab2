@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <title>VN Codelabs</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description"
+          content="Nơi cung cấp các bài hướng dẫn. Các bài học được viết theo các dạng các bài thực hành (Labs) theo bước, giúp bạn dễ dàng làm theo và hiểu hơn về ngôn ngữ lập trình, công nghệ, giải pháp ...">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="generator" content="VnCodelab">
+    <meta name="application-name" content="VnCodelab">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#455a64">
+    <meta name="apple-mobile-web-app-title" content="VnCodelab">
+    <meta name="msapplication-TileColor" content="#455a64">
+    <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+    <meta name="theme-color" content="#455a64">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZBW2LH2GQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+        gtag('config', 'G-XZBW2LH2GQ');
+    </script>
+
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css"/>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link href="../../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet"/>
+    <link href="../../static/css/login-register.css" th:href="@{/css/login-register.css}" rel="stylesheet"/>
+    <link href="../../static/css/chat.css" th:href="@{/css/chat.css}" rel="stylesheet"/>
+
+</head>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-blue" th:fragment="navbar">
+    <div class="container">
+        <a class="navbar-brand" href="/" th:href="@{/}">
+            <img th:src="@{/images/logo.svg}" src="../../static/images/logo.svg" width="30" height="30" class="d-inline-block align-tops me-1">
+            <img th:src="@{/images/logo_text.svg}" src="../../static/images/logo_text.svg" height="30" class="d-inline-block align-tops me-1">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link nav-link-white dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span th:text="#{category}">Chủ đề</span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" th:with="categories=#{categories}">
+                        <li><a class="dropdown-item" href="/"><span th:text="#{all}">Tất cả</span></a></li>
+                        <li th:each="cate:${#strings.arraySplit(categories,',')}"><a class="dropdown-item" th:href="@{/(cateID=${cate})}"><span th:text="${cate}"></span></a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link nav-link-white" href="/?cateID=Project"><span th:text="#{project}">Project</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link nav-link-white" href="/roadmap/1"><span th:text="#{roadmap}">Roadmap</span></a>
+                </li>
+            </ul>
+            <div class="d-flex">
+                <form method="get" action="/" class="flex-grow-1 flex-md-grow-0">
+                    <input class="form-control" type="search" name="text" placeholder="Search" th:placeholder="#{search}" aria-label="Search" id="input-search">
+                </form>
+                <div class="btn-group ms-3">
+                    <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span th:text="#{language}">🇬🇧 English</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{${url}(lang=vi)}">🇻🇳 Tiếng Việt</a></li>
+                        <li><a class="dropdown-item" th:href="@{${url}(lang=en)}">🇬🇧 English</a></li>
+                    </ul>
+                </div>
+                <button id="login" type="button" class="guest btn btn-primary ms-3 d-none btn-warning" data-bs-toggle="modal" data-bs-target="#modal-login"><span th:text="#{login}">Login</span></button>
+                <div id="login-spinner" class="spinner-border text-light ms-3" role="status"></div>
+                <div class="dropdown">
+                    <img id="avatar" th:src="@{/images/user.svg}" src="../../images/user.svg" data-bs-toggle="dropdown" width="38x" height="38x"
+                         class="user avatar rounded-circle ms-3 d-none dropdown-toggle">
+                    <ul class="dropdown-menu dropdown-menu-center text-small" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" href="/mylabs" onclick="loadLabs(currentUser)">My Labs</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modal-login">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#" onclick="firebase.auth().signOut();">Sign out</a></li>
+                    </ul>
+                </div>
+                <div class="modal d-block1" id="modal-login" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content shadow">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Login</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="firebaseui-auth-container" class="guest"></div>
+                                <div id="user-signed-in" class="d-none d-flex user">
+                                    <div class="flex-grow-1 d-flex justify-content-center">
+                                        <img th:src="@{/images/user.svg}" src="../../images/user.svg" width="110px" height="110px" class="avatar rounded-circle">
+                                    </div>
+                                    <div class="flex-grow-1  d-flex flex-column align-self-center me-4">
+                                        <div id="name" class="align-self-center text-primary fs-5">Name</div>
+                                        <div id="email" class="align-self-center ">Email</div>
+                                        <div id="phone">Phone</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer d-none user">
+                                <button id="sign-out" type="button" class="btn btn-danger" onclick="firebase.auth().signOut();">Sign out</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<heroes th:fragment="heroes" th:if="${page}==home">
+    <div class="container px-4">
+        <div class="row flex-lg-row-reverse align-items-center g-5">
+            <div class="col-lg-6 align-middle text-center">
+                <img th:src="@{/images/learning.svg}" src="../../static/images/learning.svg" class="mx-lg-auto img-fluid" width="380" height="380" loading="lazy">
+            </div>
+            <div class="col-lg-6">
+                <p class="guide">VnCodelab cung cấp công cụ để tạo, quản lý, theo dõi phòng thực hành (Lab room) một cách tiện lợi. Tại đây người sử dụng có thể soạn các bài thực hành (Lab), chia sẻ tới
+                    học viên và biết được các hoạt động của các học viên tại lớp trong giờ thực hành. VnCodelab cũng cung cấp các bài hướng dẫn. Các bài học được viết theo các dạng các bài
+                    thực hành theo bước, giúp bạn dễ dàng làm theo và hiểu hơn về ngôn ngữ lập trình, công
+                    nghệ, giải pháp...</a></p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+
+                    <a class="btn btn-primary btn-lg px-4 me-md-2" href="/lab/1f4139H4ZBLEPsd9S8_txs6h5NYmhPyU3El_doSLSCwg"> Hướng dẫn</a></a>
+
+                    <button type="button" class="btn btn-outline-secondary btn-lg px-4 guest d-none">Đăng nhập</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</heroes>
+
+<div class="dropdown text-center pt-5 d-none" id="cate-dropdown" th:fragment="filter">
+    <div class="container px-4 ">
+        <button class="btn btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Chủ đề
+        </button>
+        <div class="dropdown-menu" id="cate-tab-expand" aria-labelledby="dropdownMenuButton">
+            <a href="#" class="dropdown-item" onclick="filterCate('Khác')">Khác</a>
+        </div>
+    </div>
+</div>
+
+<nav th:if="${showBreadcrumb}" class="container mt-5" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" th:fragment="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">
+            <span th:utext="${breadCrumb}">Action</span>
+        </li>
+    </ol>
+</nav>
+<script>
+    var page = "frontend"
+</script>
+
+<footer th:fragment="footer">
+    <div class="bg-light text-center text-lg-start mt-5">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            @VnCodelab | Phạm Xuân Lâm | lampx@neu.edu.vn
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
+
+    <script th:src="@{/js/main.js}" src="../../static/js/main.js"></script>
+</footer>

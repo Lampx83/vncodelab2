@@ -9,7 +9,7 @@ public class Lab {
     private String userID;
     private String cateID;
     private int order;
-
+    private Boolean feature;
     private boolean insert = true;
 
     public boolean isInsert() {
@@ -36,7 +36,7 @@ public class Lab {
         this.feature = feature;
     }
 
-    private Boolean feature;
+
 
     public String getUserID() {
         return userID;

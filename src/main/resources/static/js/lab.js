@@ -349,8 +349,6 @@ function enterRoom(user) {
             })
         }
     });
-
-
 }
 
 function realtime(user) {
@@ -448,7 +446,7 @@ function realtime(user) {
     enter[user.uid] = {
         step: curStep,
         time: firebase.database.ServerValue.TIMESTAMP,
-        name: $("#profileName").text(),
+        name: $("#name").text(),
         photo: user.photoURL
     };
 
@@ -540,7 +538,7 @@ function sendMessage() {
 
 function showMessage(data) {
     if (currentUser.uid === data.uid)
-        $('#chatMessages').append("<div class=\"ml-auto d-flex justify-content-end\"><div class=\"chat-body\"><div class=\"bg-primary rounded-pill py-2 px-3  text-white text-small\">" + data.message + "</div><span class=\"text-muted d-flex justify-content-end chat-time\">" + time_ago(data.time) + "</span></div></div>\n")
+        $('#chatMessages').append("<div class=\"ml-auto d-flex justify-content-end\"><div class=\"pt-2 chat-body\"><div class=\"bg-primary rounded-pill py-2 px-3  text-white text-small\">" + data.message + "</div><span class=\"text-muted d-flex justify-content-end chat-time\">" + time_ago(data.time) + "</span></div></div>\n")
     else {
         var avatar = "<img src=\"" + data.photo + "\" alt=\"user\" width=\"40\" height=\"40\"  class=\"rounded-circle\">";
         if (!data.photo && data.name) {
@@ -591,7 +589,7 @@ function updateStep(step) {
         change[currentUser.uid] = {
             step: step,
             time: firebase.database.ServerValue.TIMESTAMP,
-            name: $("#profileName").text(),
+            name: $("#name").text(),
             photo: currentUser.photoURL
         };
 
@@ -618,7 +616,6 @@ function hoverDiv(e, state) {
     } else {
         $("#divtoshow").hide();
     }
-    console.log(e)
 }
 
 function getRoomID() {

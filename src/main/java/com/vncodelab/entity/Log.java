@@ -8,11 +8,19 @@ public class Log {
     private int enter;
     private Timestamp time;
 
-    public Timestamp getLastEnter() {
+//    public Timestamp getLastEnter() {
+//        return time;
+//    }
+//
+//    public void setLastEnter(Timestamp time) {
+//        this.time = time;
+//    }
+
+    public Timestamp getTime() {
         return time;
     }
 
-    public void setLastEnter(Timestamp time) {
+    public void setTime(Timestamp time) {
         this.time = time;
     }
 
