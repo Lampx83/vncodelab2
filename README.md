@@ -14,6 +14,7 @@ git clone https://github.com/Lampx83/vncodelab2.git
 cd vncodelab2
 sudo mvn spring-boot:run
 ```
+sudo apt install claat
 Cài Java
 ```
 sudo apt-get install default-jdk
