@@ -91,51 +91,52 @@ public class MainController {
             Process p = builder.start();
 
 
-            StreamGobbler streamGobbler =  new StreamGobbler(p.getInputStream(), System.out::println);
-            Executors.newSingleThreadExecutor().submit(streamGobbler);
-            int exitCode = p.waitFor();
-            assert exitCode == 0;
-
-            System.out.println("Done");
+//            StreamGobbler streamGobbler =  new StreamGobbler(p.getInputStream(), System.out::println);
+//            Executors.newSingleThreadExecutor().submit(streamGobbler);
+//            int exitCode = p.waitFor();
+//            assert exitCode == 0;
+//
+//            System.out.println("Done");
 
 
        //    Process p = Runtime.getRuntime().exec(System.getProperty("user.home") + "/go/bin/claat export " + newLab.getDocID());
           //   Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
-//            BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-//            String line = input.readLine();
-//            p.waitFor();
-//            String folderName = line.split("\t")[1];
-//            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
-//            String totalLine = "";
-//            while ((line = br.readLine()) != null)
-//                totalLine = totalLine + line;
-//            LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
-//            newLab.setName(labInfo.getTitle());
-//
-//            File inputFile = new File(folderName + "/index.html");
-//            Document doc = Jsoup.parse(inputFile, "UTF-8");
-//            Elements img = doc.getElementsByTag("img");
-//            if (newLab.isInsert()) {
-//                //Save to Storage
-//                StorageClient storageClient = StorageClient.getInstance();  //Storage
-//                for (Element el : img) {
-//                    File file = new File(folderName + "/" + el.attr("src"));
-//                    InputStream is = new FileInputStream(file);
-//                    Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + folderName + "/" + file.getName(), is);
-//                    String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
-//                    el.attr("src", newUrl);
-//                }
-//
-//                FileUtils.deleteDirectory(new File(folderName));  //Xoa thu muc sau khi xong
-//            }
-//            //Save to Fire Store
-//            Element codelab = doc.getElementsByTag("google-codelab").get(0);
-//            newLab.setHtml(codelab.toString());
-//
-//            labService.save(newLab);
-//
-//            return ResponseEntity.ok().body(newLab);
-//
+
+            BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            String line = input.readLine();
+            p.waitFor();
+            String folderName = line.split("\t")[1];
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
+            String totalLine = "";
+            while ((line = br.readLine()) != null)
+                totalLine = totalLine + line;
+            LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
+            newLab.setName(labInfo.getTitle());
+
+            File inputFile = new File(folderName + "/index.html");
+            Document doc = Jsoup.parse(inputFile, "UTF-8");
+            Elements img = doc.getElementsByTag("img");
+            if (newLab.isInsert()) {
+                //Save to Storage
+                StorageClient storageClient = StorageClient.getInstance();  //Storage
+                for (Element el : img) {
+                    File file = new File(folderName + "/" + el.attr("src"));
+                    InputStream is = new FileInputStream(file);
+                    Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + folderName + "/" + file.getName(), is);
+                    String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
+                    el.attr("src", newUrl);
+                }
+
+                FileUtils.deleteDirectory(new File(folderName));  //Xoa thu muc sau khi xong
+            }
+            //Save to Fire Store
+            Element codelab = doc.getElementsByTag("google-codelab").get(0);
+            newLab.setHtml(codelab.toString());
+
+            labService.save(newLab);
+
+            return ResponseEntity.ok().body(newLab);
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
