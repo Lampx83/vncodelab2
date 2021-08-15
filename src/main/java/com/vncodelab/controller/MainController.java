@@ -124,6 +124,8 @@ public class MainController {
                 return ResponseEntity.ok().body(lab);
             }
         } catch (Exception ex) {
+            System.out.println("Exception");
+            System.out.println(ex.getMessage());
             ex.printStackTrace();
         }
         return null;
