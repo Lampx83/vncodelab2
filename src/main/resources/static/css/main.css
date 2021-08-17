@@ -8,10 +8,22 @@ al,
     display: flex;
 }
 
+a {
+
+    text-decoration: none
+}
+
+body {
+    background: #eceff1
+}
 .layout.horizontal {
     -ms-flex-direction: row;
     -webkit-flex-direction: row;
     flex-direction: row
+}
+
+.modal-backdrop{
+    z-index: 10 !important;
 }
 
 /*.layout.vertical {*/
@@ -195,9 +207,6 @@ al,
 /*    outline: none*/
 /*}*/
 
-body {
-    background: #eceff1
-}
 
 /*body.view #banner {*/
 /*    padding-bottom: 24px;*/
@@ -224,11 +233,6 @@ body {
 /*b {*/
 /*    font-weight: 500*/
 /*}*/
-
-a {
-
-    text-decoration: none
-}
 
 /*!*li, ul {*!*/
 /*!*    list-style: none;*!*/
@@ -660,12 +664,12 @@ a #login:hover {
     width: 42px
 }
 
-#info {
-    position: absolute;
-    top: 13px;
-    right: 250px;
-    z-index: 1001;
-}
+/*#info {*/
+/*    position: absolute;*/
+/*    top: 13px;*/
+/*    right: 250px;*/
+/*    z-index: 1001;*/
+/*}*/
 
 .steps ol li {
     margin-bottom: 10px;

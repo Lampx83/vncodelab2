@@ -1,0 +1,19 @@
+keytool -genkey -alias vncodelab.com -keyalg RSA -keystore vncodelab_com.jks -keysize 2048
+keytool -certreq -alias vncodelab.com -keystore vncodelab_com.jks -file vncodelab_com.csr
+
+
+keytool -import -trustcacerts -alias root -file AAACertificateServices.crt -keystore vncodelab_com.jks
+keytool -import -trustcacerts -alias intermediate1 -file USERTrustRSAAAACA.crt -keystore vncodelab_com.jks
+keytool -import -trustcacerts -alias intermediate2 -file SectigoRSADomainValidationSecureServerCA.crt -keystore vncodelab_com.jks
+keytool -import -trustcacerts -alias vncodelab.com -file vncodelab_com.crt -keystore vncodelab_com.jks
+
+keytool -importkeystore -srckeystore vncodelab_com.jks -destkeystore KeyStore.p12 -srcstoretype JKS -deststoretype PKCS12 -deststorepass 123456 -srcalias vncodelab_com1 -destalias vncodelab_com1
+
+
+keytool -import -trustcacerts -alias root -file AAACertificateServices.crt -keystore vncodelab.jks
+keytool -import -trustcacerts -alias INTER -file USERTrustRSAAAACA.crt -keystore vncodelab.jks
+keytool -import -trustcacerts -alias POSITIVESSL -file SectigoRSADomainValidationSecureServerCA.crt -keystore vncodelab.jks
+keytool -import -trustcacerts -alias www.vncodelab.com -file vncodelab_com.crt -keystore vncodelab.jks
+
+
+openssl pkcs12 -export -out vncodelab.pfx -inkey vncodelab.key -in certificate.crt -certfile CACert.crt

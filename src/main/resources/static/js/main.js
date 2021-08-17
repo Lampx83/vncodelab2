@@ -137,6 +137,7 @@ $(function () {
 });
 
 function afterLogin(user) {
+
     $(".user").removeClass("d-none")
     $(".guest").addClass("d-none")
     $('#loginModal').modal('hide')
@@ -164,7 +165,9 @@ function afterLogin(user) {
 }
 
 function afterLogout() {
-    $("#cards").empty();
+    ui.start('#firebaseui-auth-container', uiConfig);
+    if (page === "mylabs")
+        $("#cards").empty();
     $(".user").addClass("d-none")
     $(".guest").removeClass("d-none")
     if (window.location.pathname.startsWith("/room")) {

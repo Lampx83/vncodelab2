@@ -1,0 +1,19 @@
+keytool -genkey -alias tomcat -keyalg RSA -keystore keystore.jks
+
+
+keytool -import -trustcacerts -alias root -file AAACertificateServices.crt -keystore keystore.jks
+keytool -import -trustcacerts -alias INTER -file USERTrustRSAAAACA.crt -keystore keystore.key
+keytool -import -trustcacerts -alias POSITIVESSL -file SectigoRSADomainValidationSecureServerCA.crt -keystore keystore.key
+keytool -import -trustcacerts -alias tomcat -file vncodelab_com.crt -keystore keystore.jks
+
+
+
+
+
+
+
+
+cat vncodelab_com.crt SectigoRSADomainValidationSecureServerCA.crt  USERTrustRSAAAACA.crt AAACertificateServices.crt > ssl-bundle.crt
+
+
+openssl pkcs12 -export -out vncodelab.pfx -inkey vncodelab.key -in ssl-bundle.crt -certfile vncodelab_com.crt
