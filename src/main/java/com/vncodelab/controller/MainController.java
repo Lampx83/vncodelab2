@@ -79,12 +79,12 @@ public class MainController {
                     newLab.setDocID(map.get("file_id"));
                 }
             }
-            // Process p = Runtime.getRuntime().exec("claat export " + newLab.getDocID());
+             Process p = Runtime.getRuntime().exec("claat export " + newLab.getDocID());
             // Process p = Runtime.getRuntime().exec("/home/phamxuanlam/work/bin/claat export " + newLab.getDocID());  //For Google Cloud
 
-            ProcessBuilder builder = new ProcessBuilder();
-            builder.command("claat", "export", newLab.getDocID());
-            Process p = builder.start();
+          //  ProcessBuilder builder = new ProcessBuilder();
+            //builder.command("classpath:claat", "export", newLab.getDocID());
+        //    Process p = builder.start();
 
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             String line = input.readLine();

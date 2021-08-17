@@ -3,8 +3,8 @@ Cập nhật apt
 ```
 sudo apt update
 ```
-Cài git
-```aidl
+Cài đặt, và chạy
+```
 sudo apt install git
 sudo apt-get install lsof
 sudo apt install maven
@@ -13,27 +13,12 @@ go get github.com/googlecodelabs/tools/claat
 git clone https://github.com/Lampx83/vncodelab2.git
 cd vncodelab2
 sudo mvn spring-boot:run
-```
-sudo apt install claat
-Cài Java
-```
-sudo apt-get install default-jdk
-sudo apt install tomcat9 => cài etc/tomcat9
-sudo apt install tomcat9
-sudo apt install tomcat9-admin
 ss -ltn  => kiểm tra cổng
-sudo systemctl enable tomcat9   => Khởi động tomcat mỗi khi vào
 $ sudo ufw allow from any to any port 8080 proto tcp  => Mở cổng 8080 nếu cần
 ```
-
 ps -ef|grep -E "apache|httpd" | grep -v "grep"
 
-Hướng dẫn cách deploy ứng dụng trên Google Cloud
-##Compute engine
-###Vào thư mục vncodelab2
-```
-cd vncodelab2
-git pull
+# Deploy
 ```
 ###Stop port 80 (bỏ dấu source)
 ```

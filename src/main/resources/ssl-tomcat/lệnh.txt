@@ -1,19 +1,7 @@
-keytool -genkey -alias tomcat -keyalg RSA -keystore keystore.jks
-
-
-keytool -import -trustcacerts -alias root -file AAACertificateServices.crt -keystore keystore.jks
-keytool -import -trustcacerts -alias INTER -file USERTrustRSAAAACA.crt -keystore keystore.key
-keytool -import -trustcacerts -alias POSITIVESSL -file SectigoRSADomainValidationSecureServerCA.crt -keystore keystore.key
-keytool -import -trustcacerts -alias tomcat -file vncodelab_com.crt -keystore keystore.jks
-
-
-
-
-
-
-
-
+1. Dùng tool hoặc web tạo ra file csr và public key
+2. Gửi file này cho nhà cung cấp, họ gửi lại 4 file crt
+3. Ghép 4 file vào thành 1 file
 cat vncodelab_com.crt SectigoRSADomainValidationSecureServerCA.crt  USERTrustRSAAAACA.crt AAACertificateServices.crt > ssl-bundle.crt
-
-
+4. Tạo file pfx bằng open ssl
 openssl pkcs12 -export -out vncodelab.pfx -inkey vncodelab.key -in ssl-bundle.crt -certfile vncodelab_com.crt
+5. cấu hình trong spring boot applications
