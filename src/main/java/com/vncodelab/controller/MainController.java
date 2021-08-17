@@ -79,8 +79,8 @@ public class MainController {
                     newLab.setDocID(map.get("file_id"));
                 }
             }
-         //    Process p = Runtime.getRuntime().exec("./claat export " + newLab.getDocID()); //Localhost
-            Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
+             Process p = Runtime.getRuntime().exec("./claat export " + newLab.getDocID()); //Localhost
+         //   Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
 
           //  ProcessBuilder builder = new ProcessBuilder();
             //builder.command("classpath:claat", "export", newLab.getDocID());
