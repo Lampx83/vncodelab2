@@ -24,7 +24,7 @@ ps -ef|grep -E "apache|httpd" | grep -v "grep"
 ```
 sudo kill -9 $(sudo lsof -t -i:80)
 sudo kill -9 $(sudo lsof -t -i:8080)
-sudo kill -9 $(sudo lsof -t -i:8443)
+sudo kill -9 $(sudo lsof -t -i:443)
 ```
 ###Bật dịch vụ Web
 ```
