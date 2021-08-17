@@ -10,7 +10,7 @@ chart.yAxisInnerRadius = am4core.percent(3);
 chart.maskBullets = false;
 
 var colorSet = new am4core.ColorSet();
-var baseUrl = "http://vncodelab.com/room/"
+var baseUrl = "/room/"
 chart.dateFormatter.inputDateFormat = "m s";
 
 
@@ -369,7 +369,7 @@ chart.data = [
         "lab": [
             {
                 "name": "Thymeleaf",
-                "id": "https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html"
+                "id": "UgScHX"
             }
         ]
     }
