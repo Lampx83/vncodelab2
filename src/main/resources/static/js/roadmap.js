@@ -332,14 +332,10 @@ chart.data = [
             },
             {
                 "name": "Mflix 4",
-                "id": "RFFH4T"
-            },
-            {
-                "name": "Mflix 5",
                 "id": "6fNT47"
             },
             {
-                "name": "Mflix 6",
+                "name": "Mflix 5",
                 "id": "02qHiD"
             }
         ]
@@ -549,14 +545,14 @@ function myFunction(ev) {
     if (data.link != null) {
         content = content + "<tr><td><b>Links:</b></td></tr>";
         for (let i = 0; i < data.link.length; i++) {
-            let row = "<tr id='" + data.link[i].id + "'><td class='align-middle'>" + (i + 1) + ". " + data.link[i].name + "</td><td class='text-end align-middle'> <a href='" + data.link[i].id + "' class='text-primary'>Link</a></td> <td class='text-end align-middle'><a href='#' class='bi bi-three-dots-vertical link-dark' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='xem(\"" + data.link[i].id + "\")'>Xóa</a> </div></td></tr>";
+            let row = "<tr id='" + data.link[i].id + "'><td class='align-middle'>" + (i + 1) + ". " + data.link[i].name + "</td><td class='text-end align-middle'> <a href='" + data.link[i].id + "' class='text-primary' target='_blank'>Link</a></td> <td class='text-end align-middle'><a href='#' class='bi bi-three-dots-vertical link-dark d-none' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='xem(\"" + data.link[i].id + "\")'>Xóa</a> </div></td></tr>";
             content = content + row;
         }
     }
     if (data.lab != null) {
         content = content + "<tr><td><b>Labs:</b></td></tr>";
         for (let i = 0; i < data.lab.length; i++) {
-            let row = "<tr id='" + data.lab[i].id + "'><td class='align-middle'>" + (i + 1) + ". " + data.lab[i].name + "</td><td class='text-end align-middle'> <a href='" + baseUrl + data.lab[i].id + "' class='text-primary'>Vào phòng</a></td> <td class='text-end align-middle'><a href='#' class='bi bi-three-dots-vertical link-dark' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='xem(\"" + data.lab[i].id + "\")'>Xóa</a> </div></td></tr>";
+            let row = "<tr id='" + data.lab[i].id + "'><td class='align-middle'>" + (i + 1) + ". " + data.lab[i].name + "</td><td class='text-end align-middle'> <a href='" + baseUrl + data.lab[i].id + "' class='text-primary' target='_blank'>Vào phòng</a></td> <td class='text-end align-middle'><a href='#' class='bi bi-three-dots-vertical link-dark d-none' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='xem(\"" + data.lab[i].id + "\")'>Xóa</a> </div></td></tr>";
             content = content + row;
         }
     }
