@@ -338,6 +338,11 @@ chart.data = [
                 "name": "Mflix 5",
                 "id": "02qHiD"
             }
+            ,
+            {
+                "name": "Mflix 6",
+                "id": "B1H83u"
+            }
         ]
     }
     ,
