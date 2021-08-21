@@ -651,9 +651,20 @@ a #login:hover {
     text-transform: none;
     border-radius: 3px !important
 }
+.toast-holder{
+    z-index: 2000;
+}
+.toast-icon{
+    width: 16px;
+    height: 16px;
+}
 
 .collapsing {
     transition: none !important;
+}
+.report-detail{
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
 .card-footer .category-icon {
@@ -760,10 +771,6 @@ a #login:hover {
     color: currentcolor
 }
 
-.hideSmall {
-    display: initial;
-}
-
 .labStepSize1 {
     width: 32px !important;
     height: 32px !important;
@@ -794,7 +801,6 @@ a #login:hover {
     height: 26px;
     vertical-align: middle;
     line-height: 26px;
-    margin-right: 8px;
     font-weight: 400;
     position: relative;
     z-index: 2;
@@ -878,4 +884,12 @@ a #login:hover {
 
 [class*='mdl-shadow'] {
     box-shadow: none;
+}
+
+.user-name{
+    font-size: 14px;
+    text-overflow: ellipsis;
+    /* Needed to make it work */
+    overflow: hidden;
+    white-space: nowrap;
 }

@@ -4,14 +4,16 @@ var chatroom;
 var sendTo;
 var raiseHand = false;
 var currentDocID;
-const HAND_UP = 0;
-const HAND_DOWN = 1;
+const HAND_UP = 1;
+const HAND_DOWN = 0;
 var teacher = false;
 var firstReport = true;
 
+
 $(function () {
+    // initialize and show Bootstrap 4 toast
+
     page = "lab";
-    $('.toast').toast()
     $('#codelab-feedback').hide();
     $("#topButton").detach().appendTo("#codelab-title");
     $("#creatroom").click(function () {
@@ -32,7 +34,7 @@ $(function () {
         }
     })
     $('#btnRaiseHand').click(function () {
-        raiseHand = !$("#btnRaiseHand").hasClass("active");
+        raiseHand = $("#btnRaiseHand").hasClass("active");
         var curStep = new URL(window.location.href).hash.split("#")[1];
         updateStep(Number(curStep))
 
@@ -40,6 +42,7 @@ $(function () {
         var db = firebase.firestore();
         var userRef = db.collection("rooms").doc(getRoomID()).collection("logs").doc(currentUser.uid).collection("hands")
         if (raiseHand) {
+            sendNotify("all", null, TOAST_RAISE_HAND);
             userRef.add({
                 time: firebase.firestore.FieldValue.serverTimestamp(),
                 type: HAND_UP,
@@ -52,7 +55,6 @@ $(function () {
                 step: Number(curStep)
             })
         }
-
     })
     $('.steps ol li a').append("<span class=\"badge badge-secondary bg-secondary my-badge invisible\" onmouseover=\"hoverDiv(this,1)\" onmouseout=\"hoverDiv(this,0)\">0</span>")
     $('#btnLogin').hide()
@@ -68,7 +70,7 @@ $(function () {
         updateStep(Number(curStep))
     });
 
-    $("#btnSubmit").click(function (ev) {
+    $("#btnSubmit").click(function (ev) {  //Lấy submit bằng JS
         ev.preventDefault();
         $("#msg").html("")
         var db = firebase.firestore();
@@ -83,7 +85,12 @@ $(function () {
                             for (let i = 0; i < obj.fileNames.length; i++) {
                                 url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
                             }
-                            $("#msg").html("<p>File đã nộp: <br>" + url);
+                            var output = "<p>&nbsp;";
+                            if (obj.content !== "")
+                                output = output + "<p><b>Nội dung đã nộp</b>: " + obj.content;
+                            if (url !== "")
+                                output = output + "<p><b>File đã nộp</b>: " + url;
+                            $("#msg").html(output);
                         }
                     }
                 }
@@ -105,6 +112,7 @@ $(function () {
         formData.append("userName", currentUser.displayName);
         formData.append("step", getSelectedStep());
         formData.append("room", getRoomID());
+        formData.append("content", $("#contentInput").val());
         // AJAX request
         $.ajax({
             url: '/upload',
@@ -119,7 +127,7 @@ $(function () {
                 $("#upload-form").trigger("reset");
                 $("#btn_upload").removeClass("d-none");
             },
-            error: function (response) {
+            error: function () {
                 $("#msg").html("Có lỗi xảy ra!");
                 $("#upload-spinner").addClass("d-none");
                 $("#upload-form").removeClass("d-none");
@@ -141,6 +149,7 @@ $(function () {
     });
 
     $("#raisehand-tab").click(function (ev) {
+        $("#raisehand-spinner").removeClass("d-none");
         $("#tbody-report-raisehand").html("")
         var room = {}
         room["roomID"] = getRoomID();
@@ -158,10 +167,12 @@ $(function () {
                         const data = snapshot.val();
                         for (var uid in data) {
                             var step = data[uid].step;
+                            //Update in Report
                             $('[id^=' + uid + ']').removeClass("yellow")
                             if (data[uid].isRaise) {
                                 $("#" + uid + "_" + step).addClass("yellow")
                             }
+
                         }
                     }
                 }).catch((error) => {
@@ -186,6 +197,7 @@ $(function () {
 
     $("#practice-tab").click(function (ev) {
         $("#tbody-report-practice").html("")
+        $("#practice-spinner").removeClass("d-none");
         var room = {}
         room["roomID"] = getRoomID();
         room["numberOfStep"] = getNumberOfSteps();
@@ -229,10 +241,10 @@ $(function () {
     });
 
     $("#submit-tab").click(function (ev) {
+        $("#submit-spinner").removeClass("d-none");
         var db = firebase.firestore();
         $("#tbody-report-submit").html("")
         db.collection("rooms").doc(getRoomID()).collection("submits").onSnapshot((querySnapshot) => {
-            $("#submit-spinner").addClass("d-none");
             $("#table-report-submit").removeClass("d-none");
             $("#tbody-report-submit").html("")
             querySnapshot.forEach((doc) => { //Duyet tung nguoi dung
@@ -246,7 +258,7 @@ $(function () {
                                 let l = submitedObjects.fileNames[j]
                                 link = link + "[<a class='text-primary' href='" + submitedObjects.fileLinks[j] + "'>" + l + "</a>] "
                             }
-                            s = s + "<td><span class ='labStep blue'>" + (i + 1) + "</span><span class='hideSmall report-detail d-none'>" + link + "</span></td>";
+                            s = s + "<td><span class ='labStep blue'>" + (i + 1) + "</span><span class='report-detail d-none'>" + link + "</span></td>";
                         } else {
                             s = s + "<td><span class ='labStep' >" + (i + 1) + "</span></td>";
                         }
@@ -254,15 +266,16 @@ $(function () {
                         s = s + "<td><span class ='labStep' >" + (i + 1) + "</span></td>";
                     }
                 }
-                let tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + doc.id + "\")'>Xóa</a> </div></td>";
+                let tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + doc.id + "\")'>Xóa</a> </div></td>";
 
-                $("#tbody-report-submit").append("<tr  id='tr-report-" + doc.id + "'><td>" + doc.data().userName + "</td>" + s + tdThreeDots + "</tr>")
+                $("#tbody-report-submit").append("<tr  id='tr-report-" + doc.id + "'><td class='user-name'>" + doc.data().userName + "</td>" + s + tdThreeDots + "</tr>")
                 if ($('#switch-showdetail').is(':checked')) {
                     $(".report-detail").removeClass("d-none")
                 } else {
                     $(".report-detail").addClass("d-none")
                 }
             });
+            $("#submit-spinner").addClass("d-none");
         });
     });
 
@@ -281,8 +294,32 @@ $(function () {
             updateStep(Number(curStep))
         }
     });
-
 });
+
+const TOAST_ENTER_ROOM = 1;
+const TOAST_LEAVE_ROOM = 2;
+const TOAST_RAISE_HAND = 3;
+const TOAST_CHAT_ROOM = 4;
+
+function showToast(data) {
+    var suffix;
+    if (data.type === TOAST_ENTER_ROOM) {
+        suffix = "enter-room";
+        $("#toast-body-" + suffix).text("Vào phòng")
+    } else if (data.type === TOAST_LEAVE_ROOM) {
+        suffix = "leave-room";
+        $("#toast-body-" + suffix).text("Rời phòng")
+    } else if (data.type === TOAST_RAISE_HAND) {
+        suffix = "raise-hand"
+        $("#toast-body-" + suffix).text("Giơ tay")
+    } else if (data.type === TOAST_CHAT_ROOM) {
+        suffix = "chat-room"
+        $("#toast-body-" + suffix).text(data.message)
+    }
+    $("#toast-title-" + suffix).text(data.uname)
+    $("#toast-" + suffix).removeClass("d-none")
+    new bootstrap.Toast($("#toast-" + suffix)).show()
+}
 
 function getSubmittedCurrentStep(step, arr) {
     for (const e of arr) {
@@ -311,7 +348,6 @@ function enterRoom(user) {
     $('#main').show();
     $('#drawer').show();
     $('#btnLogin').hide()
-
     var db = firebase.firestore();
     var roomRef = db.collection("rooms").doc(getRoomID());  //Doc thong tin cua Room
     roomRef.get().then((doc) => {
@@ -322,9 +358,11 @@ function enterRoom(user) {
                 $("#btnReport").removeClass("d-none")  //Teacher
                 teacher = true;
             } else {
-                $("#btnSubmit").removeClass("d-none")
-                $("#btnRaiseHand").removeClass("d-none")
+
             }
+            $("#btnSubmit").removeClass("d-none")
+            $("#btnRaiseHand").removeClass("d-none")
+
             realtime(user);
         } else {
             // doc.data() will be undefined in this case
@@ -357,12 +395,11 @@ function realtime(user) {
     $('#drawer').show();
     $('#btnRoom').show();
     refUsers = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/users');
-    refUsers.on('value', (snapshot) => {
+    refUsers.on('value', (snapshot) => {  //Khi có bất kỳ sự thay đổi trong labs/docID_ABC/room_123/users
         const data = snapshot.val();
         var count = []
         var totalUser = 0;
         $('#usersChat').empty()
-        var userinStep = "";
         for (var uid in data) {
             var step = data[uid].step;
             if (count[step] == undefined)
@@ -382,14 +419,20 @@ function realtime(user) {
             // if (currentUser.uid != uid) {  //Kh
             var avatar = "<img src='" + data[uid].photo + "' alt='user' width='40' height='40'  class='rounded-circle'>";
             if (!data[uid].photo && data[uid].name) {
-                var avatar = "<div><div class='friend'>" + data[uid].name + "</div></div>"
+                avatar = "<div><div class='friend'>" + data[uid].name + "</div></div>"
             }
-            $('#usersChat').append("<a href='#' onclick='showChat(this,\"" + uid + "\")' class=\"list-group-item list-group-item-action rounded-0 media uchat\">" + avatar + "<div class=\"media-body\">" + data[uid].name + "</div></a>")
+            $('#usersChat').append("<a id='chat" + uid + "' href='#' onclick='showChat(this,\"" + uid + "\")' class=\"px-2 list-group-item list-group-item-action rounded-0 media uchat\">" + avatar + "<div class=\"media-body\">" + data[uid].name + "</div></a>")
             if (!data[uid].photo && data[uid].name) {
                 $('.friend').nameBadge();
             }
-            // }
+            //Update in Chat room
+            if (data[uid].isRaise) {
+                $("#chat" + uid).addClass("yellow")
+            } else {
+                $("#chat" + uid).removeClass("yellow")
+            }
         }
+
         for (let i = 1; i <= getNumberOfSteps(); i++) {
             if (count[i - 1] == undefined)
                 $('li:nth-child(' + i + ') > a > span.badge').addClass("invisible")
@@ -403,11 +446,7 @@ function realtime(user) {
         $('#numOnline').text(totalUser)
     });
 
-    var leave = {};
-    leave[currentUser.uid] = null;
-    refUsers.onDisconnect().update(leave).then(function () {
-        console.log("update exit")
-    });
+
     updateStep(getSelectedStep());
     //Listen to Notification
     var first = true;
@@ -415,29 +454,46 @@ function realtime(user) {
         if (!first) {
             const data = snapshot.val();
             if (!$("#collapse-online").hasClass("show") || ($("#collapse-online").hasClass("show") && sendTo !== data.uid)) {
-                $("#toastTitle").text(data.uname);
-                $("#toastBody").text(data.message);
-                $('.toast').toast('show');
+                showToast(data)
             }
         }
         first = false;
     });
 
-    var firstAll = true;
+    var firstAll = true;  //Nghe toàn bộ sự kiện gửi đến phòng
     firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/notifies/all').on('value', (snapshot) => {
         if (!firstAll) {
             if (!$("#collapse-online").hasClass("show") || ($("#collapse-online").hasClass("show") && sendTo !== "all")) {
                 const data = snapshot.val();
-                $("#toastTitle").text("Chat room");
-                $("#toastBody").text(data.message);
-                $('.toast').toast('show');
+                showToast(data);
             }
         }
         firstAll = false;
     });
     // refUsers = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/users');
+
+    //OnDisconnect
     var leave = {};
-    leave[user.uid] = null;
+    leave[currentUser.uid] = null;
+    refUsers.onDisconnect().update(leave);
+
+    var ref = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/notifies/all')
+    var leave_notify = {
+        uid: currentUser.uid,
+        uname: currentUser.displayName,
+        time: firebase.database.ServerValue.TIMESTAMP,
+        type: TOAST_LEAVE_ROOM
+    }
+    ref.onDisconnect().update(leave_notify);
+
+    var enter_notify = {
+        uid: currentUser.uid,
+        uname: currentUser.displayName,
+        time: firebase.database.ServerValue.TIMESTAMP,
+        type: TOAST_ENTER_ROOM
+    }
+    ref.onDisconnect().set(enter_notify);
+
     var enter = {};
     var curStep = new URL(window.location.href).hash.split("#")[1];
     if (!curStep)
@@ -456,13 +512,24 @@ function realtime(user) {
         refUsers.onDisconnect().update(leave).then(function () {
             refUsers.update(enter)
         });
+
+        ref.onDisconnect().set(leave_notify).then(function () {
+            ref.set(enter_notify)
+        });
     });
+
+
 }
 
 function logoutRoom() {
     var leave = {};
     leave[currentUser.uid] = null;
     refUsers.update(leave);
+    //Ra khoi phong
+
+    sendNotify("all", null, TOAST_LEAVE_ROOM);
+
+
     $('#main').hide();
     $('#drawer').hide();
     $('#btnRoom').hide();
@@ -505,20 +572,8 @@ function sendMessage() {
             message: $('#txtMessage').val()
         };
         refChat.update(change);
-        var ref;
-        if (sendTo === "all") {
-            ref = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/notifies/all')
-        } else {
-            ref = firebase.database().ref('/notifies/' + sendTo)
-        }
-        ref.set({
-            uid: currentUser.uid,
-            uname: currentUser.displayName,
-            message: $('#txtMessage').val(),
-            time: firebase.database.ServerValue.TIMESTAMP
-        });
+        sendNotify(sendTo, $('#txtMessage').val(), TOAST_CHAT_ROOM)
         $('#txtMessage').val("")
-
         //REMOVE OLD CHAT
         const MAX_COUNT = 99;  //Keep 100 recent
         refChat.once('value', function (snapshot) {
@@ -536,15 +591,31 @@ function sendMessage() {
     }
 }
 
+function sendNotify(sendTo, message, type) {
+    var ref;
+    if (sendTo === "all") {
+        ref = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/notifies/all')
+    } else {
+        ref = firebase.database().ref('/notifies/' + sendTo)
+    }
+    ref.set({
+        uid: currentUser.uid,
+        uname: currentUser.displayName,
+        message: message,
+        time: firebase.database.ServerValue.TIMESTAMP,
+        type: type
+    });
+}
+
 function showMessage(data) {
     if (currentUser.uid === data.uid)
         $('#chatMessages').append("<div class=\"ml-auto d-flex justify-content-end\"><div class=\"pt-2 chat-body\"><div class=\"bg-primary rounded-pill py-2 px-3  text-white text-small\">" + data.message + "</div><span class=\"text-muted d-flex justify-content-end chat-time\">" + time_ago(data.time) + "</span></div></div>\n")
     else {
         var avatar = "<img src=\"" + data.photo + "\" alt=\"user\" width=\"40\" height=\"40\"  class=\"rounded-circle\">";
         if (!data.photo && data.name) {
-            var avatar = "<div><div class=\"friend\">" + data.name + "</div></div>"
+            avatar = "<div><div class=\"friend\">" + data.name + "</div></div>"
         }
-        $('#chatMessages').append("<div class=\"media w-75 \">" + avatar + "<div class=\"media-body ml-3\"><div class=\"bg-light rounded-pill py-2 px-3\"><span class=\"text-small mb-0 text-muted\">" + data.message + "</span></div><p class=\"text-muted chat-time\">" + time_ago(data.time) + "</p></div></div>");
+        $('#chatMessages').append("<div class=\"media w-75 \">" + avatar + "<div class=\"media-body ms-1\"><div class=\"bg-light rounded-pill py-2 px-3\"><span class=\"text-small mb-0 text-muted\">" + data.message + "</span></div><p class=\"text-muted chat-time\">" + time_ago(data.time) + "</p></div></div>");
         if (!data.photo && data.name) {
             $('.friend').nameBadge();
         }

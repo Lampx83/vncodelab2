@@ -167,12 +167,11 @@ public class MainController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<?> upload(@RequestParam("files") ArrayList<MultipartFile> files, @RequestParam("userID") String userID, @RequestParam("userName") String userName, @RequestParam("room") String room, @RequestParam("step") String step) throws IOException, InterruptedException, ExecutionException {
+    public ResponseEntity<?> upload(@RequestParam("files") ArrayList<MultipartFile> files, @RequestParam("userID") String userID, @RequestParam("userName") String userName, @RequestParam("room") String room, @RequestParam("step") String step, @RequestParam("content") String content) throws IOException, InterruptedException, ExecutionException {
         String url = "";
         ArrayList fileNames = new ArrayList<>();
         ArrayList fileLinks = new ArrayList<>();
         StorageClient storageClient = StorageClient.getInstance();
-        int i = 0;
 
         for (MultipartFile multipartFile : files) {
             File file = convertToFile(multipartFile, multipartFile.getOriginalFilename());
@@ -188,7 +187,7 @@ public class MainController {
         }
 
         Firestore dbFirestore = FirestoreClient.getFirestore();  //FireStorage
-        DocumentReference userRef = dbFirestore.collection("rooms").document(room).collection("submits").document(userID);
+        DocumentReference userRef = dbFirestore.collection("rooms").document(room).collection("submits").document(userID);  //Địa chỉ lưu bài của SV
 
         ApiFuture<DocumentSnapshot> future = userRef.get();
         DocumentSnapshot document = future.get();
@@ -204,19 +203,18 @@ public class MainController {
                         itr.remove();
                 }
             }
-
         }
         if (submitedSteps == null) {
             submitedSteps = new ArrayList<>();
         }
         HashMap mapSubmit = new HashMap();
         mapSubmit.put("step", step);
-        mapSubmit.put("comment", "");
+        mapSubmit.put("content", content);  //Nội dung sv gõ
         mapSubmit.put("fileNames", fileNames);
         mapSubmit.put("fileLinks", fileLinks);
         submitedSteps.add(mapSubmit);
 
-        Collections.sort(submitedSteps, Comparator.comparing(o -> o.get("step").toString()));
+        Collections.sort(submitedSteps, Comparator.comparing(o -> o.get("step").toString()));   //Lấy các bài thực hành trước đây, để bổ sung
 
         HashMap map = new HashMap<>();
         map.put("userName", userName);
@@ -260,15 +258,15 @@ public class MainController {
             user.setUserID(document.getId());
             String step = "";
             for (int i = 0; i < room.getNumberOfStep(); i++) {
-                String detail = "<span class='hideSmall report-detail d-none'>" + map.get(i).getNumber() + "</span>";
+                String detail = "<span class='report-detail d-none'>" + map.get(i).getNumber() + "</span>";
                 if (map.get(i).getNumber() >= 1) {
                     step = step + "<td><span class ='labStep blue' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span>" + detail + "</td>";
                 } else {
                     step = step + "<td><span class ='labStep' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span>" + detail + "</td>";
                 }
             }
-            String tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + user.getUserID() + "\")'>Xóa</a> </div></td>";
-            s = s + "<tr id='tr-report-" + user.getUserID() + "' ><td>" + user.getUserName() + "</td><td>" + step + "</td>" + tdThreeDots + "</tr>";
+            String tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + user.getUserID() + "\")'>Xóa</a> </div></td>";
+            s = s + "<tr id='tr-report-" + user.getUserID() + "' ><td  class='user-name'>" + user.getUserName() + "</td><td>" + step + "</td>" + tdThreeDots + "</tr>";
         }
         AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
         ajaxResponseBody.setMsg(s);
@@ -304,19 +302,19 @@ public class MainController {
             String step = "";
             for (int i = 0; i < room.getNumberOfStep(); i++) {
                 if (map.get(i).getNumber() > 10 * 60) {
-                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize3' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='hideSmall report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
+                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize3' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
                 } else if (map.get(i).getNumber() > 6 * 60) {
-                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize2' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='hideSmall report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
+                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize2' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
                 } else if (map.get(i).getNumber() > 3 * 60) {
-                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize1' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='hideSmall report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
+                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize1' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
                 } else if (map.get(i).getNumber() > 15) {
-                    step = step + "<td class='tdcenter'><span class ='labStep blue' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='hideSmall report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
+                    step = step + "<td class='tdcenter'><span class ='labStep blue' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
                 } else {
-                    step = step + "<td class='tdcenter'><span class ='labStep' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='hideSmall report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
+                    step = step + "<td class='tdcenter'><span class ='labStep' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
                 }
             }
-            String tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + user.getUserID() + "\")'>Xóa</a> </div></td>";
-            s = s + "<tr id='tr-report-" + user.getUserID() + "'><td>" + user.getUserName() + "</td><td>" + step + "</td>" + tdThreeDots + "</tr>";
+            String tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + user.getUserID() + "\")'>Xóa</a> </div></td>";
+            s = s + "<tr id='tr-report-" + user.getUserID() + "'><td class='user-name'>" + user.getUserName() + "</td><td>" + step + "</td>" + tdThreeDots + "</tr>";
         }
 
         AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();

@@ -74,15 +74,15 @@
                 <form method="get" action="/" class="flex-grow-1 flex-md-grow-0">
                     <input class="form-control" type="search" name="text" placeholder="Search" th:placeholder="#{search}" aria-label="Search" id="input-search">
                 </form>
-                <div class="btn-group ms-3">
-                    <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span th:text="#{language}">🇬🇧 English</span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" th:href="@{${url}(lang=vi)}">🇻🇳 Tiếng Việt</a></li>
-                        <li><a class="dropdown-item" th:href="@{${url}(lang=en)}">🇬🇧 English</a></li>
-                    </ul>
-                </div>
+<!--                <div class="btn-group ms-3">-->
+<!--                    <button type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                        <span th:text="#{language}">🇬🇧 English</span>-->
+<!--                    </button>-->
+<!--                    <ul class="dropdown-menu">-->
+<!--                        <li><a class="dropdown-item" th:href="@{${url}(lang=vi)}">🇻🇳 Tiếng Việt</a></li>-->
+<!--                        <li><a class="dropdown-item" th:href="@{${url}(lang=en)}">🇬🇧 English</a></li>-->
+<!--                    </ul>-->
+<!--                </div>-->
                 <button id="login" type="button" class="guest btn btn-primary ms-3 d-none btn-warning" data-bs-toggle="modal" data-bs-target="#modal-login"><span th:text="#{login}">Login</span></button>
                 <div id="login-spinner" class="spinner-border text-light ms-3" role="status"></div>
                 <div class="dropdown">

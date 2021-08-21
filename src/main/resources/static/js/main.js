@@ -35,7 +35,7 @@ var ui
 $(function () {
     firebase.initializeApp(firebaseConfig);
     ui = new firebaseui.auth.AuthUI(firebase.auth());
-    ui.start('#firebaseui-auth-container', uiConfig);
+    // ui.start('#firebaseui-auth-container', uiConfig);
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {  //Neu dang nhap roi
             currentUser = user;
@@ -546,7 +546,7 @@ var TimeAgo = (function () {
     self.locales = {
         prefix: '',
         sufix: 'ago',
-        seconds: 'less than a min',
+        seconds: 'just now',
         minute: 'about a minute',
         minutes: '%d minutes',
         hour: 'about an hour',

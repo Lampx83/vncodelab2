@@ -68,7 +68,8 @@
 .media-body {
     width: 100%;
     margin: auto;
-    padding-left: 10px;
+    font-size: 13px;
+    padding-left: 5px;
 }
 .chat-body {
     text-align: right;

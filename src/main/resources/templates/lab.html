@@ -18,7 +18,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XZBW2LH2GQ"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'G-XZBW2LH2GQ');
@@ -52,7 +56,7 @@
 <div id="topButton">
     <div class="layout horizontal" style="  justify-content: flex-end;">
         <!--Room button-->
-        <button id="btnRaiseHand" type="button" class="btn btn-secondary ml-2 d-none" data-toggle="button">
+        <button id="btnRaiseHand" type="button" class="btn btn-secondary ms-2 d-none" data-bs-toggle="button">
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="16" height="16" fill="#ffffff">
                 <circle cx="21.732" cy="5.5" r="1.5"/>
                 <circle cx="17.732" cy="2.5" r="1.5"/>
@@ -63,9 +67,9 @@
 		c-0.6-0.925-1.771-1.235-2.629-0.705c-0.855,0.542-1.067,1.724-0.475,2.646c0,0,3.266,4.943,4.658,7.059S11.408,26,15.625,26
 		c6.982,0,7.607-5.392,7.607-7s0-13.5,0-13.5H20.232z"/>
             </svg>
-            <span class="hideSmall">Giơ tay</span>
+            <span class="d-none d-sm-inline">Giơ tay</span>
         </button>
-        <button id="btnSubmit" type="button" class="btn btn-danger ml-2 d-none">
+        <button id="btnSubmit" type="button" class="btn btn-danger ms-2 d-none">
             <?xml version="1.0" encoding="iso-8859-1"?>
             <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" viewBox="0 0 36.375 36.376">
                 <path d="M33.938,25.626v8.25c0,1.382-1.119,2.5-2.5,2.5h-26.5c-1.381,0-2.5-1.118-2.5-2.5v-8.25c0-1.381,1.119-2.5,2.5-2.5
@@ -74,9 +78,9 @@
             c0.978-0.978,0.978-2.561,0-3.535l-7.5-7.498c-0.977-0.977-2.559-0.977-3.535,0l-7.5,7.498c-0.977,0.976-0.977,2.559,0,3.535
             C9.895,12.743,11.479,12.743,12.456,11.766z"/>
             </svg>
-            <span class="hideSmall">Nộp bài</span>
+            <span class="d-none d-sm-inline">Nộp bài</span>
         </button>
-        <button id="btnReport" type="button" class="btn btn-danger ms-2 d-none" data-bs-toggle="modal" data-bs-target="#reportModal">
+        <button id="btnReport" type="button" class="btn btn-success ms-2 d-none" data-bs-toggle="modal" data-bs-target="#reportModal">
             <?xml version="1.0" encoding="iso-8859-1"?>
 
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="#ffffff">
@@ -87,7 +91,7 @@
                 <path d="M0,369.6h142.4V512H0V369.6z"/>
                 <path d="M187.7,369.6h323.9V512H187.7V369.6z"/>
             </svg>
-            <span class="hideSmall">Báo cáo</span>
+            <span class="d-none d-sm-inline">Báo cáo</span>
         </button>
         <button id="btnRoom" type="button" class="btn btn-primary ms-2 d-none" data-bs-toggle="collapse" data-bs-target="#collapse-online">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
@@ -96,47 +100,28 @@
                       d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
                 <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
             </svg>
-            <span class="hideSmall">Phòng chat</span> <span class="badge badge-secondary bg-secondary" id="numOnline">0</span>
+            <span class="d-none d-sm-inline">Phòng chat</span> <span class="badge badge-secondary bg-secondary" id="numOnline">0</span>
         </button>
 
-        <!--Profile Button-->
-
-<!--        <img class="ms-2 rounded-circle user d-none p-1 profilePicture" id="profilePicture" width="41px" height="41px" data-toggle="dropdown" data-offset="-90,20">-->
-<!--        <a href="#" data-toggle="dropdown" data-offset="-90,20" class="profilePicture">-->
-<!--            <div class="ms-2 userName user d-none"></div>-->
-<!--        </a>-->
-
-<!--        <div class="dropdown-menu  shadow-sm dropdown-menu-profile-lab">-->
-<!--            <div class="profile-info">-->
-<!--                <span id="profileName" class="text-primary"></span>-->
-<!--                <span id="profileEmail"></span>-->
-<!--            </div>-->
-<!--            <div class="list-group list-group-flush">-->
-<!--                <a href="/mylabs" class="list-group-item list-group-item-action">Lab của tôi</a>-->
-<!--                <a href="#" class="list-group-item list-group-item-action text-danger" id="signout">Đăng xuất</a>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <button id="btnLogin" type="button" class="btn btn-primary d-none">Đăng nhập</button>-->
         <button id="login" type="button" class="guest btn btn-primary ms-3 d-none btn-warning" data-bs-toggle="modal" data-bs-target="#modal-login"><span th:text="#{login}">Login</span></button>
         <div id="login-spinner" class="spinner-border text-light ms-3" role="status"></div>
         <div class="dropdown">
             <img id="avatar" th:src="@{/images/user.svg}" src="../../images/user.svg" data-bs-toggle="dropdown" width="38x" height="38x"
                  class="user avatar rounded-circle ms-3 d-none dropdown-toggle">
             <ul class="dropdown-menu dropdown-menu-center text-small" aria-labelledby="dropdownUser1">
-                <li><a class="dropdown-item" href="/mylabs" onclick="loadLabs(currentUser)">My Labs</a></li>
+<!--                <li><a class="dropdown-item" href="/mylabs" onclick="loadLabs(currentUser)">My Labs</a></li>-->
                 <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modal-login">Profile</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item" href="#" onclick="firebase.auth().signOut();">Sign out</a></li>
+                <li><a class="dropdown-item" href="#" onclick="firebase.auth().signOut();">Đăng xuất</a></li>
             </ul>
         </div>
         <div class="modal d-block1" id="modal-login" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content shadow">
                     <div class="modal-header">
-                        <h5 class="modal-title">Login</h5>
+                        <h5 class="modal-title">Tài khoản</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -153,7 +138,7 @@
                         </div>
                     </div>
                     <div class="modal-footer d-none user">
-                        <button id="sign-out" type="button" class="btn btn-danger" onclick="firebase.auth().signOut();">Sign out</button>
+                        <button id="sign-out" type="button" class="btn btn-danger" onclick="firebase.auth().signOut();">Đăng xuất</button>
                     </div>
                 </div>
             </div>
@@ -161,52 +146,121 @@
     </div>
 </div>
 
-<!--MODAL CREATE ROOM-->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tạo phòng học</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <form id="add-form" th:action="@{/save}">
-                <div class="modal-body">
-                    Chức năng này tạo ra một phòng học để theo dõi các học viên thực hành trên từng bước
-                </div>
-                <div class="modal-footer">
-                    <span class="mr-auto text-danger" id="modal-error"></span>
-                    <button type="submit" class="btn btn-primary" id="create-room-button">Tạo</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-<!--TOAST-->
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1005">
-    <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+<div class="toast-container position-fixed bottom-0 end-0 p-5 mb-5" style="z-index: 1002">
+    <!-- Toast Chat Room -->
+    <div class="toast" id="toast-chat-room" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-            <img width="15px" height="15px" class="me-2" src="../static/images/chat-right-text-fill.svg" th:src="@{/images/chat-right-text-fill.svg}"/>
-            <strong class="me-auto" id="toastTitle">Bootstrap</strong>
-            <button type="button" class="btn-close" data-dismiss="toast" aria-label="Close"></button>
+            <img src="../static/images/chat-right-text-fill.svg" th:src="@{/images/chat-right-text-fill.svg}" class="toast-icon rounded me-2">
+            <strong class="me-auto" id="toast-title-chat-room">Phòng chat</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-        <div class="toast-body" id="toastBody">
-            Hello, world! This is a toast message.
+        <div class="toast-body" id="toast-body-chat-room">
+            Tin nhắn
+        </div>
+    </div>
+
+    <!-- Toast Raise Hand -->
+    <div class="toast d-none" id="toast-raise-hand" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="../static/images/raise_hand.svg" th:src="@{/images/raise_hand.svg}" class="toast-icon rounded me-2">
+            <strong class="me-auto" id="toast-title-raise-hand">Giơ tay</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toast-body-raise-hand">
+            Phạm Xuân Lâm
+        </div>
+    </div>
+
+    <!-- Chat Enter room -->
+    <div class="toast d-none" id="toast-enter-room" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="../static/images/enter.svg" th:src="@{/images/enter.svg}" class="toast-icon rounded me-2">
+            <strong class="me-auto" id="toast-title-enter-room">Vào phòng</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toast-body-enter-room">
+            Phạm Xuân Lâm
+        </div>
+    </div>
+
+    <!-- Chat Leave room -->
+    <div class="toast d-none" id="toast-leave-room" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="../static/images/leave.svg" th:src="@{/images/leave.svg}" class="toast-icon rounded me-2">
+            <strong class="me-auto" id="toast-title-leave-room">Vào phòng</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toast-body-leave-room">
+            Phạm Xuân Lâm
+        </div>
+    </div>
+
+</div>
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1002">
+
+    <div aria-live="polite" aria-atomic="true" class="position-relative toast-holder">
+        <div class="toast-container position-absolute top-0 end-0 p-3">
+
+
         </div>
     </div>
 </div>
 
+
+<!--&lt;!&ndash;TOAST&ndash;&gt;-->
+<!--<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">-->
+<!--    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">-->
+<!--        <div class="toast-header">-->
+<!--            <img src="../static/images/chat-right-text-fill.svg" th:src="@{/images/chat-right-text-fill.svg}" class="rounded me-2" alt="...">-->
+<!--            <strong class="me-auto">Bootstrap</strong>-->
+<!--            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>-->
+<!--        </div>-->
+<!--        <div class="toast-body">-->
+<!--            Hello, world! This is a toast message.-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div aria-live="polite" aria-atomic="true" class="position-relative">-->
+<!--    &lt;!&ndash; Position it: &ndash;&gt;-->
+<!--    &lt;!&ndash; - `.toast-container` for spacing between toasts &ndash;&gt;-->
+<!--    &lt;!&ndash; - `.position-absolute`, `top-0` & `end-0` to position the toasts in the upper right corner &ndash;&gt;-->
+<!--    &lt;!&ndash; - `.p-3` to prevent the toasts from sticking to the edge of the container  &ndash;&gt;-->
+<!--    <div class="toast-container position-absolute top-0 end-0 p-3">-->
+
+<!--        &lt;!&ndash; Then put toasts within &ndash;&gt;-->
+<!--        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">-->
+<!--            <div class="toast-header">-->
+<!--                <img src="..." class="rounded me-2" alt="...">-->
+<!--                <strong class="me-auto">Bootstrap</strong>-->
+<!--                <small class="text-muted">just now</small>-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>-->
+<!--            </div>-->
+<!--            <div class="toast-body">-->
+<!--                See? Just like this.-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">-->
+<!--            <div class="toast-header">-->
+<!--                <img src="..." class="rounded me-2" alt="...">-->
+<!--                <strong class="me-auto">Bootstrap</strong>-->
+<!--                <small class="text-muted">2 seconds ago</small>-->
+<!--                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>-->
+<!--            </div>-->
+<!--            <div class="toast-body">-->
+<!--                Heads up, toasts will stack automatically-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 <!--COLLAPSE CHAT ROOM-->
 <div class="collapse container row rounded-lg overflow-hidden shadow " id="collapse-online" aria-expanded="true">
     <!-- Users box-->
     <div class="col-4 px-0 chat-leftside">
         <div class="messages-box">
             <div class="list-group rounded-0">
-                <a onclick='showChat(this,"all")' class="list-group-item list-group-item-action active text-white rounded-0 media uchat" id="chat0">
+                <a onclick='showChat(this,"all")' class="px-2 list-group-item list-group-item-action active text-white rounded-0 media uchat" id="chat0">
                     <img src="../static/images/people-fill.svg" th:src="@{/images/people-fill.svg}" alt="user" width="50" class="rounded-circle">
                     <div class="media-body">Tất cả</div>
                 </a>
@@ -218,7 +272,7 @@
     </div>
     <!-- Chat Box-->
     <div class="col-8 px-0 main-chat">
-        <div class="px-4 chat-box bg-white" id="chatMessages">
+        <div class="px-2 chat-box bg-white" id="chatMessages">
 
         </div>
 
@@ -243,18 +297,20 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Nộp bài</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form method='post' action='' enctype="multipart/form-data" id="upload-form">
-                    <div class="form-group files color">
-                        <input type='file' name='files' id='files' multiple>
+                    <div class="mb-3">
+                        <label for="contentInput" class="form-label">Nội dung:</label>
+                        <textarea class="form-control" id="contentInput" aria-describedby="content" rows="10"></textarea>
                     </div>
-
+                    <div class="mb-3">
+                        <label for="files" class="form-label">Tệp đính kèm:</label>
+                        <input type='file' name='files' id='files' muliple>
+                    </div>
                     <div class="d-flex justify-content-center">
-                        <input type='button' class='btn btn-info d-none' value='Upload' id='btn_upload'>
+                        <input type='button' class='btn btn-danger d-none' value='Nộp bài' id='btn_upload'>
                     </div>
                     <span id="msg"></span>
                 </form>
@@ -273,7 +329,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Báo cáo</h5>
-                <div class="custom-control custom-switch hideSmall">
+                <div class="custom-control custom-switch d-none d-sm-inline">
                     <input type="checkbox" class="custom-control-input" id="switch-showdetail">
                     <label class="custom-control-label" for="switch-showdetail">Hiện chi tiết</label>
                 </div>
@@ -281,35 +337,39 @@
             <div class="modal-body">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="raisehand-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Giơ tay</a>
+                        <a class="nav-link" id="practice-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="practice" aria-selected="false">Thực hành</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="practice-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Thực hành</a>
+                        <a class="nav-link active" id="raisehand-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="raisehand" aria-selected="true">Giơ tay</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="submit-tab" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Nộp bài</a>
+                        <a class="nav-link" id="submit-tab" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="submit" aria-selected="false">Nộp bài</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active pt-3" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <!--TAB RAISEHAND-->
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-border spinner-border" role="status" id="raisehand-spinner"></div>
-                        </div>
-                        <table class="table table-borderless d-none" id="table-report-raisehand">
-                            <tbody id="tbody-report-raisehand">
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade  pt-3" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tab-pane fade  pt-3" id="profile" role="tabpanel" aria-labelledby="practice-tab">
                         <!--TAB PRACTICE-->
                         <div class="d-flex justify-content-center">
                             <div class="spinner-border spinner-border" role="status" id="practice-spinner"></div>
                         </div>
-                        <table class="table table-borderless d-none" id="table-report-practice">
-                            <tbody id="tbody-report-practice">
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-borderless d-none" id="table-report-practice">
+                                <tbody id="tbody-report-practice">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show active pt-3" id="home" role="tabpanel" aria-labelledby="raisehand-tab">
+                        <!--TAB RAISEHAND-->
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border spinner-border" role="status" id="raisehand-spinner"></div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-borderless d-none" id="table-report-raisehand">
+                                <tbody id="tbody-report-raisehand">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="tab-pane fade  pt-3" id="contact" role="tabpanel" aria-labelledby="submit-tab">
                         <!--TAB SUBMITS-->
@@ -317,10 +377,12 @@
                             <div class="spinner-border spinner-border" role="status" id="submit-spinner">
                             </div>
                         </div>
-                        <table class="table table-borderless d-none" id="table-report-submit">
-                            <tbody id="tbody-report-submit">
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-borderless d-none" id="table-report-submit">
+                                <tbody id="tbody-report-submit">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
