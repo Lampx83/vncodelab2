@@ -19,11 +19,11 @@ $ sudo ufw allow from any to any port 8080 proto tcp  => Mở cổng 8080 nếu 
 ps -ef|grep -E "apache|httpd" | grep -v "grep"
 
 # Deploy
-```
+
 ###Stop ports
 ``` 
 sudo kill -9 $(sudo lsof -t -i:80)
-sudo kill -9 $(sudo lsof -t -i:443
+sudo kill -9 $(sudo lsof -t -i:443)
 ```
 ###Bật dịch vụ Web
 ```

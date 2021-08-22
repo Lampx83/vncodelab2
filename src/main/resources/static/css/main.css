@@ -942,21 +942,12 @@ a #login:hover {
     text-align: center;
 }
 
-.slide ul {
+.slide .instructions ul {
     list-style: square; /* Remove default bullets */
 }
-.slide li::marker {
+.slide .instructions li::marker {
     color: #006A98;
 }
-
-
-/*.slide ul li::before {*/
-/*    content: "▪";  !* Add content: \2022 is the CSS Code/unicode for a bullet *!*/
-/*    color: #006A98; !* Change the color *!*/
-/*    display: inline-block; !* Needed to add space between the bullet and the text *!*/
-/*    margin-right: 10px; !* Also needed for space (tweak if needed) *!*/
-/*}*/
-
 
 .slide .inner {
     margin-left: 0px !important;
@@ -977,7 +968,7 @@ a #login:hover {
     display: none;
 }
 
-.slide h2{
+.slide .instructions h2{
     font-size: 30px !important;
     padding-top: 30px;
     padding-bottom: 30px;
