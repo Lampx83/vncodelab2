@@ -11,6 +11,15 @@ public class Lab {
     private int order;
     private Boolean feature;
     private boolean insert = true;
+    private boolean slides = false;
+
+    public boolean isSlides() {
+        return slides;
+    }
+
+    public void setSlides(boolean slides) {
+        this.slides = slides;
+    }
 
     public boolean isInsert() {
         return insert;
@@ -35,7 +44,6 @@ public class Lab {
     public void setFeature(Boolean feature) {
         this.feature = feature;
     }
-
 
 
     public String getUserID() {

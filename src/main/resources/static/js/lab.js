@@ -10,292 +10,6 @@ var teacher = false;
 var firstReport = true;
 
 
-$(function () {
-    // initialize and show Bootstrap 4 toast
-
-    page = "lab";
-    $('#codelab-feedback').hide();
-    $("#topButton").detach().appendTo("#codelab-title");
-    $("#creatroom").click(function () {
-        $('#exampleModal').modal('show')
-    });
-
-    $("#done").hide();
-
-    $('.steps ol li').click(function (e) {
-        updateStep($(this).index());
-    });
-
-    var firstEnterRoom = true
-    $('#btnRoom').click(function () {
-        if (firstEnterRoom) {
-            showChat($('#chat0'), "all")
-            firstEnterRoom = false;
-        }
-    })
-    $('#btnRaiseHand').click(function () {
-        raiseHand = $("#btnRaiseHand").hasClass("active");
-        var curStep = new URL(window.location.href).hash.split("#")[1];
-        updateStep(Number(curStep))
-
-        //Ghi log vao storageblue
-        var db = firebase.firestore();
-        var userRef = db.collection("rooms").doc(getRoomID()).collection("logs").doc(currentUser.uid).collection("hands")
-        if (raiseHand) {
-            sendNotify("all", null, TOAST_RAISE_HAND);
-            userRef.add({
-                time: firebase.firestore.FieldValue.serverTimestamp(),
-                type: HAND_UP,
-                step: Number(curStep)
-            })
-        } else {
-            userRef.add({
-                time: firebase.firestore.FieldValue.serverTimestamp(),
-                type: HAND_DOWN,
-                step: Number(curStep)
-            })
-        }
-    })
-    $('.steps ol li a').append("<span class=\"badge badge-secondary bg-secondary my-badge invisible\" onmouseover=\"hoverDiv(this,1)\" onmouseout=\"hoverDiv(this,0)\">0</span>")
-    $('#btnLogin').hide()
-    // if (getRoomID()) {  //Neu co phong thi an
-    //
-    // }
-    $("#next-step").click(function () {
-        var curStep = new URL(window.location.href).hash.split("#")[1];
-        updateStep(Number(curStep))
-    });
-    $("#previous-step").click(function () {
-        var curStep = new URL(window.location.href).hash.split("#")[1];
-        updateStep(Number(curStep))
-    });
-
-    $("#btnSubmit").click(function (ev) {  //Lấy submit bằng JS
-        ev.preventDefault();
-        $("#msg").html("")
-        var db = firebase.firestore();
-        db.collection("rooms").doc(getRoomID()).collection("submits").doc(currentUser.uid)
-            .get()
-            .then((doc) => {
-                if (doc.exists) {
-                    var url = "";
-                    if (doc.data().steps != null) {
-                        var obj = getSubmittedCurrentStep(getSelectedStep(), doc.data().steps);
-                        if (obj != null) {
-                            for (let i = 0; i < obj.fileNames.length; i++) {
-                                url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
-                            }
-                            var output = "<p>&nbsp;";
-                            if (obj.content !== "")
-                                output = output + "<p><b>Nội dung đã nộp</b>: " + obj.content;
-                            if (url !== "")
-                                output = output + "<p><b>File đã nộp</b>: " + url;
-                            $("#msg").html(output);
-                        }
-                    }
-                }
-                $("#upload-spinner").addClass("d-none");
-                $("#btn_upload").removeClass("d-none");
-            })
-            .catch((error) => {
-                console.log("Error getting documents: ", error);
-            });
-        $("#uploadModal").modal("show");
-    });
-
-    $('#btn_upload').click(function () {
-        $("#upload-spinner").removeClass("d-none");
-        $("#upload-form").addClass("d-none");
-        $("#btn_upload").addClass("d-none");
-        var formData = new FormData($("#upload-form")[0]);
-        formData.append("userID", currentUser.uid);
-        formData.append("userName", currentUser.displayName);
-        formData.append("step", getSelectedStep());
-        formData.append("room", getRoomID());
-        formData.append("content", $("#contentInput").val());
-        // AJAX request
-        $.ajax({
-            url: '/upload',
-            type: 'post',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                $("#upload-spinner").addClass("d-none");
-                $("#upload-form").removeClass("d-none");
-                $("#msg").html(response);
-                $("#upload-form").trigger("reset");
-                $("#btn_upload").removeClass("d-none");
-            },
-            error: function () {
-                $("#msg").html("Có lỗi xảy ra!");
-                $("#upload-spinner").addClass("d-none");
-                $("#upload-form").removeClass("d-none");
-                $("#upload-form").trigger("reset");
-                $("#btn_upload").removeClass("d-none");
-            }
-        });
-    });
-
-
-    $("#btnReport").click(function (ev) {
-        if (firstReport) {
-            $("#raisehand-tab").click();
-            firstReport = false;
-        } else {
-            //Reload
-            $("#" + $('.nav-tabs .active').attr("id")).click();
-        }
-    });
-
-    $("#raisehand-tab").click(function (ev) {
-        $("#raisehand-spinner").removeClass("d-none");
-        $("#tbody-report-raisehand").html("")
-        var room = {}
-        room["roomID"] = getRoomID();
-        room["numberOfStep"] = getNumberOfSteps();
-
-        $.ajax({
-            url: '/report_raisehand',
-            type: 'post',
-            data: JSON.stringify(room),
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                refUsers.get().then((snapshot) => {
-                    if (snapshot.exists()) {
-                        const data = snapshot.val();
-                        for (var uid in data) {
-                            var step = data[uid].step;
-                            //Update in Report
-                            $('[id^=' + uid + ']').removeClass("yellow")
-                            if (data[uid].isRaise) {
-                                $("#" + uid + "_" + step).addClass("yellow")
-                            }
-
-                        }
-                    }
-                }).catch((error) => {
-                    console.error(error);
-                });
-                $("#raisehand-spinner").addClass("d-none");
-                $("#table-report-raisehand").removeClass("d-none");
-                $("#tbody-report-raisehand").html(response.msg);
-                if ($('#switch-showdetail').is(':checked')) {
-                    $(".report-detail").removeClass("d-none")
-                } else {
-                    $(".report-detail").addClass("d-none")
-                }
-            },
-            error: function (response) {
-                $("#raisehand-spinner").addClass("d-none");
-                $("#table-report-raisehand").removeClass("d-none");
-                $("#tbody-report-raisehand").html(response.msg)
-            }
-        });
-    });
-
-    $("#practice-tab").click(function (ev) {
-        $("#tbody-report-practice").html("")
-        $("#practice-spinner").removeClass("d-none");
-        var room = {}
-        room["roomID"] = getRoomID();
-        room["numberOfStep"] = getNumberOfSteps();
-
-        $.ajax({
-            url: '/report_practice',
-            type: 'post',
-            data: JSON.stringify(room),
-            dataType: "json",
-            contentType: "application/json",
-            success: function (response) {
-                refUsers.get().then((snapshot) => {
-                    if (snapshot.exists()) {
-                        const data = snapshot.val();
-                        for (var uid in data) {
-                            var step = data[uid].step;
-                            $('[id^=' + uid + ']').removeClass("yellow")
-                            if (data[uid].isRaise) {
-                                $("#" + uid + "_" + step).addClass("yellow")
-                            }
-                        }
-                    }
-                }).catch((error) => {
-                    console.error(error);
-                });
-                $("#practice-spinner").addClass("d-none");
-                $("#table-report-practice").removeClass("d-none");
-                $("#tbody-report-practice").html(response.msg);
-                if ($('#switch-showdetail').is(':checked')) {
-                    $(".report-detail").removeClass("d-none")
-                } else {
-                    $(".report-detail").addClass("d-none")
-                }
-            },
-            error: function (response) {
-                $("#practice-spinner").addClass("d-none");
-                $("#table-report-practice").removeClass("d-none");
-                $("#tbody-report-practice").html(response.msg)
-            }
-        });
-    });
-
-    $("#submit-tab").click(function (ev) {
-        $("#submit-spinner").removeClass("d-none");
-        var db = firebase.firestore();
-        $("#tbody-report-submit").html("")
-        db.collection("rooms").doc(getRoomID()).collection("submits").onSnapshot((querySnapshot) => {
-            $("#table-report-submit").removeClass("d-none");
-            $("#tbody-report-submit").html("")
-            querySnapshot.forEach((doc) => { //Duyet tung nguoi dung
-                var s = "";
-                for (let i = 0; i < getNumberOfSteps(); i++) {
-                    if (doc.data().steps != null) {
-                        var submitedObjects = getSubmitedObjects(i, doc.data().steps);
-                        if (submitedObjects != null) {
-                            var link = "";
-                            for (let j = 0; j < submitedObjects.fileNames.length; j++) {
-                                let l = submitedObjects.fileNames[j]
-                                link = link + "[<a class='text-primary' href='" + submitedObjects.fileLinks[j] + "'>" + l + "</a>] "
-                            }
-                            s = s + "<td><span class ='labStep blue'>" + (i + 1) + "</span><span class='report-detail d-none'>" + link + "</span></td>";
-                        } else {
-                            s = s + "<td><span class ='labStep' >" + (i + 1) + "</span></td>";
-                        }
-                    } else {
-                        s = s + "<td><span class ='labStep' >" + (i + 1) + "</span></td>";
-                    }
-                }
-                let tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + doc.id + "\")'>Xóa</a> </div></td>";
-
-                $("#tbody-report-submit").append("<tr  id='tr-report-" + doc.id + "'><td class='user-name'>" + doc.data().userName + "</td>" + s + tdThreeDots + "</tr>")
-                if ($('#switch-showdetail').is(':checked')) {
-                    $(".report-detail").removeClass("d-none")
-                } else {
-                    $(".report-detail").addClass("d-none")
-                }
-            });
-            $("#submit-spinner").addClass("d-none");
-        });
-    });
-
-
-    $('#switch-showdetail').click(function (e) {
-        if ($('#switch-showdetail').is(':checked')) {
-            $(".report-detail").removeClass("d-none")
-        } else {
-            $(".report-detail").addClass("d-none")
-        }
-    });
-
-    $(document).on('keydown', function (e) {
-        if (e.keyCode === 37 || e.keyCode === 39) {
-            var curStep = new URL(window.location.href).hash.split("#")[1];
-            updateStep(Number(curStep))
-        }
-    });
-});
-
 const TOAST_ENTER_ROOM = 1;
 const TOAST_LEAVE_ROOM = 2;
 const TOAST_RAISE_HAND = 3;
@@ -630,15 +344,21 @@ function getNumberOfSteps() {
 }
 
 function getSelectedStep() {
-    var radioButtons = $(".steps ol li");
+    const radioButtons = $(".steps ol li");
     for (const element of radioButtons) {
-        if (element.hasAttribute("selected"))
+        if (element.hasAttribute("selected")) {
             return radioButtons.index(element)
+        }
     }
+}
+
+function getSelectedStepText(step) {
+    return $(".steps > ol > li:nth-child(" + (step + 1) + ") .step").text()
 }
 
 var oldStep = -1;
 var oldTime = 0;
+var editor;
 
 function updateStep(step) {
     var db = firebase.firestore();
@@ -667,13 +387,81 @@ function updateStep(step) {
         if (raiseHand) {
             change[currentUser.uid].isRaise = true;
         }
-
         refUsers.update(change);
     }
     oldStep = step
     oldTime = Math.floor(Date.now() / 1000);
-}
 
+    //Load Submitted
+
+
+    if (getSelectedStepText(step).includes("(*)")) {
+        var ext = "    <div class='submit-practice'>" +
+            "               <form method='post' enctype='multipart/form-data'>" +
+            "                    <div class='mb-3'>" +
+            "                       <textarea class='contentInput form-control' id='demotext'></textarea>" +
+            "                    </div>" +
+            "                    <div class='mb-3'>" +
+            "                        <label for='files' class='form-label'>Tệp đính kèm:</label>" +
+            "                        <input type='file' name='files' multiple>" +
+            "                    </div>" +
+            "                    <div class='mb-3 d-flex'>" +
+            "                       <div class='msg flex-grow-1'></div>" +
+            "                    </div>" +
+            "                    <div class='d-flex justify-content-center'>" +
+            "                       <div class='spinner-border d-none upload-spinner' role='status' ></div>" +
+            "                       <input type='button' class='btn btn-danger btn_upload' value='Lưu'>" +
+            "                    </div>" +
+            "                 </form>" +
+            "           </div>"
+
+        var extend = $("google-codelab-step .extend").eq(step);
+
+        extend.empty()
+        extend.append(ext);
+
+        editor = CodeMirror.fromTextArea(document.getElementById("demotext"), {
+            lineNumbers: true,
+            mode: "text/html",
+            matchBrackets: true
+        });
+
+        $('.btn_upload').on("click", event => upload(event));
+        $(".contentInput").text("")
+        $(".msg").html("")
+
+        firebase.firestore().collection("rooms").doc(getRoomID()).collection("submits").doc(currentUser.uid)
+            .get()
+            .then((doc) => {
+                if (doc.exists) {
+                    var url = "";
+                    if (doc.data().steps != null) {
+                        var obj = getSubmittedCurrentStep(getSelectedStep(), doc.data().steps);
+                        if (obj != null) {
+                            for (let i = 0; i < obj.fileNames.length; i++) {
+                                url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
+                            }
+                            var output = "";
+                            //$(".contentInput").val(obj.content)
+
+                            editor.refresh()
+                            editor.setValue(obj.content)
+
+
+                            if (url !== "")
+                                output = output + "<b>File đã nộp</b>: <br>" + url;
+                            $(".msg").html(output);
+                        }
+                    }
+                }
+                $("#upload-spinner").addClass("d-none");
+                $("#btn_upload").removeClass("d-none");
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
+    }
+}
 
 function hoverDiv(e, state) {
     if (state === 1) {
@@ -690,7 +478,7 @@ function hoverDiv(e, state) {
 }
 
 function getRoomID() {
-    // return "WmKeL3"; //TODO test
+    // return "lXW9wS"; //TODO test  //lab thử nghiệm https://docs.google.com/document/d/1EEGARIc9dEj9mpnmKoYP8n4EA9KNH9qR0W2c6CYEWT0/edit#
     // return (new URL(window.location.href)).searchParams.get('room')
     var arr = (new URL(window.location.href)).pathname.split("/");
     return arr[arr.length - 1]
@@ -708,12 +496,274 @@ function deleteUserReport(userID) {  //Hàm này có dùng nhé không được 
         dataType: "json",
         contentType: "application/json",
         success: function (data) {
-
         },
         error: function (e) {
-
-
         }
     })
 }
 
+
+function upload(ev) {
+    var curStep = new URL(window.location.href).hash.split("#")[1];
+
+    let button = $(ev.currentTarget);
+    let form = button.closest("form")
+    let textarea = form.find("textarea").first()
+    let msg = form.find(".msg").first()
+
+    $(".upload-spinner").removeClass("d-none");
+    $(".upload-form").addClass("d-none");
+    $(".btn_upload").addClass("d-none");
+    var formData = new FormData(form[0]);
+    formData.append("userID", currentUser.uid);
+    formData.append("userName", currentUser.displayName);
+    formData.append("step", getSelectedStep());
+    formData.append("room", getRoomID());
+    formData.append("content", editor.getValue());
+    // AJAX request
+    $.ajax({
+        url: '/upload',
+        type: 'post',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            $(".upload-spinner").addClass("d-none");
+            form.removeClass("d-none");
+            msg.html(response);
+            form.trigger("reset");
+            button.removeClass("d-none");
+        },
+        error: function () {
+            msg.html("Có lỗi xảy ra!");
+            $(".upload-spinner").addClass("d-none");
+            form.removeClass("d-none");
+            form.trigger("reset");
+            button.removeClass("d-none");
+        }
+    });
+}
+
+
+$(function () {
+    // initialize and show Bootstrap 4 toast
+
+    page = "lab";
+    $('#codelab-feedback').hide();
+    $("#topButton").detach().appendTo("#codelab-title");
+    $("#creatroom").click(function () {
+        $('#exampleModal').modal('show')
+    });
+
+    $("#done").hide();
+
+    $('.steps ol li').click(function (e) {
+        updateStep($(this).index());
+    });
+
+    var firstEnterRoom = true
+    $('#btnRoom').click(function () {
+        if (firstEnterRoom) {
+            showChat($('#chat0'), "all")
+            firstEnterRoom = false;
+        }
+    })
+    $('#btnRaiseHand').click(function () {
+        raiseHand = $("#btnRaiseHand").hasClass("active");
+        var curStep = new URL(window.location.href).hash.split("#")[1];
+        updateStep(Number(curStep))
+
+        //Ghi log vao storageblue
+        var db = firebase.firestore();
+        var userRef = db.collection("rooms").doc(getRoomID()).collection("logs").doc(currentUser.uid).collection("hands")
+        if (raiseHand) {
+            sendNotify("all", null, TOAST_RAISE_HAND);
+            userRef.add({
+                time: firebase.firestore.FieldValue.serverTimestamp(),
+                type: HAND_UP,
+                step: Number(curStep)
+            })
+        } else {
+            userRef.add({
+                time: firebase.firestore.FieldValue.serverTimestamp(),
+                type: HAND_DOWN,
+                step: Number(curStep)
+            })
+        }
+    })
+    $('.steps ol li a').append("<span class=\"badge badge-secondary bg-secondary my-badge invisible\" onmouseover=\"hoverDiv(this,1)\" onmouseout=\"hoverDiv(this,0)\">0</span>")
+    $('#btnLogin').hide()
+    // if (getRoomID()) {  //Neu co phong thi an
+    //
+    // }
+    $("#next-step").click(function () {
+        var curStep = new URL(window.location.href).hash.split("#")[1];
+        updateStep(Number(curStep))
+    });
+    $("#previous-step").click(function () {
+        var curStep = new URL(window.location.href).hash.split("#")[1];
+        updateStep(Number(curStep))
+    });
+
+    // $("#btnSubmit").click(function (ev) {  //Lấy submit bằng JS
+    //     ev.preventDefault();
+    //
+    //     $("#uploadModal").modal("show");
+    // });
+
+
+    $("#btnReport").click(function (ev) {
+        if (firstReport) {
+            $("#raisehand-tab").click();
+            firstReport = false;
+        } else {
+            //Reload
+            $("#" + $('.nav-tabs .active').attr("id")).click();
+        }
+    });
+
+    $("#raisehand-tab").click(function (ev) {
+        $("#raisehand-spinner").removeClass("d-none");
+        $("#tbody-report-raisehand").html("")
+        var room = {}
+        room["roomID"] = getRoomID();
+        room["numberOfStep"] = getNumberOfSteps();
+
+        $.ajax({
+            url: '/report_raisehand',
+            type: 'post',
+            data: JSON.stringify(room),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                refUsers.get().then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        for (var uid in data) {
+                            var step = data[uid].step;
+                            //Update in Report
+                            $('[id^=' + uid + ']').removeClass("yellow")
+                            if (data[uid].isRaise) {
+                                $("#" + uid + "_" + step).addClass("yellow")
+                            }
+                        }
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
+                $("#raisehand-spinner").addClass("d-none");
+                $("#table-report-raisehand").removeClass("d-none");
+                $("#tbody-report-raisehand").html(response.msg);
+                if ($('#switch-showdetail').is(':checked')) {
+                    $(".report-detail").removeClass("d-none")
+                } else {
+                    $(".report-detail").addClass("d-none")
+                }
+            },
+            error: function (response) {
+                $("#raisehand-spinner").addClass("d-none");
+                $("#table-report-raisehand").removeClass("d-none");
+                $("#tbody-report-raisehand").html(response.msg)
+            }
+        });
+    });
+
+    $("#practice-tab").click(function (ev) {
+        $("#tbody-report-practice").html("")
+        $("#practice-spinner").removeClass("d-none");
+        var room = {}
+        room["roomID"] = getRoomID();
+        room["numberOfStep"] = getNumberOfSteps();
+
+        $.ajax({
+            url: '/report_practice',
+            type: 'post',
+            data: JSON.stringify(room),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                $("#practice-spinner").addClass("d-none");
+                $("#table-report-practice").removeClass("d-none");
+                $("#tbody-report-practice").html(response.msg);
+                if ($('#switch-showdetail').is(':checked')) {
+                    $(".report-detail").removeClass("d-none")
+                } else {
+                    $(".report-detail").addClass("d-none")
+                }
+            },
+            error: function (response) {
+                $("#practice-spinner").addClass("d-none");
+                $("#table-report-practice").removeClass("d-none");
+                $("#tbody-report-practice").html(response.msg)
+            }
+        });
+    });
+
+    $("#submit-tab").click(function (ev) {
+        var db = firebase.firestore();
+        if (first_submit_tab) {
+            db.collection("rooms").doc(getRoomID()).collection("submits").onSnapshot((querySnapshot) => {
+                $("#tbody-report-submit").html("")
+                $("#table-report-submit").removeClass("d-none");
+                $("#tbody-report-submit").html("")
+                querySnapshot.forEach((doc) => { //Duyet tung nguoi dung
+                    var s = "";
+                    for (let i = 0; i < getNumberOfSteps(); i++) {
+                        if (doc.data().steps != null) {
+                            var submitedObjects = getSubmitedObjects(i, doc.data().steps);
+                            if (submitedObjects != null && (submitedObjects.content !== "" || submitedObjects.fileLinks.length > 0)) {
+                                var link = "";
+                                for (let j = 0; j < submitedObjects.fileNames.length; j++) {
+                                    let l = submitedObjects.fileNames[j]
+                                    link = link + "[<a class='text-primary' href='" + submitedObjects.fileLinks[j] + "'>" + l + "</a>] "
+                                }
+                                s = s + "<td><span class ='labStep blue'>" + (i + 1) + "</span><span class='report-detail d-none'>" + link + "</span></td>";
+                            } else {
+                                s = s + "<td><span class ='labStep' >" + (i + 1) + "</span></td>";
+                            }
+                        } else {
+                            s = s + "<td><span class ='labStep' >" + (i + 1) + "</span></td>";
+                        }
+                    }
+                    let tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + doc.id + "\")'>Xóa</a> </div></td>";
+
+                    $("#tbody-report-submit").append("<tr  id='tr-report-" + doc.id + "'><td class='user-name'>" + doc.data().userName + "</td>" + s + tdThreeDots + "</tr>")
+                    if ($('#switch-showdetail').is(':checked')) {
+                        $(".report-detail").removeClass("d-none")
+                    } else {
+                        $(".report-detail").addClass("d-none")
+                    }
+                });
+                $("#submit-spinner").addClass("d-none");
+            });
+            first_submit_tab = false;
+        }
+    });
+
+    $('#switch-showdetail').click(function (e) {
+        if ($('#switch-showdetail').is(':checked')) {
+            $(".report-detail").removeClass("d-none")
+        } else {
+            $(".report-detail").addClass("d-none")
+        }
+    });
+
+    $(document).on('keydown', function (e) {
+        if (e.keyCode === 37 || e.keyCode === 39) {
+            var curStep = new URL(window.location.href).hash.split("#")[1];
+            updateStep(Number(curStep))
+        }
+    });
+    $("google-codelab-step .instructions").append("<div class='extend'></div>");
+
+    $(".slide aside").append("<span></span>")
+    $(".slide aside").on('click',function (ev){
+        // var me = ev.currentTarget;
+        // $(me).
+        $(this).children("p").toggle();
+        $(this).children("span").toggle();
+    })
+
+    $(".slide .inner > table").addClass("table table-striped table-bordered")
+});
+var first_submit_tab = true;

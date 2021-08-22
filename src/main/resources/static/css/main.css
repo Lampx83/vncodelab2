@@ -16,13 +16,14 @@ a {
 body {
     background: #eceff1
 }
+
 .layout.horizontal {
     -ms-flex-direction: row;
     -webkit-flex-direction: row;
     flex-direction: row
 }
 
-.modal-backdrop{
+.modal-backdrop {
     z-index: 10 !important;
 }
 
@@ -496,6 +497,7 @@ a #login:hover {
 .card-feature {
     border-bottom-color: #4285f4
 }
+
 .card-not-feature {
     border-bottom-color: #ff4c38
 }
@@ -555,6 +557,7 @@ a #login:hover {
 .codelab-card .card-header {
     padding: 16px 16px 0
 }
+
 .codelab-card .card-duration,
 .codelab-card .card-header {
     -ms-flex-align: center;
@@ -651,10 +654,12 @@ a #login:hover {
     text-transform: none;
     border-radius: 3px !important
 }
-.toast-holder{
+
+.toast-holder {
     z-index: 2000;
 }
-.toast-icon{
+
+.toast-icon {
     width: 16px;
     height: 16px;
 }
@@ -662,7 +667,8 @@ a #login:hover {
 .collapsing {
     transition: none !important;
 }
-.report-detail{
+
+.report-detail {
     padding-left: 8px;
     padding-right: 8px;
 }
@@ -886,10 +892,112 @@ a #login:hover {
     box-shadow: none;
 }
 
-.user-name{
+.user-name {
     font-size: 14px;
     text-overflow: ellipsis;
     /* Needed to make it work */
     overflow: hidden;
     white-space: nowrap;
+}
+
+.submit-practice {
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 24px;
+}
+
+.CodeMirror {
+    height: auto;
+    height: 300px;
+    border: 1px solid #ddd;
+}
+
+.slide google-codelab-step {
+    padding-top: 22px !important;
+}
+
+
+.slide .inner > * {
+    margin-left: 50px !important;
+    /*padding: 0px !important;*/
+}
+.slide .inner > aside{
+    display: block;
+}
+.slide .inner > pre,
+.slide .inner > aside,
+.slide .inner > google-codelab-survey
+{
+    margin-right: 50px !important;
+    /*padding: 0px !important;*/
+}
+.slide .inner > table
+{
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 90%;
+}
+.slide .inner > table td
+{
+    text-align: center;
+}
+
+.slide ul {
+    list-style: square; /* Remove default bullets */
+}
+.slide li::marker {
+    color: #006A98;
+}
+
+
+/*.slide ul li::before {*/
+/*    content: "▪";  !* Add content: \2022 is the CSS Code/unicode for a bullet *!*/
+/*    color: #006A98; !* Change the color *!*/
+/*    display: inline-block; !* Needed to add space between the bullet and the text *!*/
+/*    margin-right: 10px; !* Also needed for space (tweak if needed) *!*/
+/*}*/
+
+
+.slide .inner {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-top: 0px !important;
+    /*min-height: 900px;*/
+}
+.slide .special{
+    border-color: #006A98 !important;
+    background: #d9f5ff !important;
+}
+
+.slide .warning p,
+.slide .special p
+{
+    display: none;
+}
+
+.slide h2{
+    font-size: 30px !important;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    color: #006A98;
+}
+
+.slide .step-title {
+    font-size: 40px !important;
+    background-color: #006A98;
+    color: white;
+    padding: 50px;
+    margin-left: 0px !important;
+    /*margin-right: 0px !important;*/
+}
+
+.slide .instructions {
+    font-size: 24px !important;
+    max-width: 98% !important;
+    line-height: 32px !important;
+}
+.slide #fabs{
+    max-width:97% !important;
 }

@@ -79,12 +79,12 @@ public class MainController {
                     newLab.setDocID(map.get("file_id"));
                 }
             }
-             Process p = Runtime.getRuntime().exec("./claat export " + newLab.getDocID()); //Localhost
-         //   Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
+            Process p = Runtime.getRuntime().exec("./claat export " + newLab.getDocID()); //Localhost
+            //   Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
 
-          //  ProcessBuilder builder = new ProcessBuilder();
+            //  ProcessBuilder builder = new ProcessBuilder();
             //builder.command("classpath:claat", "export", newLab.getDocID());
-        //    Process p = builder.start();
+            //    Process p = builder.start();
 
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             String line = input.readLine();
@@ -174,16 +174,17 @@ public class MainController {
         StorageClient storageClient = StorageClient.getInstance();
 
         for (MultipartFile multipartFile : files) {
-            File file = convertToFile(multipartFile, multipartFile.getOriginalFilename());
-            InputStream is = new FileInputStream(file);
-            Blob blob = storageClient.bucket().create("submits/" + room + "/" + userID + "/" + step + "/" + file.getName(), is);
-            String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
-            url = url + "<a class='text-primary' href = '" + newUrl + "' >" + file.getName() + "</a ><br>";
-            fileLinks.add(newUrl);
-            fileNames.add(file.getName());
-
-            //Xoa file
-            file.delete();
+            if (multipartFile.getOriginalFilename() != null && !multipartFile.getOriginalFilename().isEmpty()) {
+                File file = convertToFile(multipartFile, multipartFile.getOriginalFilename());
+                InputStream is = new FileInputStream(file);
+                Blob blob = storageClient.bucket().create("submits/" + room + "/" + userID + "/" + step + "/" + file.getName(), is);
+                String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
+                url = url + "<a class='text-primary' href = '" + newUrl + "' >" + file.getName() + "</a ><br>";
+                fileLinks.add(newUrl);
+                fileNames.add(file.getName());
+                //Xoa file
+                file.delete();
+            }
         }
 
         Firestore dbFirestore = FirestoreClient.getFirestore();  //FireStorage
@@ -222,7 +223,11 @@ public class MainController {
         map.put("steps", submitedSteps);
         userRef.set(map);
 
-        return ResponseEntity.ok().body("<p>File đã nộp: <br>" + url);
+        String output = "<div class = 'text-primary text-center'>Lưu thành công</div><p>";
+        if (url != null && url != "")
+            output = output + "<b>File đã nộp</b>: " + url;
+
+        return ResponseEntity.ok().body(output);
 
     }
 
@@ -295,7 +300,8 @@ public class MainController {
                 if (log.getDuration() > 0) {
                     System.out.println();
                 }
-                cStep.setNumber(cStep.getNumber() + log.getDuration());
+                if (cStep != null)
+                    cStep.setNumber(cStep.getNumber() + log.getDuration());
             }
             User user = document.toObject(User.class);
             user.setUserID(document.getId());

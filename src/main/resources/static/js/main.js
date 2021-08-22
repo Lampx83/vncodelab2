@@ -251,7 +251,7 @@ function createLabCard(lab, mylabs) {
     if (mylabs)
         return "" +
             "<div class='col codelab-card-item  filter-cate-" + lab.cateID.trim() + "' id='" + lab.docID + "'>" +
-            "   <div class = 'card " + ((lab.feature != null) ? 'card-feature' : 'card-not-feature') + "' >" +
+            "   <div class = 'card " + ((lab.feature != null && lab.feature) ? 'card-feature' : 'card-not-feature') + "' >" +
             "           <div class='card-body'>" +
             "               <div class='d-flex'>" +
             "                  <a href = '/lab/" + lab.docID + "' class='flex-grow-1'> <span  class='card-title '>" + lab.name + "</span></a>" +
@@ -630,6 +630,7 @@ function createLab() {  //Thêm hoặc sửa Lab
         lab["userID"] = currentUser.uid;
         lab["insert"] = insertLab || $("#updateCheckbox").is(':checked');  // Nếu thêm Lab mới, hoặc lấy Lab lại từ đầu
         lab["feature"] = $("#featureCheckbox").is(':checked');
+        lab["slides"] = $("#slideCheckbox").is(':checked');
         $("#add-lab-button").html('');
         $("#add-lab-button").prop("disabled", true);
         $("#add-lab-button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang thực hiện...');
@@ -691,6 +692,11 @@ function editLab(docID) { //Hiển thị form sửa Lab
                 $("#featureCheckbox").prop('checked', true);
             else
                 $("#featureCheckbox").prop('checked', false);
+            if (doc.data().slides != null && doc.data().slides)
+                $("#slideCheckbox").prop('checked', true);
+            else
+                $("#slideCheckbox").prop('checked', false);
+
             oldCateID = doc.data().cateID.trim();
         } else {
             console.log("No such document!");

@@ -89,7 +89,6 @@ public class LabService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return lab;
     }
 
