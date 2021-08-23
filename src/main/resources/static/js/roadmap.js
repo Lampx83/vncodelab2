@@ -1,3 +1,523 @@
+function getRoadMapID() {
+    var arr = (new URL(window.location.href)).pathname.split("/");
+    return arr[arr.length - 1]
+}
+
+function JavaCoreNEU() {
+    return [
+        {
+            "text": "Introduction",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EeqnplMoGktOur0DvF_LV3IBcSs8loVmEi8KbANPGXT2RA?e=TWDSGd"
+                }
+            ]
+        },
+        {
+            "text": "Java Language 1",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EeBpLpnpk91GgevAyVl2saEBg8VVYFhC05Lf5X9JtgEyfw?e=4KTc2d"
+                }
+            ]
+        },
+        {
+            "text": "Java Language 2",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/ES48baOlmD1Jk41LjfvMKIkBNvBd8GM9jhVsEATUORKf5A?e=FkkrPr"
+                }
+            ]
+        },
+        {
+            "text": "Objects and Classes",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EVqvzRPfeKhIuf_T_QFZ9ZMBUouwEcDCsUpj6TqrRvIiYA?e=1CQRAg"
+                }
+            ]
+        },
+        {
+            "text": "Relationship among Objects",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EXpPScArVfRJjRP0JSj6xN0Br1P2h_HTaDR_gln_M20jbQ?e=Kqyx9w"
+                }
+            ]
+        },
+        {
+            "text": "Exception and Debugging.",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EbauG-0_C7xFpva_I1Z_DqEB7DOpS9MOmRO3zrZz2nmkbg?e=ufAA3P"
+                }
+            ]
+        },
+        {
+            "text": "Input and Output Facilities",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EaiQHHE5ZQhDrizCuOl23LoBaJlJ2JeUIZQIIfBamCRlOA?e=DkkpBk"
+                }
+            ]
+        },
+        {
+            "text": "Concurrency",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/ESsKtmelIgZAv9NzFish9OsBQqblDF_n5_Sdq_Cf59HvrQ?e=cxJT8K"
+                }
+            ]
+        },
+        {
+            "text": "Generic Programming And Collections",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/Ecospiu0Q6lMmNk3Rbn2ybgBLc1H2E94rgbGuTvZDfiz1Q?e=rCh0HN"
+                }
+            ]
+        },
+        {
+            "text": "Midterm exam",
+            "icon":"/images/idea.svg"
+        },
+        {
+            "text": "Advantage Topic 1",
+        },
+        {
+            "text": "Advantage  Topic 2",
+        },
+        {
+            "text": "Advantage  Topic 3",
+        },
+        {
+            "text": "Final exam",
+            "icon":"/images/idea.svg"
+        },
+    ];
+}
+
+function nhomJava() {
+    return [
+        {
+            "text": "Java Basic",
+            "content": "Lập trình căn bản với Java",
+            "link": [
+                {
+                    "name": "Code Academy",
+                    "id": "https://www.codecademy.com/learn/learn-java"
+                }
+            ]
+        },
+        {
+            "text": "Java OOP",
+            "content": "Lập trình hướng đối tượng với Java",
+            "link": [
+                {
+                    "name": "W3 Schools",
+                    "id": "https://www.w3schools.com/java/java_oop.asp"
+                }
+            ]
+        },
+        {
+            "text": "Java Essential",
+            "content": "Sử dụng các lớp Java Essential",
+            "link": [
+                {
+                    "name": "Oracle Docs",
+                    "id": "https://docs.oracle.com/javase/tutorial/"
+                }
+            ]
+        },
+        {
+            "text": "intellij IDEA ",
+            "icon": "/images/tool.svg",
+            "category": " ",
+            "link": [
+                {
+                    "name": "Jet Brains",
+                    "id": "https://www.jetbrains.com/help/idea/getting-started.html"
+                }
+            ]
+        },
+        {
+            "text": "Java GUI",
+            "icon": "/images/app.svg",
+            "link": [
+                {
+                    "name": "Javatpoint",
+                    "id": "https://www.javatpoint.com/java-swing"
+                }
+            ]
+        },
+        {
+            "text": "Socket",
+            "icon": "/images/network.svg",
+            "link": [
+                {
+                    "name": "Infoworld",
+                    "id": "https://www.infoworld.com/article/2853780/socket-programming-for-scalable-systems.html"
+                }
+            ]
+        },
+        {
+            "text": "HTML",
+            "icon": "/images/code.svg",
+            "category": " ",
+            "link": [
+                {
+                    "name": "W3 Schools",
+                    "id": "https://www.w3schools.com/html/default.asp"
+                }
+            ]
+        },
+        {
+            "text": "Servlet",
+            "link": [
+                {
+                    "name": "Javatpoint",
+                    "id": "https://www.javatpoint.com/servlet-tutorial"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "Servlet Helloworld",
+                    "id": "c2A7FR"
+                },
+                {
+                    "name": "Form - Collaboration - Config - Context",
+                    "id": "AVhBz0"
+                },
+                {
+                    "name": "Cookie - Session",
+                    "id": "VMUxUn"
+                },
+                {
+                    "name": "Event Listener",
+                    "id": "L3AQvs"
+                },
+                {
+                    "name": "Filter",
+                    "id": "G9OehA"
+                },
+                {
+                    "name": "Annotation",
+                    "id": "o4Ersx"
+                },
+                {
+                    "name": "Textfile",
+                    "id": "ckm9AE"
+                },
+                {
+                    "name": "Upload and Download",
+                    "id": "urTsqo"
+                },
+                {
+                    "name": "Login",
+                    "id": "QvVu4f"
+                },
+                {
+                    "name": "Database Access",
+                    "id": "6vx3G0"
+                }
+            ]
+        },
+        {
+            "text": "CSS",
+            "icon": "/images/web.svg",
+            "category": " ",
+            "link": [
+                {
+                    "name": "W3 Schools",
+                    "id": "https://www.w3schools.com/css/default.asp"
+                }
+            ]
+        },
+        {
+            "text": "RDBMS",
+            "icon": "/images/database.svg",
+            "category": " ",
+            "link": [
+                {
+                    "name": "Mysql Tutorial",
+                    "id": "https://www.mysqltutorial.org/"
+                }
+            ]
+        },
+        {
+            "text": "JSP",
+            "link": [
+                {
+                    "name": "Javatpoint",
+                    "id": "https://www.javatpoint.com/jsp-tutorial"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "JSP Tag",
+                    "id": "nIwBuu"
+                },
+                {
+                    "name": "JSP Implicit Objects",
+                    "id": "31YcoD"
+                },
+                {
+                    "name": "JSP directives",
+                    "id": "HsnuTs"
+                },
+                {
+                    "name": "JSP Action Tags",
+                    "id": "pJ3UJk"
+                },
+                {
+                    "name": "Expression Language",
+                    "id": "bAf1Ke"
+                },
+                {
+                    "name": "JSP Standard Tag Library (JSTL)",
+                    "id": "P7c9uw"
+                },
+                {
+                    "name": "MVC Model 1",
+                    "id": "CzKHi1"
+                },
+                {
+                    "name": "MVC Model 2",
+                    "id": "uDQPmC"
+                }
+            ]
+        },
+        {
+            "text": "JPA",
+            "icon": "/images/block.svg",
+            "link": [
+                {
+                    "name": "Javatpoint",
+                    "id": "https://www.javatpoint.com/jpa-tutorial"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "JPA Basic",
+                    "id": "1CoyBL"
+                },
+                {
+                    "name": "Query",
+                    "id": "aCM6Z4"
+                },
+                {
+                    "name": "Embed",
+                    "id": "aGqcQm"
+                },
+                {
+                    "name": "Relationship",
+                    "id": "kr0o6E"
+                },
+                {
+                    "name": "Cascading",
+                    "id": "1SxPtt"
+                }
+            ]
+        },
+        {
+            "text": "Maven",
+            "icon": "/images/tool.svg",
+            "category": " ",
+            "link": [
+                {
+                    "name": "Apache Maven",
+                    "id": "https://maven.apache.org/guides/index.html"
+                }
+            ]
+        },
+        {
+            "text": "MVC",
+            "icon": "/images/layer.svg",
+            "category": " ",
+            "link": [
+                {
+                    "name": "MVC in JSP",
+                    "id": "https://www.javatpoint.com/MVC-in-jsp"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "MVC Model 1",
+                    "id": "CzKHi1"
+                },
+                {
+                    "name": "MVC Model 2",
+                    "id": "uDQPmC"
+                }
+            ]
+        },
+        {
+            "text": "noSQL",
+            "icon": "/images/bracket.svg",
+            "category": " ",
+            "link": [
+                {
+                    "name": "MongoDB University",
+                    "id": "https://university.mongodb.com/"
+                },
+                {
+                    "name": "MongoDB Java Drive",
+                    "id": "https://mongodb.github.io/mongo-java-driver/4.3/"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "MongoDB",
+                    "id": "UZJr83"
+                },
+                {
+                    "name": "MongoDB Java Basic",
+                    "id": "BncrHF"
+                },
+                {
+                    "name": "Mongo Atlas",
+                    "id": "bi9CnV"
+                },
+                {
+                    "name": "MongoDB Aggregation",
+                    "id": "uoqmex"
+                },
+                {
+                    "name": "MongoDB Indexes",
+                    "id": "BWghAT"
+                },
+                {
+                    "name": "MongoDB Java Advanced",
+                    "id": "OLrfqE"
+                }
+            ]
+        },
+        {
+            "text": "Project 1",
+            "category": "  ",
+            "icon": "/images/idea.svg",
+            "lab": [
+                {
+                    "name": "Mflix 1",
+                    "id": "xncTjt"
+                },
+                {
+                    "name": "Mflix 2",
+                    "id": "RFFH4T"
+                },
+                {
+                    "name": "Mflix 3",
+                    "id": "tvj14u"
+                },
+                {
+                    "name": "Mflix 4",
+                    "id": "6fNT47"
+                },
+                {
+                    "name": "Mflix 5",
+                    "id": "02qHiD"
+                }
+                ,
+                {
+                    "name": "Mflix 6",
+                    "id": "B1H83u"
+                }
+            ]
+        },
+        {
+            "text": "Bootstrap",
+            "icon": "/images/b.svg",
+            "category": " ",
+            "link": [
+                {
+                    "name": "Getbootstrap",
+                    "id": "https://getbootstrap.com/docs/5.0/getting-started/introduction/"
+                }
+            ]
+        },
+        {
+            "text": "Thymeleaf",
+            "icon": "/images/leaf.svg",
+            "link": [
+                {
+                    "name": "Thymeleaf",
+                    "id": "https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "Thymeleaf",
+                    "id": "UgScHX"
+                }
+            ]
+        },
+        {
+            "text": "Firebase",
+            "icon": "/images/firebase.svg",
+            "category": " ",
+            "link": [
+                {
+                    "name": "Authentication",
+                    "id": "https://firebase.google.com/docs/auth"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "Hello Firebase",
+                    "id": "tNG1z3"
+                }
+            ],
+        },
+        {
+            "text": "Jersey",
+            "icon": "/images/jersey.svg",
+            "link": [
+                {
+                    "name": "Jersey User Guide",
+                    "id": "https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/index.html"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "Jersey Client",
+                    "id": "WobKq2"
+                },
+                {
+                    "name": "Jersey Server",
+                    "id": "JENBWx"
+                }
+            ]
+        },
+        {
+            "text": "jQuery",
+            "icon": "/images/jquery.svg",
+            "category": " ",
+            "link": [
+                {
+                    "name": "jQuery Learning Center",
+                    "id": "https://learn.jquery.com/"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "jQuery",
+                    "id": "TxnyPQ"
+                }
+            ]
+        }
+    ];
+}
+
+
 am4core.useTheme(am4themes_animated);
 am4core.useTheme(am4themes_material);
 var chart = am4core.create("chartdiv", am4plugins_timeline.SerpentineChart);
@@ -14,423 +534,12 @@ var baseUrl = "/room/"
 chart.dateFormatter.inputDateFormat = "m s";
 
 
-chart.data = [
-    {
-        "text": "Java Basic",
-        "content": "Lập trình căn bản với Java",
-        "link": [
-            {
-                "name": "Code Academy",
-                "id": "https://www.codecademy.com/learn/learn-java"
-            }
-        ]
-    },
-    {
-        "text": "Java OOP",
-        "content": "Lập trình hướng đối tượng với Java",
-        "link": [
-            {
-                "name": "W3 Schools",
-                "id": "https://www.w3schools.com/java/java_oop.asp"
-            }
-        ]
-    },
-    {
-        "text": "Java Essential",
-        "content": "Sử dụng các lớp Java Essential",
-        "link": [
-            {
-                "name": "Oracle Docs",
-                "id": "https://docs.oracle.com/javase/tutorial/"
-            }
-        ]
-    },
-    {
-        "text": "intellij IDEA ",
-        "icon": "/images/tool.svg",
-        "category": " ",
-        "link": [
-            {
-                "name": "Jet Brains",
-                "id": "https://www.jetbrains.com/help/idea/getting-started.html"
-            }
-        ]
-    },
-    {
-        "text": "Java GUI",
-        "icon": "/images/app.svg",
-        "link": [
-            {
-                "name": "Javatpoint",
-                "id": "https://www.javatpoint.com/java-swing"
-            }
-        ]
-    },
-    {
-        "text": "Socket",
-        "icon": "/images/network.svg",
-        "link": [
-            {
-                "name": "Infoworld",
-                "id": "https://www.infoworld.com/article/2853780/socket-programming-for-scalable-systems.html"
-            }
-        ]
-    },
-    {
-        "text": "HTML",
-        "icon": "/images/code.svg",
-        "category": " ",
-        "link": [
-            {
-                "name": "W3 Schools",
-                "id": "https://www.w3schools.com/html/default.asp"
-            }
-        ]
-    },
-    {
-        "text": "Servlet",
-        "link": [
-            {
-                "name": "Javatpoint",
-                "id": "https://www.javatpoint.com/servlet-tutorial"
-            }
-        ],
-        "lab": [
-            {
-                "name": "Servlet Helloworld",
-                "id": "c2A7FR"
-            },
-            {
-                "name": "Form - Collaboration - Config - Context",
-                "id": "AVhBz0"
-            },
-            {
-                "name": "Cookie - Session",
-                "id": "VMUxUn"
-            },
-            {
-                "name": "Event Listener",
-                "id": "L3AQvs"
-            },
-            {
-                "name": "Filter",
-                "id": "G9OehA"
-            },
-            {
-                "name": "Annotation",
-                "id": "o4Ersx"
-            },
-            {
-                "name": "Textfile",
-                "id": "ckm9AE"
-            },
-            {
-                "name": "Upload and Download",
-                "id": "urTsqo"
-            },
-            {
-                "name": "Login",
-                "id": "QvVu4f"
-            },
-            {
-                "name": "Database Access",
-                "id": "6vx3G0"
-            }
-        ]
-    },
-    {
-        "text": "CSS",
-        "icon": "/images/web.svg",
-        "category": " ",
-        "link": [
-            {
-                "name": "W3 Schools",
-                "id": "https://www.w3schools.com/css/default.asp"
-            }
-        ]
-    },
-    {
-        "text": "RDBMS",
-        "icon": "/images/database.svg",
-        "category": " ",
-        "link": [
-            {
-                "name": "Mysql Tutorial",
-                "id": "https://www.mysqltutorial.org/"
-            }
-        ]
-    },
-    {
-        "text": "JSP",
-        "link": [
-            {
-                "name": "Javatpoint",
-                "id": "https://www.javatpoint.com/jsp-tutorial"
-            }
-        ],
-        "lab": [
-            {
-                "name": "JSP Tag",
-                "id": "nIwBuu"
-            },
-            {
-                "name": "JSP Implicit Objects",
-                "id": "31YcoD"
-            },
-            {
-                "name": "JSP directives",
-                "id": "HsnuTs"
-            },
-            {
-                "name": "JSP Action Tags",
-                "id": "pJ3UJk"
-            },
-            {
-                "name": "Expression Language",
-                "id": "bAf1Ke"
-            },
-            {
-                "name": "JSP Standard Tag Library (JSTL)",
-                "id": "P7c9uw"
-            },
-            {
-                "name": "MVC Model 1",
-                "id": "CzKHi1"
-            },
-            {
-                "name": "MVC Model 2",
-                "id": "uDQPmC"
-            }
-        ]
-    },
-    {
-        "text": "JPA",
-        "icon": "/images/block.svg",
-        "link": [
-            {
-                "name": "Javatpoint",
-                "id": "https://www.javatpoint.com/jpa-tutorial"
-            }
-        ],
-        "lab": [
-            {
-                "name": "JPA Basic",
-                "id": "1CoyBL"
-            },
-            {
-                "name": "Query",
-                "id": "aCM6Z4"
-            },
-            {
-                "name": "Embed",
-                "id": "aGqcQm"
-            },
-            {
-                "name": "Relationship",
-                "id": "kr0o6E"
-            },
-            {
-                "name": "Cascading",
-                "id": "1SxPtt"
-            }
-        ]
-    }
-    ,
-    {
-        "text": "Maven",
-        "icon": "/images/tool.svg",
-        "category": " ",
-        "link": [
-            {
-                "name": "Apache Maven",
-                "id": "https://maven.apache.org/guides/index.html"
-            }
-        ]
-    }
-    ,
-    {
-        "text": "MVC",
-        "icon": "/images/layer.svg",
-        "category": " ",
-        "link": [
-            {
-                "name": "MVC in JSP",
-                "id": "https://www.javatpoint.com/MVC-in-jsp"
-            }
-        ],
-        "lab": [
-            {
-                "name": "MVC Model 1",
-                "id": "CzKHi1"
-            },
-            {
-                "name": "MVC Model 2",
-                "id": "uDQPmC"
-            }
-        ]
-    }
-    ,
-    {
-        "text": "noSQL",
-        "icon": "/images/bracket.svg",
-        "category": " ",
-        "link": [
-            {
-                "name": "MongoDB University",
-                "id": "https://university.mongodb.com/"
-            },
-            {
-                "name": "MongoDB Java Drive",
-                "id": "https://mongodb.github.io/mongo-java-driver/4.3/"
-            }
-        ],
-        "lab": [
-            {
-                "name": "MongoDB",
-                "id": "UZJr83"
-            },
-            {
-                "name": "MongoDB Java Basic",
-                "id": "BncrHF"
-            },
-            {
-                "name": "Mongo Atlas",
-                "id": "bi9CnV"
-            },
-            {
-                "name": "MongoDB Aggregation",
-                "id": "uoqmex"
-            },
-            {
-                "name": "MongoDB Indexes",
-                "id": "BWghAT"
-            },
-            {
-                "name": "MongoDB Java Advanced",
-                "id": "OLrfqE"
-            }
-        ]
-    }
-    ,
-    {
-        "category": "  ",
-        "text": "Project 1",
-        "icon": "/images/idea.svg",
+if (getRoadMapID() === "1")
+    chart.data = nhomJava();
 
-        "lab": [
-            {
-                "name": "Mflix 1",
-                "id": "xncTjt"
-            },
-            {
-                "name": "Mflix 2",
-                "id": "RFFH4T"
-            },
-            {
-                "name": "Mflix 3",
-                "id": "tvj14u"
-            },
-            {
-                "name": "Mflix 4",
-                "id": "6fNT47"
-            },
-            {
-                "name": "Mflix 5",
-                "id": "02qHiD"
-            }
-            ,
-            {
-                "name": "Mflix 6",
-                "id": "B1H83u"
-            }
-        ]
-    }
-    ,
-    {
-        "text": "Bootstrap",
-        "icon": "/images/b.svg",
-        "category": " ",
-        "link": [
-            {
-                "name": "Getbootstrap",
-                "id": "https://getbootstrap.com/docs/5.0/getting-started/introduction/"
-            }
-        ]
-    }
-    ,
-    {
-        "text": "Thymeleaf",
-        "icon": "/images/leaf.svg",
-        "link": [
-            {
-                "name": "Thymeleaf",
-                "id": "https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html"
-            }
-        ],
-        "lab": [
-            {
-                "name": "Thymeleaf",
-                "id": "UgScHX"
-            }
-        ]
-    }
-    ,
-    {
-        "text": "Firebase",
-        "icon": "/images/firebase.svg",
-        "category": " ",
-        "link": [
-            {
-                "name": "Authentication",
-                "id": "https://firebase.google.com/docs/auth"
-            }
-        ],
-        "lab": [
-            {
-                "name": "Hello Firebase",
-                "id": "tNG1z3"
-            }
-        ],
-    }
-    ,
-    {
-        "text": "Jersey",
-        "icon": "/images/jersey.svg",
-        "link": [
-            {
-                "name": "Jersey User Guide",
-                "id": "https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/index.html"
-            }
-        ],
-        "lab": [
-            {
-                "name": "Jersey Client",
-                "id": "WobKq2"
-            },
-             {
-                "name": "Jersey Server",
-                "id": "JENBWx"
-            }
-        ]
-    },
-    {
-        "text": "jQuery",
-        "icon": "/images/jquery.svg",
-        "category": " ",
-        "link": [
-            {
-                "name": "jQuery Learning Center",
-                "id": "https://learn.jquery.com/"
-            }
-        ],
-        "lab": [
-            {
-                "name": "jQuery",
-                "id": "TxnyPQ"
-            }
-        ]
-    }
-];
+if (getRoadMapID() === "2")
+    chart.data = JavaCoreNEU();
+
 
 for (let i = 0; i < chart.data.length; i++) {
     if (chart.data[i].category == null)
@@ -455,9 +564,9 @@ for (let i = 0; i < chart.data.length; i++) {
         }
 
     }
-    if (chart.data[i].color == null){
+    if (chart.data[i].color == null) {
         chart.data[i].color = colorSet.getIndex(i)
-       chart.data[i].color = colorSet.getIndex(29 - Math.round(i * 10 / chart.data.length))
+        chart.data[i].color = colorSet.getIndex(29 - Math.round(i * 10 / chart.data.length))
     }
     chart.data[i].textDisabled = false;
 
