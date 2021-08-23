@@ -919,32 +919,28 @@ a #login:hover {
 
 .slide .inner > * {
     margin-left: 50px !important;
-    /*padding: 0px !important;*/
-}
-.slide .inner > aside{
-    display: block;
-}
-.slide .inner > pre,
-.slide .inner > aside,
-.slide .inner > google-codelab-survey
-{
     margin-right: 50px !important;
     /*padding: 0px !important;*/
 }
-.slide .inner > table
-{
+
+.slide .inner > aside {
+    display: block;
+}
+
+.slide .inner > table {
     margin-left: auto !important;
     margin-right: auto !important;
     width: 90%;
 }
-.slide .inner > table td
-{
+
+.slide .inner > table td {
     text-align: center;
 }
 
 .slide .instructions ul {
     list-style: square; /* Remove default bullets */
 }
+
 .slide .instructions li::marker {
     color: #006A98;
 }
@@ -957,31 +953,31 @@ a #login:hover {
     padding-top: 0px !important;
     /*min-height: 900px;*/
 }
-.slide .special{
+
+.slide .special {
     border-color: #006A98 !important;
     background: #d9f5ff !important;
 }
 
 .slide .warning p,
-.slide .special p
-{
+.slide .special p {
     display: none;
 }
 
-.slide .instructions h2{
+.slide .instructions h2 {
     font-size: 30px !important;
     padding-top: 30px;
     padding-bottom: 30px;
     color: #006A98;
 }
 
-.slide .step-title {
+.slide .instructions .step-title {
     font-size: 40px !important;
     background-color: #006A98;
     color: white;
     padding: 50px;
     margin-left: 0px !important;
-    /*margin-right: 0px !important;*/
+    margin-right: 0px !important;
 }
 
 .slide .instructions {
@@ -989,6 +985,28 @@ a #login:hover {
     max-width: 98% !important;
     line-height: 32px !important;
 }
-.slide #fabs{
-    max-width:97% !important;
+
+.slide #fabs {
+    max-width: 97% !important;
+}
+
+@media screen and (max-width: 768px) {
+    .slide .inner > * {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .slide .inner > pre,
+    .slide .inner > aside,
+    .slide .inner > google-codelab-survey {
+        margin-right: 0px !important;
+        /*padding: 0px !important;*/
+    }
+
+    .slide .instructions {
+        box-shadow: none !important;
+        max-width: 100% !important;
+    }
 }

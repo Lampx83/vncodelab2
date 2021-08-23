@@ -3,6 +3,26 @@ function getRoadMapID() {
     return arr[arr.length - 1]
 }
 
+function tempalate() {
+    return [
+        {
+            "text": "Introduction",
+            "link": [
+                {
+                    "name": "",
+                    "id": ""
+                }
+            ],
+            "lab": [
+                {
+                    "name": "",
+                    "id": ""
+                }
+            ]
+        }
+    ];
+}
+
 function JavaCoreNEU() {
     return [
         {
@@ -11,6 +31,12 @@ function JavaCoreNEU() {
                 {
                     "name": "Slides",
                     "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EeqnplMoGktOur0DvF_LV3IBcSs8loVmEi8KbANPGXT2RA?e=TWDSGd"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "Lab 1",
+                    "id": "KDTBN7"
                 }
             ]
         },
@@ -88,7 +114,7 @@ function JavaCoreNEU() {
         },
         {
             "text": "Midterm exam",
-            "icon":"/images/idea.svg"
+            "icon": "/images/idea.svg"
         },
         {
             "text": "Advantage Topic 1",
@@ -101,7 +127,7 @@ function JavaCoreNEU() {
         },
         {
             "text": "Final exam",
-            "icon":"/images/idea.svg"
+            "icon": "/images/idea.svg"
         },
     ];
 }

@@ -22,6 +22,7 @@ ps -ef|grep -E "apache|httpd" | grep -v "grep"
 
 ###Stop ports
 ``` 
+cd vncodelab
 git pull
 sudo kill -9 $(sudo lsof -t -i:80)
 sudo kill -9 $(sudo lsof -t -i:443)

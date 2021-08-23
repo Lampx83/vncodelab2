@@ -1,3 +1,8 @@
+var ui
+var currentUser;
+var availableTags = []
+var insertLab = true;  //true mean insert false mean update
+var oldCateID; // lưu old CateID lại để xóa đi sau khi sửa
 var firebaseConfig = {
     apiKey: "AIzaSyCAowCDyHC5b0HhhIBvxVqc0o3lLSMXnJM",
     authDomain: "vncodelab2.firebaseapp.com",
@@ -8,9 +13,6 @@ var firebaseConfig = {
     appId: "1:852532707206:web:5281cd31d29828fbc7f607",
     measurementId: "G-6ZVL24X18C"
 };
-
-var currentUser;
-var insertLab = true;  //true mean insert false mean update
 var uiConfig = {
     signInFlow: 'popup',
     signInOptions: [
@@ -31,113 +33,8 @@ var uiConfig = {
         }
     },
 };
-var ui
-$(function () {
-    firebase.initializeApp(firebaseConfig);
-    ui = new firebaseui.auth.AuthUI(firebase.auth());
-    // ui.start('#firebaseui-auth-container', uiConfig);
-    firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {  //Neu dang nhap roi
-            currentUser = user;
-            afterLogin(user);
-            presence(user);
-        } else { //Neu chua dang nhap
-            if (((window.location.pathname.startsWith("/room")) || (window.location.pathname.startsWith("/mylabs")))) //Bat buoc phai dang nhap
-                $('#loginModal').modal('show')  //Hien form dang nhap
-            afterLogout();
-        }
-        $("#login-spinner").addClass("d-none")
-    });
-
-    $("#codelab-card-add").click(function (e) {
-        $('#updateCheckboxdiv').addClass("d-none");
-        $('#addLabModal > div > div > div > h5').text("Thêm bài Lab")
-        $('#docID').prop("disabled", false);
-        $('#add-lab-button').text("Thêm");
-        $('#docID').val("")
-        $('#description').val("")
-        $('#addLabModal').modal('show')
-        insertLab = true;
-        $("#updateCheckbox").prop('checked', false);
-    });
-    $("#add-form").submit(function (e) {
-        e.preventDefault();
-    });
-
-    $('#input-search').keypress(function (e) {
-        if (e.which == 13) {//
-            loadFeatureLabs()
-        }
-    });
-    //
-    // $('#btnLogin').click(function (e) {
-    //     openLoginModal();
-    // });
-    //
-    // $('a#google_login').click(function (e) {
-    //     var provider = new firebase.auth.GoogleAuthProvider();
-    //     firebase.auth()
-    //         .signInWithPopup(provider)
-    //         .then((result) => {
-    //             currentUser = user;
-    //             presence(result.user)
-    //             afterLogin(result.user);
-    //         }).catch((error) => {
-    //     });
-    // });
-    // $('#signout').click(function (e) {
-    //     logOut();
-    // })
-
-    if (page == "home" || page == "mylabs") {
-
-        availableTags = []
-        $("#input-search").autocomplete({
-            source: availableTags,
-            position: {
-                my: "left-8 top+10"
-            },
-            select: function (e, ui) {
-                if (ui.item.id.length == 44)
-                    window.location.replace("/lab/" + ui.item.id);
-                else
-                    filterCate(ui.item.id)
-            },
-            autoFocus: true
-        });
-
-
-        $("#input-search").keydown(function (event) {
-            if (event.keyCode == 13) {
-                if ($(".selector").val().length == 0) {
-                    event.preventDefault();
-                    return false;
-                }
-            }
-        });
-        if (page === "mylabs") {
-            // $("#cards").disableSelection();
-            $("#cards").sortable({
-                update: function (event, ui) {
-                    var db = firebase.firestore();
-                    for (let i = 0; i < $("#cards").children().length; i++) {
-                        let id = $("#cards").children()[i].id
-                        if (id !== "codelab-card-add" && !$("#" + id).hasClass("d-none")) {
-                            db.collection("labs").doc(id).collection("users").doc(currentUser.uid).update({order: i});
-                            db.collection("labs").doc(id).update({order: i});
-                        }
-                    }
-                },
-                cancel: ".selectable"
-            });
-        } else if (page === "home") {
-            loadFeatureLabs()
-        }
-    }
-});
 
 function afterLogin(user) {
-
     $(".user").removeClass("d-none")
     $(".guest").addClass("d-none")
     $('#loginModal').modal('hide')
@@ -196,9 +93,6 @@ function hashCode(s) {
         return a & a
     }, 0);
 }
-
-
-var availableTags = []
 
 function createLabCard(lab, mylabs) {
     //Kiem tra xem da dua cate do len hay chua
@@ -352,8 +246,7 @@ function loadLabByQuerySnapshot(querySnapshot) {
     $("#spiner-loading-card").addClass("d-none")
 }
 
-
-var getUrlParameter = function getUrlParameter(sParam) {
+function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1),
         sURLVariables = sPageURL.split('&'),
         sParameterName,
@@ -368,7 +261,6 @@ var getUrlParameter = function getUrlParameter(sParam) {
     }
     return false;
 };
-
 
 function loadRooms(docID) {
     $("rooms-spinner").removeClass("d-none");
@@ -596,7 +488,7 @@ var TimeAgo = (function () {
 }());
 
 function createLab() {  //Thêm hoặc sửa Lab
-    //Kiểm tra thông tin
+
     var valid = true;
     if ($("#docID").val().trim() === "" || (!$("#docID").val().includes("docs.google.com") && !$("#docID").val().includes("codelabs-preview.appspot.com") && $("#docID").val().length != 44)) {
         $("#docID").addClass("is-invalid")
@@ -629,6 +521,7 @@ function createLab() {  //Thêm hoặc sửa Lab
         lab["cateID"] = $("#cateID").val().trim();
         lab["userID"] = currentUser.uid;
         lab["insert"] = insertLab || $("#updateCheckbox").is(':checked');  // Nếu thêm Lab mới, hoặc lấy Lab lại từ đầu
+        // lab["updateImage"] = insertLab || $("#updateImageCheckbox").is(':checked');
         lab["feature"] = $("#featureCheckbox").is(':checked');
         lab["slides"] = $("#slideCheckbox").is(':checked');
         $("#add-lab-button").html('');
@@ -672,11 +565,10 @@ function createLab() {  //Thêm hoặc sửa Lab
     }
 }
 
-var oldCateID; // lưu old CateID lại để xóa đi sau khi sửa
-
 function editLab(docID) { //Hiển thị form sửa Lab
     insertLab = false;
     $('#updateCheckboxdiv').removeClass("d-none");
+  //  $('#updateImageCheckboxdiv').removeClass("d-none");
     $('#addLabModal > div > div > div > h5').text("Sửa bài Lab")
     $('#docID').prop("disabled", true);
     $('#docID').val(docID)
@@ -707,7 +599,6 @@ function editLab(docID) { //Hiển thị form sửa Lab
 }
 
 function deleteLab(docID) {
-
     $('#confirm-modal').modal('show')
     $('#confirm-title').text("Bạn có chắc chắn muốn xóa?")
     $('#confirm-body').text("Toàn bộ dữ liệu liên quan đến phòng thực hành sẽ bị xóa")
@@ -740,3 +631,91 @@ function deleteLab(docID) {
     })
 }
 
+$(function () {
+    firebase.initializeApp(firebaseConfig);
+    ui = new firebaseui.auth.AuthUI(firebase.auth());
+    // ui.start('#firebaseui-auth-container', uiConfig);
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {  //Neu dang nhap roi
+            currentUser = user;
+            afterLogin(user);
+            presence(user);
+        } else { //Neu chua dang nhap
+            if (((window.location.pathname.startsWith("/room")) || (window.location.pathname.startsWith("/mylabs")))) //Bat buoc phai dang nhap
+                $('#loginModal').modal('show')  //Hien form dang nhap
+            afterLogout();
+        }
+        $("#login-spinner").addClass("d-none")
+    });
+
+    $("#codelab-card-add").click(function (e) {
+        $('#updateCheckboxdiv').addClass("d-none");
+        // $('#updateImageCheckboxdiv').addClass("d-none");
+        $('#addLabModal > div > div > div > h5').text("Thêm bài Lab")
+        $('#docID').prop("disabled", false);
+        $('#add-lab-button').text("Thêm");
+        $('#docID').val("")
+        $('#description').val("")
+        $('#addLabModal').modal('show')
+        insertLab = true;
+        $("#updateCheckbox").prop('checked', false);
+        // $("#updateImageCheckbox").prop('checked', false);
+    });
+    $("#add-form").submit(function (e) {
+        e.preventDefault();
+    });
+
+    $('#input-search').keypress(function (e) {
+        if (e.which == 13) {//
+            loadFeatureLabs()
+        }
+    });
+
+
+    if (page == "home" || page == "mylabs") {
+
+        availableTags = []
+        $("#input-search").autocomplete({
+            source: availableTags,
+            position: {
+                my: "left-8 top+10"
+            },
+            select: function (e, ui) {
+                if (ui.item.id.length == 44)
+                    window.location.replace("/lab/" + ui.item.id);
+                else
+                    filterCate(ui.item.id)
+            },
+            autoFocus: true
+        });
+
+
+        $("#input-search").keydown(function (event) {
+            if (event.keyCode == 13) {
+                if ($(".selector").val().length == 0) {
+                    event.preventDefault();
+                    return false;
+                }
+            }
+        });
+        if (page === "mylabs") {
+            $("#cate-dropdown").removeClass("d-none");
+            // $("#cards").disableSelection();
+            $("#cards").sortable({
+                update: function (event, ui) {
+                    var db = firebase.firestore();
+                    for (let i = 0; i < $("#cards").children().length; i++) {
+                        let id = $("#cards").children()[i].id
+                        if (id !== "codelab-card-add" && !$("#" + id).hasClass("d-none")) {
+                            db.collection("labs").doc(id).collection("users").doc(currentUser.uid).update({order: i});
+                            db.collection("labs").doc(id).update({order: i});
+                        }
+                    }
+                },
+                cancel: ".selectable"
+            });
+        } else if (page === "home") {
+            loadFeatureLabs()
+        }
+    }
+});

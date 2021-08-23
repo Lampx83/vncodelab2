@@ -91,7 +91,6 @@ public class MainController {
             System.out.println(line);
             p.waitFor();
 
-
             String folderName = line.split("\t")[1];
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
             String totalLine = "";
@@ -104,12 +103,12 @@ public class MainController {
             Document doc = Jsoup.parse(inputFile, "UTF-8");
             Elements img = doc.getElementsByTag("img");
             if (newLab.isInsert()) {
-                //Save to Storage
+                //Save to Storage {userID}/labs/{lab_name}
                 StorageClient storageClient = StorageClient.getInstance();  //Storage
                 for (Element el : img) {
                     File file = new File(folderName + "/" + el.attr("src"));
                     InputStream is = new FileInputStream(file);
-                    Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + folderName + "/" + file.getName(), is);
+                    Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + newLab.getDocID() + "/" + file.getName(), is);
                     String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
                     el.attr("src", newUrl);
                 }
