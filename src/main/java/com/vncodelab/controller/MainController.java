@@ -294,13 +294,17 @@ public class MainController {
             ApiFuture<QuerySnapshot> future1 = document.getReference().collection("steps").get();
             List<QueryDocumentSnapshot> documents1 = future1.get().getDocuments();
             for (DocumentSnapshot document1 : documents1) {
-                Log log = document1.toObject(Log.class);
-                Step cStep = map.get(log.getLeave());
-                if (log.getDuration() > 0) {
-                    System.out.println();
-                }
-                if (cStep != null)
-                    cStep.setNumber(cStep.getNumber() + log.getDuration());
+               try {
+                   Log log = document1.toObject(Log.class);
+                    Step cStep = map.get(log.getLeave());
+                    if (log.getDuration() > 0) {
+                        System.out.println();
+                    }
+                    if (cStep != null)
+                        cStep.setNumber(cStep.getNumber() + log.getDuration());
+               }catch (Exception ex){
+                   ex.printStackTrace();
+               }
             }
             User user = document.toObject(User.class);
             user.setUserID(document.getId());

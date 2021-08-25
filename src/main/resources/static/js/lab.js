@@ -132,13 +132,14 @@ function realtime(user) {
             //Add to chat room
             // if (currentUser.uid != uid) {  //Kh
             var avatar = "<img src='" + data[uid].photo + "' alt='user' width='40' height='40'  class='rounded-circle'>";
-            if (!data[uid].photo && data[uid].name) {
-                avatar = "<div><div class='friend'>" + data[uid].name + "</div></div>"
+            if (data[uid].photo!==undefined) {
+                avatar = "<img src='" + data[uid].photo + "' alt='user' width='40' height='40'  class='rounded-circle'>";
+            }else{
+                avatar = "<img src='/images/user.svg' alt='user' width='40' height='40'  class='rounded-circle'>";
             }
             $('#usersChat').append("<a id='chat" + uid + "' href='#' onclick='showChat(this,\"" + uid + "\")' class=\"px-2 list-group-item list-group-item-action rounded-0 media uchat\">" + avatar + "<div class=\"media-body\">" + data[uid].name + "</div></a>")
-            if (!data[uid].photo && data[uid].name) {
-                $('.friend').nameBadge();
-            }
+
+
             //Update in Chat room
             if (data[uid].isRaise) {
                 $("#chat" + uid).addClass("yellow")
@@ -323,16 +324,15 @@ function sendNotify(sendTo, message, type) {
 
 function showMessage(data) {
     if (currentUser.uid === data.uid)
-        $('#chatMessages').append("<div class=\"ml-auto d-flex justify-content-end\"><div class=\"pt-2 chat-body\"><div class=\"bg-primary rounded-pill py-2 px-3  text-white text-small\">" + data.message + "</div><span class=\"text-muted d-flex justify-content-end chat-time\">" + time_ago(data.time) + "</span></div></div>\n")
+        $('#chatMessages').append("<div class='ml-auto d-flex justify-content-end'><div class='pt-2 chat-body'><div class='bg-primary rounded-pill py-2 px-3  text-white text-small'>" + data.message + "</div><span class='text-muted d-flex justify-content-end chat-time'>" + time_ago(data.time) + "</span></div></div>\n")
     else {
-        var avatar = "<img src=\"" + data.photo + "\" alt=\"user\" width=\"40\" height=\"40\"  class=\"rounded-circle\">";
-        if (!data.photo && data.name) {
-            avatar = "<div><div class=\"friend\">" + data.name + "</div></div>"
+
+        if (data.photo!==undefined) {
+            avatar = "<img src='" + data.photo + "' alt='user' width='40' height='40'  class='rounded-circle'>";
+        }else{
+            avatar = "<img src='/images/user.svg' alt='user' width='40' height='40'  class='rounded-circle'>";
         }
-        $('#chatMessages').append("<div class=\"media w-75 \">" + avatar + "<div class=\"media-body ms-1\"><div class=\"bg-light rounded-pill py-2 px-3\"><span class=\"text-small mb-0 text-muted\">" + data.message + "</span></div><p class=\"text-muted chat-time\">" + time_ago(data.time) + "</p></div></div>");
-        if (!data.photo && data.name) {
-            $('.friend').nameBadge();
-        }
+        $('#chatMessages').append("<div class='media w-75 '>" + avatar + "<div class='media-body ms-1'><div class='bg-light rounded-pill py-2 px-3'><span class='text-small mb-0 text-muted'>" + data.message + "</span></div><p class='text-muted chat-time'>" + time_ago(data.time) + "</p></div></div>");
     }
     var objDiv = document.getElementById("chatMessages");
     objDiv.scrollTop = objDiv.scrollHeight;
@@ -361,105 +361,107 @@ var oldTime = 0;
 var editor;
 
 function updateStep(step) {
-    var db = firebase.firestore();
-    var newTime = Math.floor(Date.now() / 1000);
-    var duration = newTime - oldTime;
+    if(isNaN(step)) {
+        var db = firebase.firestore();
+        var newTime = Math.floor(Date.now() / 1000);
+        var duration = newTime - oldTime;
 
-    if (duration > 15 && duration < 1800) {
-        var userRef = db.collection("rooms").doc(getRoomID()).collection("logs").doc(currentUser.uid).collection("steps")
-        userRef.add({
-            time: firebase.firestore.FieldValue.serverTimestamp(),
-            enter: step,
-            leave: oldStep,
-            duration: duration
-        })
-    }
-
-    if (currentUser != null) {
-        var change = {};
-        change[currentUser.uid] = {
-            step: step,
-            time: firebase.database.ServerValue.TIMESTAMP,
-            name: $("#name").text(),
-            photo: currentUser.photoURL
-        };
-
-        if (raiseHand) {
-            change[currentUser.uid].isRaise = true;
+        if (duration > 15 && duration < 1800) {
+            var userRef = db.collection("rooms").doc(getRoomID()).collection("logs").doc(currentUser.uid).collection("steps")
+            userRef.add({
+                time: firebase.firestore.FieldValue.serverTimestamp(),
+                enter: step,
+                leave: oldStep,
+                duration: duration
+            })
         }
-        refUsers.update(change);
-    }
-    oldStep = step
-    oldTime = Math.floor(Date.now() / 1000);
 
-    //Load Submitted
+        if (currentUser != null) {
+            var change = {};
+            change[currentUser.uid] = {
+                step: step,
+                time: firebase.database.ServerValue.TIMESTAMP,
+                name: $("#name").text(),
+                photo: currentUser.photoURL
+            };
+
+            if (raiseHand) {
+                change[currentUser.uid].isRaise = true;
+            }
+            refUsers.update(change);
+        }
+        oldStep = step
+        oldTime = Math.floor(Date.now() / 1000);
+
+        //Load Submitted
 
 
-    if (getSelectedStepText(step).includes("(*)")) {
-        var ext = "    <div class='submit-practice'>" +
-            "               <form method='post' enctype='multipart/form-data'>" +
-            "                    <div class='mb-3'>" +
-            "                       <textarea class='contentInput form-control' id='demotext'></textarea>" +
-            "                    </div>" +
-            "                    <div class='mb-3'>" +
-            "                        <label for='files' class='form-label'>Tệp đính kèm:</label>" +
-            "                        <input type='file' name='files' multiple>" +
-            "                    </div>" +
-            "                    <div class='mb-3 d-flex'>" +
-            "                       <div class='msg flex-grow-1'></div>" +
-            "                    </div>" +
-            "                    <div class='d-flex justify-content-center'>" +
-            "                       <div class='spinner-border d-none upload-spinner' role='status' ></div>" +
-            "                       <input type='button' class='btn btn-danger btn_upload' value='Lưu'>" +
-            "                    </div>" +
-            "                 </form>" +
-            "           </div>"
+        if (getSelectedStepText(step).includes("(*)")) {
+            var ext = "    <div class='submit-practice'>" +
+                "               <form method='post' enctype='multipart/form-data'>" +
+                "                    <div class='mb-3'>" +
+                "                       <textarea class='contentInput form-control' id='demotext'></textarea>" +
+                "                    </div>" +
+                "                    <div class='mb-3'>" +
+                "                        <label for='files' class='form-label'>Tệp đính kèm:</label>" +
+                "                        <input type='file' name='files' multiple>" +
+                "                    </div>" +
+                "                    <div class='mb-3 d-flex'>" +
+                "                       <div class='msg flex-grow-1'></div>" +
+                "                    </div>" +
+                "                    <div class='d-flex justify-content-center'>" +
+                "                       <div class='spinner-border d-none upload-spinner' role='status' ></div>" +
+                "                       <input type='button' class='btn btn-danger btn_upload' value='Lưu'>" +
+                "                    </div>" +
+                "                 </form>" +
+                "           </div>"
 
-        var extend = $("google-codelab-step .extend").eq(step);
+            var extend = $("google-codelab-step .extend").eq(step);
 
-        extend.empty()
-        extend.append(ext);
+            extend.empty()
+            extend.append(ext);
 
-        editor = CodeMirror.fromTextArea(document.getElementById("demotext"), {
-            lineNumbers: true,
-            mode: "text/html",
-            matchBrackets: true
-        });
+            editor = CodeMirror.fromTextArea(document.getElementById("demotext"), {
+                lineNumbers: true,
+                mode: "text/html",
+                matchBrackets: true
+            });
 
-        $('.btn_upload').on("click", event => upload(event));
-        $(".contentInput").text("")
-        $(".msg").html("")
+            $('.btn_upload').on("click", event => upload(event));
+            $(".contentInput").text("")
+            $(".msg").html("")
 
-        firebase.firestore().collection("rooms").doc(getRoomID()).collection("submits").doc(currentUser.uid)
-            .get()
-            .then((doc) => {
-                if (doc.exists) {
-                    var url = "";
-                    if (doc.data().steps != null) {
-                        var obj = getSubmittedCurrentStep(getSelectedStep(), doc.data().steps);
-                        if (obj != null) {
-                            for (let i = 0; i < obj.fileNames.length; i++) {
-                                url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
+            firebase.firestore().collection("rooms").doc(getRoomID()).collection("submits").doc(currentUser.uid)
+                .get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        var url = "";
+                        if (doc.data().steps != null) {
+                            var obj = getSubmittedCurrentStep(getSelectedStep(), doc.data().steps);
+                            if (obj != null) {
+                                for (let i = 0; i < obj.fileNames.length; i++) {
+                                    url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
+                                }
+                                var output = "";
+                                //$(".contentInput").val(obj.content)
+
+                                editor.refresh()
+                                editor.setValue(obj.content)
+
+
+                                if (url !== "")
+                                    output = output + "<b>File đã nộp</b>: <br>" + url;
+                                $(".msg").html(output);
                             }
-                            var output = "";
-                            //$(".contentInput").val(obj.content)
-
-                            editor.refresh()
-                            editor.setValue(obj.content)
-
-
-                            if (url !== "")
-                                output = output + "<b>File đã nộp</b>: <br>" + url;
-                            $(".msg").html(output);
                         }
                     }
-                }
-                $("#upload-spinner").addClass("d-none");
-                $("#btn_upload").removeClass("d-none");
-            })
-            .catch((error) => {
-                console.log("Error getting documents: ", error);
-            });
+                    $("#upload-spinner").addClass("d-none");
+                    $("#btn_upload").removeClass("d-none");
+                })
+                .catch((error) => {
+                    console.log("Error getting documents: ", error);
+                });
+        }
     }
 }
 

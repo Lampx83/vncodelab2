@@ -23,6 +23,73 @@ function tempalate() {
     ];
 }
 
+function MongoDB() {
+    return [
+        {
+            "text": "Introduction",
+            "lab": [
+                {
+                    "name": "Giới thiệu về NoSQL",
+                    "id": "rEHlLa"
+                }
+            ],
+            "icon": "/images/database.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/database.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/database.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/database.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/database.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/database.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/database.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/database.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/database.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/idea.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/database.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/database.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/database.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/idea.svg"
+        }
+    ];
+}
+
 function JavaCoreNEU() {
     return [
         {
@@ -562,9 +629,10 @@ chart.dateFormatter.inputDateFormat = "m s";
 
 if (getRoadMapID() === "1")
     chart.data = nhomJava();
-
-if (getRoadMapID() === "2")
+else if (getRoadMapID() === "2")
     chart.data = JavaCoreNEU();
+else if (getRoadMapID() === "3")
+    chart.data = MongoDB();
 
 
 for (let i = 0; i < chart.data.length; i++) {
@@ -675,31 +743,33 @@ label.fontSize = 22;
 
 function myFunction(ev) {
     var data = chart.data[ev.target.dataItem.index];
-    $('#modal-title').html(data.text);
-    var content = "";
-    if (data.content != null)
-        content = "<h6>" + data.content + "</h6>"
+    if(data.text!=="") {
+        $('#modal-title').html(data.text);
+        var content = "";
+        if (data.content != null)
+            content = "<h6>" + data.content + "</h6>"
 
-    content = content + "<table class='table table-borderless' id='table-rooms'>"
+        content = content + "<table class='table table-borderless' id='table-rooms'>"
 
-    if (data.link != null) {
-        content = content + "<tr><td><b>Links:</b></td></tr>";
-        for (let i = 0; i < data.link.length; i++) {
-            let row = "<tr id='" + data.link[i].id + "'><td class='align-middle'>" + (i + 1) + ". " + data.link[i].name + "</td><td class='text-end align-middle'> <a href='" + data.link[i].id + "' class='text-primary' target='_blank'>Link</a></td> <td class='text-end align-middle'><a href='#' class='bi bi-three-dots-vertical link-dark d-none' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='xem(\"" + data.link[i].id + "\")'>Xóa</a> </div></td></tr>";
-            content = content + row;
+        if (data.link != null) {
+            content = content + "<tr><td><b>Links:</b></td></tr>";
+            for (let i = 0; i < data.link.length; i++) {
+                let row = "<tr id='" + data.link[i].id + "'><td class='align-middle'>" + (i + 1) + ". " + data.link[i].name + "</td><td class='text-end align-middle'> <a href='" + data.link[i].id + "' class='text-primary' target='_blank'>Link</a></td> <td class='text-end align-middle'><a href='#' class='bi bi-three-dots-vertical link-dark d-none' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='xem(\"" + data.link[i].id + "\")'>Xóa</a> </div></td></tr>";
+                content = content + row;
+            }
         }
-    }
-    if (data.lab != null) {
-        content = content + "<tr><td><b>Labs:</b></td></tr>";
-        for (let i = 0; i < data.lab.length; i++) {
-            let row = "<tr id='" + data.lab[i].id + "'><td class='align-middle'>" + (i + 1) + ". " + data.lab[i].name + "</td><td class='text-end align-middle'> <a href='" + baseUrl + data.lab[i].id + "' class='text-primary' target='_blank'>Vào phòng</a></td> <td class='text-end align-middle'><a href='#' class='bi bi-three-dots-vertical link-dark d-none' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='xem(\"" + data.lab[i].id + "\")'>Xóa</a> </div></td></tr>";
-            content = content + row;
+        if (data.lab != null) {
+            content = content + "<tr><td><b>Labs:</b></td></tr>";
+            for (let i = 0; i < data.lab.length; i++) {
+                let row = "<tr id='" + data.lab[i].id + "'><td class='align-middle'>" + (i + 1) + ". " + data.lab[i].name + "</td><td class='text-end align-middle'> <a href='" + baseUrl + data.lab[i].id + "' class='text-primary' target='_blank'>Vào phòng</a></td> <td class='text-end align-middle'><a href='#' class='bi bi-three-dots-vertical link-dark d-none' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='xem(\"" + data.lab[i].id + "\")'>Xóa</a> </div></td></tr>";
+                content = content + row;
+            }
         }
-    }
-    content = content + "</table>";
+        content = content + "</table>";
 
-    $('#modal-body').html(content);
-    $('#modal-info').modal('toggle'); // Opens the dropdown
+        $('#modal-body').html(content);
+        $('#modal-info').modal('toggle'); // Opens the dropdown
+    }
 }
 
 imageBullet1.events.on("hit", myFunction, this);

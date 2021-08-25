@@ -823,6 +823,7 @@ a #login:hover {
 
 .tdcenter {
     vertical-align: middle !important;
+    text-align: center;
 }
 
 
