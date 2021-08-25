@@ -361,7 +361,7 @@ var oldTime = 0;
 var editor;
 
 function updateStep(step) {
-    if(isNaN(step)) {
+    if(!isNaN(step)) {
         var db = firebase.firestore();
         var newTime = Math.floor(Date.now() / 1000);
         var duration = newTime - oldTime;
