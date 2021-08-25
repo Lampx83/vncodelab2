@@ -161,7 +161,6 @@ function realtime(user) {
         $('#numOnline').text(totalUser)
     });
 
-
     updateStep(getSelectedStep());
     //Listen to Notification
     var first = true;
