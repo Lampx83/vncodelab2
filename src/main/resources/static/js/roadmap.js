@@ -90,7 +90,7 @@ function MongoDB() {
     ];
 }
 
-function JavaCoreNEU() {
+function JavaCoreNEU1() {
     return [
         {
             "text": "Introduction",
@@ -104,6 +104,114 @@ function JavaCoreNEU() {
                 {
                     "name": "Lab 1",
                     "id": "KDTBN7"
+                }
+            ]
+        },
+        {
+            "text": "Java Language 1",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EeBpLpnpk91GgevAyVl2saEBg8VVYFhC05Lf5X9JtgEyfw?e=4KTc2d"
+                }
+            ]
+        },
+        {
+            "text": "Java Language 2",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/ES48baOlmD1Jk41LjfvMKIkBNvBd8GM9jhVsEATUORKf5A?e=FkkrPr"
+                }
+            ]
+        },
+        {
+            "text": "Objects and Classes",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EVqvzRPfeKhIuf_T_QFZ9ZMBUouwEcDCsUpj6TqrRvIiYA?e=1CQRAg"
+                }
+            ]
+        },
+        {
+            "text": "Relationship among Objects",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EXpPScArVfRJjRP0JSj6xN0Br1P2h_HTaDR_gln_M20jbQ?e=Kqyx9w"
+                }
+            ]
+        },
+        {
+            "text": "Exception and Debugging.",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EbauG-0_C7xFpva_I1Z_DqEB7DOpS9MOmRO3zrZz2nmkbg?e=ufAA3P"
+                }
+            ]
+        },
+        {
+            "text": "Input and Output Facilities",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EaiQHHE5ZQhDrizCuOl23LoBaJlJ2JeUIZQIIfBamCRlOA?e=DkkpBk"
+                }
+            ]
+        },
+        {
+            "text": "Concurrency",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/ESsKtmelIgZAv9NzFish9OsBQqblDF_n5_Sdq_Cf59HvrQ?e=cxJT8K"
+                }
+            ]
+        },
+        {
+            "text": "Generic Programming And Collections",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/Ecospiu0Q6lMmNk3Rbn2ybgBLc1H2E94rgbGuTvZDfiz1Q?e=rCh0HN"
+                }
+            ]
+        },
+        {
+            "text": "Midterm exam",
+            "icon": "/images/idea.svg"
+        },
+        {
+            "text": "Advantage Topic 1",
+        },
+        {
+            "text": "Advantage  Topic 2",
+        },
+        {
+            "text": "Advantage  Topic 3",
+        },
+        {
+            "text": "Final exam",
+            "icon": "/images/idea.svg"
+        },
+    ];
+}
+function JavaCoreNEU2() {
+    return [
+        {
+            "text": "Introduction",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EeqnplMoGktOur0DvF_LV3IBcSs8loVmEi8KbANPGXT2RA?e=TWDSGd"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "Lab 1",
+                    "id": "kE0X5E"
                 }
             ]
         },
@@ -635,9 +743,11 @@ chart.dateFormatter.inputDateFormat = "m s";
 if (getRoadMapID() === "1")
     chart.data = nhomJava();
 else if (getRoadMapID() === "2")
-    chart.data = JavaCoreNEU();
+    chart.data = JavaCoreNEU1();
 else if (getRoadMapID() === "3")
     chart.data = MongoDB();
+else if (getRoadMapID() === "4")
+    chart.data = JavaCoreNEU2();
 
 
 for (let i = 0; i < chart.data.length; i++) {
@@ -739,7 +849,7 @@ textBullet.dy = -95;
 textBullet.label.textAlign = "middle";
 
 var label = chart.createChild(am4core.Label);
-label.text = "JAVA ROADMAP"
+label.text = "ROADMAP"
 label.isMeasured = false;
 label.y = am4core.percent(33);
 label.x = am4core.percent(48);
