@@ -22,7 +22,6 @@ function tempalate() {
         }
     ];
 }
-
 function MongoDB() {
     return [
         {
@@ -89,7 +88,6 @@ function MongoDB() {
         }
     ];
 }
-
 function JavaCoreNEU1() {
     return [
         {
@@ -306,7 +304,76 @@ function JavaCoreNEU2() {
         },
     ];
 }
-
+function WebNEU() {
+    return [
+        {
+            "text": "Giới thiệu",
+            "lab": [
+                {
+                    "name": "Giới thiệu",
+                    "id": "XeS1pk"
+                },
+                {
+                    "name": "HTML phần 1",
+                    "id": "0ASEZ3"
+                }
+            ],
+            "icon": "/images/web.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/web.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/web.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/web.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/web.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/web.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/web.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/web.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/web.svg"
+        },
+        {
+            "text": "Thi giữa kỳ",
+            "icon": "/images/idea.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/web.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/web.svg"
+        },
+        {
+            "text": "",
+            "icon": "/images/web.svg"
+        },
+        {
+            "text": "Thi cuối kỳ",
+            "icon": "/images/idea.svg"
+        },
+    ];
+}
 function nhomJava() {
     return [
         {
@@ -723,7 +790,6 @@ function nhomJava() {
     ];
 }
 
-
 am4core.useTheme(am4themes_animated);
 am4core.useTheme(am4themes_material);
 var chart = am4core.create("chartdiv", am4plugins_timeline.SerpentineChart);
@@ -739,7 +805,6 @@ var colorSet = new am4core.ColorSet();
 var baseUrl = "/room/"
 chart.dateFormatter.inputDateFormat = "m s";
 
-
 if (getRoadMapID() === "1")
     chart.data = nhomJava();
 else if (getRoadMapID() === "2")
@@ -748,6 +813,8 @@ else if (getRoadMapID() === "3")
     chart.data = MongoDB();
 else if (getRoadMapID() === "4")
     chart.data = JavaCoreNEU2();
+else if (getRoadMapID() === "5")
+    chart.data = WebNEU();
 
 
 for (let i = 0; i < chart.data.length; i++) {
