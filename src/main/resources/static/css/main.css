@@ -912,6 +912,9 @@ a #login:hover {
     height: 300px;
     border: 1px solid #ddd;
 }
+.user-answer{
+    font-size: 14px;
+}
 
 .slide google-codelab-step {
     padding-top: 22px !important;
@@ -927,12 +930,25 @@ a #login:hover {
 .slide .inner > aside {
     display: block;
 }
-
-.slide .inner > table {
-    margin-left: auto !important;
-    margin-right: auto !important;
-    width: 90%;
+.slide .inner .table-lab .table-onerow{
+    border: none;
+    width: 100%;
 }
+.slide .inner .table-lab .table-onerow td{
+    text-align: center;
+    border: none;
+}
+.slide .inner .table-lab .table-onerow ul,
+.slide .inner .table-lab .table-onerow h2
+{
+    text-align: left;
+}
+
+/*.slide .inner .table > table {*/
+/*    margin-left: 50px !important;*/
+/*    margin-right: 50px !important;*/
+/*    width: 90%;*/
+/*}*/
 
 .slide .inner > table td {
     text-align: center;
@@ -970,6 +986,21 @@ a #login:hover {
     padding-top: 30px;
     padding-bottom: 30px;
     color: #006A98;
+}
+
+.slide .custom-radio-button {
+   top:10px !important;
+}
+.slide .instructions h3 {
+    font-size: 28px !important;
+}
+
+
+.slide .instructions h4 {
+    font-size: 26px !important;
+}
+.slide .instructions .option-text {
+    font-size: 26px !important;
 }
 
 .slide .instructions .step-title {

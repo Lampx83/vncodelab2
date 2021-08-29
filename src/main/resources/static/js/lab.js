@@ -71,6 +71,7 @@ function enterRoom(user) {
             if (obj.userID === user.uid) {
                 $("#btnReport").removeClass("d-none")  //Teacher
                 teacher = true;
+                $(".survey-question-wrapper h4").append(" <a href='#' class='show-result' onclick='showQuizResult(this)'>Kết quả</a>")
             } else {
 
             }
@@ -101,6 +102,67 @@ function enterRoom(user) {
             })
         }
     });
+}
+var unsubscribe;
+function showQuizResult(me) {
+    if (unsubscribe != null){
+        unsubscribe();
+    }
+    let temp = $(me).text();
+    $(".show-result").text("Kết quả")
+    $(me).text(temp)
+
+    $(".user-answer").html("")
+
+    var survey_id = $(me).closest("google-codelab-survey").attr('survey-id')
+    if($(me).text()==="Kết quả") {
+        unsubscribe = firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").onSnapshot((querySnapshot) => {
+            console.log("Thay đổi")
+            $(me).closest("google-codelab-survey").find(".user-answer").html("")
+
+            querySnapshot.forEach((doc) => { //Duyet tung cau tra loi
+                console.log(doc.data())
+
+                $(me).parent().next().children().eq(doc.data().choice).find(".user-answer").append("[" + doc.data().uname + "] ")
+
+                // var s = "";
+                // for (let i = 0; i < getNumberOfSteps(); i++) {
+                //     if (doc.data().steps != null) {
+                //         var submitedObjects = getSubmitedObjects(i, doc.data().steps);
+                //         if (submitedObjects != null && (submitedObjects.content !== "" || submitedObjects.fileLinks.length > 0)) {
+                //             var link = "";
+                //             for (let j = 0; j < submitedObjects.fileNames.length; j++) {
+                //                 let l = submitedObjects.fileNames[j]
+                //                 link = link + "[<a class='text-primary' href='" + submitedObjects.fileLinks[j] + "'>" + l + "</a>] "
+                //             }
+                //             s = s + "<td><span class ='labStep blue'>" + (i + 1) + "</span><span class='report-detail d-none'>" + link + "</span></td>";
+                //         } else {
+                //             s = s + "<td><span class ='labStep' >" + (i + 1) + "</span></td>";
+                //         }
+                //     } else {
+                //         s = s + "<td><span class ='labStep' >" + (i + 1) + "</span></td>";
+                //     }
+                // }
+                // let tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + doc.id + "\")'>Xóa</a> </div></td>";
+                //
+                // $("#tbody-report-submit").append("<tr  id='tr-report-" + doc.id + "'><td class='user-name'>" + doc.data().userName + "</td>" + s + tdThreeDots + "</tr>")
+                // if ($('#switch-showdetail').is(':checked')) {
+                //     $(".report-detail").removeClass("d-none")
+                // } else {
+                //     $(".report-detail").addClass("d-none")
+                // }
+            });
+            $("#submit-spinner").addClass("d-none");
+        });
+        $(me).text("Ẩn")
+    }
+    else{
+        $(me).closest("google-codelab-survey").find(".user-answer").html("");
+        unsubscribe();
+        $(me).text("Kết quả");
+    }
+
+
 }
 
 function realtime(user) {
@@ -765,6 +827,34 @@ $(function () {
         $(this).children("span").toggle();
     })
 
-    $(".slide .inner > table").addClass("table table-striped table-bordered")
+    $( ".slide .inner > table" ).wrap( "<div class='table-lab'></div>" );
+
+    $('.slide .inner .table-lab table:has(tr:eq(0):last-child)').addClass('table-onerow');
+
+    $('.slide .inner .table-lab table:has(tr:not(:eq(0):last-child))').addClass("table table-striped table-bordered")
+
+    $(".option-text").on('click',function (ev){
+        var me = ev.currentTarget;
+        var survey_id =  $(me).closest("google-codelab-survey").attr('survey-id')
+
+
+        var choice =  $(me).closest(".survey-question-options").find("label").index( $(me).closest("label"));
+
+        //Ghi log vao storageblue
+        var db = firebase.firestore();
+        var ref = db.collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").doc(currentUser.uid)
+        ref.set({
+            uname:currentUser.displayName,
+            time: firebase.firestore.FieldValue.serverTimestamp(),
+            choice:  choice
+        })
+
+        return true;
+    })
+
+    $('.survey-option-wrapper').append("<span class='user-answer'></span>")
+
+
 });
 var first_submit_tab = true;
+var first_quiz_tab = true;
