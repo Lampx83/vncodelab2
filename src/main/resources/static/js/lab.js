@@ -102,6 +102,20 @@ function enterRoom(user) {
             })
         }
     });
+
+    //Load cac bài tập đã nộp
+    $( "google-codelab-survey" ).each(function() {
+        var text_area= $(this).find("textarea");
+        var survey_id = $(this).attr("survey-id")
+        var ref = firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").doc(currentUser.uid)
+
+        ref.get().then((doc) => {
+            if (doc.exists) {
+                var obj = doc.data();
+                text_area.val(obj.content)
+            }
+        });
+    });
 }
 var unsubscribe;
 function showQuizResult(me) {
@@ -125,32 +139,6 @@ function showQuizResult(me) {
 
                 $(me).parent().next().children().eq(doc.data().choice).find(".user-answer").append("[" + doc.data().uname + "] ")
 
-                // var s = "";
-                // for (let i = 0; i < getNumberOfSteps(); i++) {
-                //     if (doc.data().steps != null) {
-                //         var submitedObjects = getSubmitedObjects(i, doc.data().steps);
-                //         if (submitedObjects != null && (submitedObjects.content !== "" || submitedObjects.fileLinks.length > 0)) {
-                //             var link = "";
-                //             for (let j = 0; j < submitedObjects.fileNames.length; j++) {
-                //                 let l = submitedObjects.fileNames[j]
-                //                 link = link + "[<a class='text-primary' href='" + submitedObjects.fileLinks[j] + "'>" + l + "</a>] "
-                //             }
-                //             s = s + "<td><span class ='labStep blue'>" + (i + 1) + "</span><span class='report-detail d-none'>" + link + "</span></td>";
-                //         } else {
-                //             s = s + "<td><span class ='labStep' >" + (i + 1) + "</span></td>";
-                //         }
-                //     } else {
-                //         s = s + "<td><span class ='labStep' >" + (i + 1) + "</span></td>";
-                //     }
-                // }
-                // let tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + doc.id + "\")'>Xóa</a> </div></td>";
-                //
-                // $("#tbody-report-submit").append("<tr  id='tr-report-" + doc.id + "'><td class='user-name'>" + doc.data().userName + "</td>" + s + tdThreeDots + "</tr>")
-                // if ($('#switch-showdetail').is(':checked')) {
-                //     $(".report-detail").removeClass("d-none")
-                // } else {
-                //     $(".report-detail").addClass("d-none")
-                // }
             });
             $("#submit-spinner").addClass("d-none");
         });
@@ -199,7 +187,7 @@ function realtime(user) {
             }else{
                 avatar = "<img src='/images/user.svg' alt='user' width='40' height='40'  class='rounded-circle'>";
             }
-            $('#usersChat').append("<a id='chat" + uid + "' href='#' onclick='showChat(this,\"" + uid + "\")' class=\"px-2 list-group-item list-group-item-action rounded-0 media uchat\">" + avatar + "<div class=\"media-body\">" + data[uid].name + "</div></a>")
+            $('#usersChat').append("<a id='chat" + uid + "' href='#' onclick='showChat(this,\"" + uid + "\")' class='px-2 list-group-item list-group-item-action rounded-0 media uchat'>" + avatar + "<div class='media-body'>" + data[uid].name + "</div></a>")
 
 
             //Update in Chat room
@@ -654,7 +642,7 @@ $(function () {
             })
         }
     })
-    $('.steps ol li a').append("<span class=\"badge badge-secondary bg-secondary my-badge invisible\" onmouseover=\"hoverDiv(this,1)\" onmouseout=\"hoverDiv(this,0)\">0</span>")
+    $('.steps ol li a').append("<span class='badge badge-secondary bg-secondary my-badge invisible' onmouseover='hoverDiv(this,1)' onmouseout='hoverDiv(this,0)'>0</span>")
     $('#btnLogin').hide()
     // if (getRoomID()) {  //Neu co phong thi an
     //
@@ -853,8 +841,62 @@ $(function () {
     })
 
     $('.survey-option-wrapper').append("<span class='user-answer'></span>")
+    $('span.option-text:contains("Mã nguồn")').closest("label.survey-option-wrapper").html("<div class='container-code'>" +
+        "    <textarea rows='10' class='textarea-code'></textarea>       " +
+        "    <a href='#' class='btn btn-success btn-upload-code btn-right-corner'>Lưu </a>" +
+        "</div>")
 
+    $(".btn-upload-code").on('click',function (ev){
+        var me = ev.currentTarget;
+        $(me).addClass("d-none")
+        var survey_id =  $(me).closest("google-codelab-survey").attr('survey-id')
+        var content =  $(me).prev().val()
+        var ref = firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").doc(currentUser.uid)
+        ref.set({
+            uname:currentUser.displayName,
+            time: firebase.firestore.FieldValue.serverTimestamp(),
+            content:  content
+        }).then(function () {
+            $(me).removeClass("d-none")
+        })
+
+        return true;
+    })
+
+    addCopyButtons(navigator.clipboard)
 
 });
+
+function addCopyButtons(clipboard) {
+    document.querySelectorAll(".slide pre > code").forEach(function(codeBlock) {
+        var pre = codeBlock.parentNode;
+        $(pre).wrap( "<div class='block-code'></div>" );
+        var button = document.createElement("a");
+        button.className = "btn btn-success btn-right-corner";
+        button.innerText = "Copy";
+        button.addEventListener("click", function() {
+            clipboard.writeText(codeBlock.textContent).then(function() {
+                button.blur();
+                button.innerText = "Copied!";
+                setTimeout(function() {
+                    button.innerText = "Copy"
+                }, 2e3)
+            }, function(error) {
+                button.innerText = "Error";
+                console.error(error)
+            })
+        });
+
+
+
+
+        $(pre).before( button);
+        //     var highlight = pre.parentNode;
+        //     highlight.parentNode.insertBefore(button, highlight)
+        // } else {
+        //     pre.parentNode.insertBefore(button, pre)
+        // }
+    })
+}
 var first_submit_tab = true;
-var first_quiz_tab = true;
+

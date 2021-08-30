@@ -996,13 +996,19 @@ a #login:hover {
 }
 
 
+
 .slide .instructions h4 {
     font-size: 26px !important;
 }
 .slide .instructions .option-text {
     font-size: 26px !important;
 }
-
+.slide .survey-questions{
+    padding-right: 20px;
+}
+.slide .textarea-code{
+    width: 100% !important;
+}
 .slide .instructions .step-title {
     font-size: 40px !important;
     background-color: #006A98;
@@ -1020,6 +1026,28 @@ a #login:hover {
 
 .slide #fabs {
     max-width: 97% !important;
+}
+
+.slide .container-code {
+    position:relative;
+}
+.slide  .btn-right-corner {
+    position:absolute;
+    top: 10px;
+    right:10px;
+    color: white !important;
+    font-size: 16px;
+}
+.slide  .block-code {
+    position:relative;
+
+}
+.slide  .textarea-code {
+    position:relative;
+    resize: vertical;
+    width: 100%;
+    font-size: 16px;
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
 }
 
 @media screen and (max-width: 768px) {

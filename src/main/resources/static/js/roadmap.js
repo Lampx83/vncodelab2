@@ -112,6 +112,12 @@ function JavaCoreNEU1() {
                     "name": "Slides",
                     "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EeBpLpnpk91GgevAyVl2saEBg8VVYFhC05Lf5X9JtgEyfw?e=4KTc2d"
                 }
+            ],
+            "lab": [
+                {
+                    "name": "Lab 2",
+                    "id": "KVFPaL"
+                }
             ]
         },
         {
