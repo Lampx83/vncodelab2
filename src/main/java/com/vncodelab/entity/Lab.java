@@ -10,7 +10,6 @@ public class Lab {
     private String cateID;
     private int order;
     private Boolean feature;
-    private boolean insert = true;  //update = false
     private boolean updateImage = false;
     private boolean slides = false;
 
@@ -30,13 +29,7 @@ public class Lab {
         this.slides = slides;
     }
 
-    public boolean isInsert() {
-        return insert;
-    }
 
-    public void setInsert(boolean insert) {
-        this.insert = insert;
-    }
 
     public int getOrder() {
         return order;

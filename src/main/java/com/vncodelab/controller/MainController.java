@@ -10,22 +10,32 @@ import com.vncodelab.entity.*;
 import com.vncodelab.json.LabInfo;
 import com.vncodelab.model.AjaxResponseBody;
 import com.vncodelab.others.MyFunc;
+import com.vncodelab.service.FileStorageService;
 import com.vncodelab.service.LabService;
 import com.vncodelab.service.RoomService;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -39,6 +49,9 @@ public class MainController {
     @Autowired
     private RoomService roomService;
 
+    @Autowired
+    private FileStorageService fileStorageService;
+
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("page", "home");
@@ -51,13 +64,91 @@ public class MainController {
         return "index";
     }
 
+    @GetMapping("/img/{fileName:.+}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
+        // Load file as Resource
+        Resource resource = fileStorageService.loadFileAsResource(fileName);
+
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        // Fallback to the default content type if type could not be determined
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
     @GetMapping("/roadmap/{roadID}")
     public String roadmap(Model model, @PathVariable(name = "roadID") String roadID) {
         return "roadmap";
     }
 
+
+    public void updateHTML(@RequestBody Lab newLab) throws IOException, InterruptedException {
+        Process p = Runtime.getRuntime().exec("./claat export " + newLab.getDocID()); //Localhost
+        //   Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
+
+        //  ProcessBuilder builder = new ProcessBuilder();
+        //builder.command("classpath:claat", "export", newLab.getDocID());
+        //    Process p = builder.start();
+
+        BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+        String line = input.readLine();
+        System.out.println(line);
+        p.waitFor();
+
+        String folderName = line.split("\t")[1];
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
+        String totalLine = "";
+        while ((line = br.readLine()) != null)
+            totalLine = totalLine + line;
+        LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
+        newLab.setName(labInfo.getTitle());
+
+        File inputFile = new File(folderName + "/index.html");
+        Document doc = Jsoup.parse(inputFile, "UTF-8");
+        Elements img = doc.getElementsByTag("img");
+
+        //Save to Fire Store
+//        {
+//            //Save to Storage {userID}/labs/{lab_name}
+//            StorageClient storageClient = StorageClient.getInstance();  //Storage
+//            for (Element el : img) {
+//                File file = new File(folderName + "/" + el.attr("src"));
+//                InputStream is = new FileInputStream(file);
+//                Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + newLab.getDocID() + "/" + file.getName(), is);
+//                String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
+//                el.attr("src", newUrl);
+//            }
+//        }
+        {
+            for (Element el : img) {
+                File file = new File(folderName + "/" + el.attr("src"));
+                FileInputStream input1 = new FileInputStream(file);
+                MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain", IOUtils.toByteArray(input1));
+                String fileName = fileStorageService.storeFile(multipartFile);
+                el.attr("src", "/img/" + file.getName());
+            }
+        }
+
+        FileUtils.deleteDirectory(new File(folderName));
+        Element codelab = doc.getElementsByTag("google-codelab").get(0);
+        newLab.setHtml(codelab.toString());
+    }
+
+
     @PostMapping("/createLab")
-    public ResponseEntity<?> createLab(@RequestBody Lab newLab) throws IOException, InterruptedException {
+    public ResponseEntity<?> createLab(@RequestBody Lab newLab, @RequestParam String action) throws IOException, InterruptedException {
         try {
             String docID = newLab.getDocID();
             if (docID.contains("docs.google.com")) {
@@ -79,47 +170,26 @@ public class MainController {
                     newLab.setDocID(map.get("file_id"));
                 }
             }
-            Process p = Runtime.getRuntime().exec("./claat export " + newLab.getDocID()); //Localhost
-            //   Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
-
-            //  ProcessBuilder builder = new ProcessBuilder();
-            //builder.command("classpath:claat", "export", newLab.getDocID());
-            //    Process p = builder.start();
-
-            BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-            String line = input.readLine();
-            System.out.println(line);
-            p.waitFor();
-
-            String folderName = line.split("\t")[1];
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
-            String totalLine = "";
-            while ((line = br.readLine()) != null)
-                totalLine = totalLine + line;
-            LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
-            newLab.setName(labInfo.getTitle());
-
-            File inputFile = new File(folderName + "/index.html");
-            Document doc = Jsoup.parse(inputFile, "UTF-8");
-            Elements img = doc.getElementsByTag("img");
-            if (newLab.isInsert()) {
-                //Save to Storage {userID}/labs/{lab_name}
-                StorageClient storageClient = StorageClient.getInstance();  //Storage
-                for (Element el : img) {
-                    File file = new File(folderName + "/" + el.attr("src"));
-                    InputStream is = new FileInputStream(file);
-                    Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + newLab.getDocID() + "/" + file.getName(), is);
-                    String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
-                    el.attr("src", newUrl);
-                }
-
-                FileUtils.deleteDirectory(new File(folderName));  //Xoa thu muc sau khi xong
+            if (action.equals("insert")) {
+                updateHTML(newLab);  //Claat
+                newLab.setOrder(999);
+                labService.save(newLab);
+            } else if (action.equals("updateAll")) {
+                updateHTML(newLab);  //Claat
+                labService.save(newLab);
+            } else if (action.equals("updateHTML")) {
+                Lab lab = labService.getByID(newLab.getDocID());
+                updateHTML(lab);  //Claat
+                labService.save(lab);
+                return ResponseEntity.ok().body(lab);
+            } else if (action.equals("updateInfo")) {
+                Lab lab = labService.getByID(newLab.getDocID());
+                lab.setDescription(newLab.getDescription());
+                lab.setFeature(newLab.getFeature());
+                lab.setSlides(newLab.isSlides());
+                lab.setUserID(newLab.getUserID());
+                labService.save(lab);
             }
-            //Save to Fire Store
-            Element codelab = doc.getElementsByTag("google-codelab").get(0);
-            newLab.setHtml(codelab.toString());
-
-            labService.save(newLab);
 
             return ResponseEntity.ok().body(newLab);
 
@@ -294,17 +364,17 @@ public class MainController {
             ApiFuture<QuerySnapshot> future1 = document.getReference().collection("steps").get();
             List<QueryDocumentSnapshot> documents1 = future1.get().getDocuments();
             for (DocumentSnapshot document1 : documents1) {
-               try {
-                   Log log = document1.toObject(Log.class);
+                try {
+                    Log log = document1.toObject(Log.class);
                     Step cStep = map.get(log.getLeave());
                     if (log.getDuration() > 0) {
                         System.out.println();
                     }
                     if (cStep != null)
                         cStep.setNumber(cStep.getNumber() + log.getDuration());
-               }catch (Exception ex){
-                   ex.printStackTrace();
-               }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
             User user = document.toObject(User.class);
             user.setUserID(document.getId());

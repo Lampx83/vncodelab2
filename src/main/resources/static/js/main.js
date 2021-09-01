@@ -520,16 +520,23 @@ function createLab() {  //Thêm hoặc sửa Lab
         lab["description"] = $("#description").val();
         lab["cateID"] = $("#cateID").val().trim();
         lab["userID"] = currentUser.uid;
-        lab["insert"] = insertLab || $("#updateCheckbox").is(':checked');  // Nếu thêm Lab mới, hoặc lấy Lab lại từ đầu
-        // lab["updateImage"] = insertLab || $("#updateImageCheckbox").is(':checked');
         lab["feature"] = $("#featureCheckbox").is(':checked');
         lab["slides"] = $("#slideCheckbox").is(':checked');
+        $('#modal-error').text("")
         $("#add-lab-button").html('');
         $("#add-lab-button").prop("disabled", true);
         $("#add-lab-button").html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang thực hiện...');
-
+        var action
+        if (insertLab)
+            action = "insert"
+        else {
+            if ($("#updateCheckbox").is(':checked'))
+                action = "updateAll"
+            else
+                action = "updateInfo"
+        }
         $.ajax({  //Chuyển Request tới server
-            url: "/createLab",
+            url: "/createLab?action=" + action,
             type: "POST",
             data: JSON.stringify(lab),
             dataType: "json",
@@ -546,7 +553,6 @@ function createLab() {  //Thêm hoặc sửa Lab
                         $("#" + lab.docID).addClass("d-none")
                     }
                 }
-
                 //Loading
                 $("#add-lab-button").prop("disabled", false);
                 $("#add-lab-button").html('Thêm');
@@ -568,7 +574,7 @@ function createLab() {  //Thêm hoặc sửa Lab
 function editLab(docID) { //Hiển thị form sửa Lab
     insertLab = false;
     $('#updateCheckboxdiv').removeClass("d-none");
-  //  $('#updateImageCheckboxdiv').removeClass("d-none");
+    //  $('#updateImageCheckboxdiv').removeClass("d-none");
     $('#addLabModal > div > div > div > h5').text("Sửa bài Lab")
     $('#docID').prop("disabled", true);
     $('#docID').val(docID)
