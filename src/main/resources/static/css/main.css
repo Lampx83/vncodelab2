@@ -1006,7 +1006,9 @@ a #login:hover {
 .slide .survey-questions{
     padding-right: 20px;
 }
-.slide .textarea-code{
+.slide .textarea-code,
+.slide .textarea-text
+{
     width: 100% !important;
 }
 .slide .instructions .step-title {
@@ -1049,6 +1051,12 @@ a #login:hover {
     width: 100%;
     font-size: 16px;
     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+}
+.slide  .textarea-code {
+    position:relative;
+    resize: vertical;
+    width: 100%;
+    font-size: 16px;
 }
 .youtube-container {
     position: relative;

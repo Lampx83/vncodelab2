@@ -104,14 +104,22 @@ function enterRoom(user) {
 
     //Load cac bài tập đã nộp
     $("google-codelab-survey").each(function () {
-        var text_area = $(this).find("textarea");
-        var survey_id = $(this).attr("survey-id")
-        var ref = firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").doc(currentUser.uid)
+        let text_area = $(this).find("textarea");
+        let survey_id = $(this).attr("survey-id")
+        let ref = firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").doc(currentUser.uid)
 
         ref.get().then((doc) => {
             if (doc.exists) {
-                var obj = doc.data();
-                text_area.val(obj.content)
+                let obj = doc.data();
+                if (obj.content != null) {
+                    text_area.val(obj.content)
+                } else if (obj.fileNames != null) {
+                    let url = "";
+                    for (let i = 0; i < obj.fileNames.length; i++) {
+                        url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
+                    }
+                    $(".msg").html("<p></p><b>File đã nộp</b>: <br>" + url);
+                }
             }
         });
     });
@@ -129,17 +137,24 @@ function showQuizResult(me) {
 
     $(".user-answer").html("")
 
-    var survey_id = $(me).closest("google-codelab-survey").attr('survey-id')
+    let survey_id = $(me).closest("google-codelab-survey").attr('survey-id')
     if ($(me).text() === "Kết quả") {
         unsubscribe = firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").onSnapshot((querySnapshot) => {
-            console.log("Thay đổi")
             $(me).closest("google-codelab-survey").find(".user-answer").html("")
-
             querySnapshot.forEach((doc) => { //Duyet tung cau tra loi
-                console.log(doc.data())
 
-                $(me).parent().next().children().eq(doc.data().choice).find(".user-answer").append("[" + doc.data().uname + "] ")
-
+                let obj = doc.data()
+                if (obj.choice != null)  //Nếu là câu hỏi trắc nghiệm
+                    $(me).parent().next().children().eq(obj.choice).find(".user-answer").append("[" + obj.uname + "] ")
+                else if (obj.content != null) //Nếu là câu trả lời dài
+                    $(me).closest("google-codelab-survey").find(".user-answer").append("<b>" + obj.uname + "</b>: " + obj.content + "<br>");
+                else  if (obj.fileLinks != null) {  //Nếu là upload file
+                    let url = "";
+                    for (let i = 0; i < obj.fileLinks.length; i++) {
+                        url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a > ";
+                    }
+                    $(me).closest("google-codelab-survey").find(".user-answer").append("<b>" + obj.uname + "</b>: " + url + "<br>");
+                }
             });
             $("#submit-spinner").addClass("d-none");
         });
@@ -407,7 +422,7 @@ function getSelectedStepText(step) {
 
 var oldStep = -1;
 var oldTime = 0;
-var editor;
+
 
 function updateStep(step) {
     if (!isNaN(step)) {
@@ -445,72 +460,72 @@ function updateStep(step) {
         //Load Submitted
 
 
-        if (getSelectedStepText(step).includes("(*)")) {
-            var ext = "    <div class='submit-practice'>" +
-                "               <form method='post' enctype='multipart/form-data'>" +
-                "                    <div class='mb-3'>" +
-                "                       <textarea class='contentInput form-control' id='demotext'></textarea>" +
-                "                    </div>" +
-                "                    <div class='mb-3'>" +
-                "                        <label for='files' class='form-label'>Tệp đính kèm:</label>" +
-                "                        <input type='file' name='files' multiple>" +
-                "                    </div>" +
-                "                    <div class='mb-3 d-flex'>" +
-                "                       <div class='msg flex-grow-1'></div>" +
-                "                    </div>" +
-                "                    <div class='d-flex justify-content-center'>" +
-                "                       <div class='spinner-border d-none upload-spinner' role='status' ></div>" +
-                "                       <input type='button' class='btn btn-danger btn_upload' value='Lưu'>" +
-                "                    </div>" +
-                "                 </form>" +
-                "           </div>"
-
-            var extend = $("google-codelab-step .extend").eq(step);
-
-            extend.empty()
-            extend.append(ext);
-
-            editor = CodeMirror.fromTextArea(document.getElementById("demotext"), {
-                lineNumbers: true,
-                mode: "text/html",
-                matchBrackets: true
-            });
-
-            $('.btn_upload').on("click", event => upload(event));
-            $(".contentInput").text("")
-            $(".msg").html("")
-
-            firebase.firestore().collection("rooms").doc(getRoomID()).collection("submits").doc(currentUser.uid)
-                .get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        var url = "";
-                        if (doc.data().steps != null) {
-                            var obj = getSubmittedCurrentStep(getSelectedStep(), doc.data().steps);
-                            if (obj != null) {
-                                for (let i = 0; i < obj.fileNames.length; i++) {
-                                    url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
-                                }
-                                var output = "";
-                                //$(".contentInput").val(obj.content)
-
-                                editor.refresh()
-                                editor.setValue(obj.content)
-
-
-                                if (url !== "")
-                                    output = output + "<b>File đã nộp</b>: <br>" + url;
-                                $(".msg").html(output);
-                            }
-                        }
-                    }
-                    $("#upload-spinner").addClass("d-none");
-                    $("#btn_upload").removeClass("d-none");
-                })
-                .catch((error) => {
-                    console.log("Error getting documents: ", error);
-                });
-        }
+        // if (getSelectedStepText(step).includes("(*)")) {
+        //     var ext = "    <div class='submit-practice'>" +
+        //         "               <form method='post' enctype='multipart/form-data'>" +
+        //         "                    <div class='mb-3'>" +
+        //         "                       <textarea class='contentInput form-control' id='demotext'></textarea>" +
+        //         "                    </div>" +
+        //         "                    <div class='mb-3'>" +
+        //         "                        <label for='files' class='form-label'>Tệp đính kèm:</label>" +
+        //         "                        <input type='file' name='files' multiple>" +
+        //         "                    </div>" +
+        //         "                    <div class='mb-3 d-flex'>" +
+        //         "                       <div class='msg flex-grow-1'></div>" +
+        //         "                    </div>" +
+        //         "                    <div class='d-flex justify-content-center'>" +
+        //         "                       <div class='spinner-border d-none upload-spinner' role='status' ></div>" +
+        //         "                       <input type='button' class='btn btn-danger btn_upload' value='Lưu'>" +
+        //         "                    </div>" +
+        //         "                 </form>" +
+        //         "           </div>"
+        //
+        //     var extend = $("google-codelab-step .extend").eq(step);
+        //
+        //     extend.empty()
+        //     extend.append(ext);
+        //
+        //     editor = CodeMirror.fromTextArea(document.getElementById("demotext"), {
+        //         lineNumbers: true,
+        //         mode: "text/html",
+        //         matchBrackets: true
+        //     });
+        //
+        //     $('.btn_upload').on("click", event => upload(event));
+        //     $(".contentInput").text("")
+        //     $(".msg").html("")
+        //
+        //     firebase.firestore().collection("rooms").doc(getRoomID()).collection("submits").doc(currentUser.uid)
+        //         .get()
+        //         .then((doc) => {
+        //             if (doc.exists) {
+        //                 var url = "";
+        //                 if (doc.data().steps != null) {
+        //                     var obj = getSubmittedCurrentStep(getSelectedStep(), doc.data().steps);
+        //                     if (obj != null) {
+        //                         for (let i = 0; i < obj.fileNames.length; i++) {
+        //                             url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
+        //                         }
+        //                         var output = "";
+        //                         //$(".contentInput").val(obj.content)
+        //
+        //                         editor.refresh()
+        //                         editor.setValue(obj.content)
+        //
+        //
+        //                         if (url !== "")
+        //                             output = output + "<b>File đã nộp</b>: <br>" + url;
+        //                         $(".msg").html(output);
+        //                     }
+        //                 }
+        //             }
+        //             $("#upload-spinner").addClass("d-none");
+        //             $("#btn_upload").removeClass("d-none");
+        //         })
+        //         .catch((error) => {
+        //             console.log("Error getting documents: ", error);
+        //         });
+        // }
     }
 }
 
@@ -583,47 +598,6 @@ function updateHTML() {
 };
 
 
-function upload(ev) {
-    var curStep = new URL(window.location.href).hash.split("#")[1];
-
-    let button = $(ev.currentTarget);
-    let form = button.closest("form")
-    let textarea = form.find("textarea").first()
-    let msg = form.find(".msg").first()
-
-    $(".upload-spinner").removeClass("d-none");
-    $(".upload-form").addClass("d-none");
-    $(".btn_upload").addClass("d-none");
-    var formData = new FormData(form[0]);
-    formData.append("userID", currentUser.uid);
-    formData.append("userName", currentUser.displayName);
-    formData.append("step", getSelectedStep());
-    formData.append("room", getRoomID());
-    formData.append("content", editor.getValue());
-    // AJAX request
-    $.ajax({
-        url: '/upload',
-        type: 'post',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            $(".upload-spinner").addClass("d-none");
-            form.removeClass("d-none");
-            msg.html(response);
-            form.trigger("reset");
-            button.removeClass("d-none");
-        },
-        error: function () {
-            msg.html("Có lỗi xảy ra!");
-            $(".upload-spinner").addClass("d-none");
-            form.removeClass("d-none");
-            form.trigger("reset");
-            button.removeClass("d-none");
-        }
-    });
-}
-
 var topButton;
 
 function addCopyButtons(clipboard) {
@@ -683,17 +657,37 @@ function mofifyLab() {
         })
         return true;
     })
-    $('.survey-option-wrapper').append("<span class='user-answer'></span>")
-    $('span.option-text:contains("Mã nguồn")').closest("label.survey-option-wrapper").html("<div class='container-code'>" +
+
+    $('span.option-text:contains("Code"),span.option-text:contains("Mã nguồn")').closest("label.survey-option-wrapper").html("<div class='container-code'>" +
         "    <textarea rows='10' class='textarea-code'></textarea>       " +
-        "    <a href='#' class='btn btn-success btn-upload-code btn-right-corner'>Lưu </a>" +
+        "    <a href='#' class='btn btn-success btn-upload-code btn-right-corner'>Lưu</a>" +
         "</div>")
+    $('span.option-text:contains("Text")').closest("label.survey-option-wrapper").html("<div class='container-code'>" +
+        "    <textarea rows='10' class='textarea-text'></textarea>       " +
+        "    <a href='#' class='btn btn-success btn-upload-code btn-right-corner'>Lưu</a>" +
+        "</div>")
+
+    $('span.option-text:contains("File")').closest("label.survey-option-wrapper").before(
+        "<div class='container-code'>" +
+        "    <form method='post' enctype='multipart/form-data'>" +
+        "       <input type='file' name='files' multiple>       " +
+        "       <a href='#' class='btn btn-success btn_upload_file btn-right-corner'>Lưu</a>" +
+        "       <div class='msg flex-grow-1'></div>" +
+        "   </form>" +
+        "</div>")
+
+    $(".contentInput").text("")
+    $(".msg").html("")
+
+    $('span.option-text:contains("File")').closest("label.survey-option-wrapper").html("")
+
+    $('.survey-option-wrapper').append("<span class='user-answer'></span>")
     $(".btn-upload-code").on('click', function (ev) {
-        var me = ev.currentTarget;
+        let me = ev.currentTarget;
         $(me).addClass("d-none")
-        var survey_id = $(me).closest("google-codelab-survey").attr('survey-id')
-        var content = $(me).prev().val()
-        var ref = firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").doc(currentUser.uid)
+        let survey_id = $(me).closest("google-codelab-survey").attr('survey-id')
+        let content = $(me).prev().val()
+        let ref = firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").doc(currentUser.uid)
         ref.set({
             uname: currentUser.displayName,
             time: firebase.firestore.FieldValue.serverTimestamp(),
@@ -703,6 +697,43 @@ function mofifyLab() {
         })
 
         return true;
+    })
+    $(".btn_upload_file").on('click', function (ev) {
+        let me = $(ev.currentTarget);
+        $(me).addClass("d-none")
+        let survey_id = $(me).closest("google-codelab-survey").attr('survey-id')
+        let form = me.closest("form")
+        let msg = form.find(".msg").first()
+        $(".upload-spinner").removeClass("d-none");
+        $(".upload-form").addClass("d-none");
+        $(".btn_upload").addClass("d-none");
+        var formData = new FormData(form[0]);
+        formData.append("userID", currentUser.uid);
+        formData.append("uname", currentUser.displayName);
+        formData.append("survey_id", survey_id);
+        formData.append("room", getRoomID());
+        // AJAX request
+        $.ajax({
+            url: '/upload',
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $(".upload-spinner").addClass("d-none");
+                form.removeClass("d-none");
+                msg.html(response);
+                form.trigger("reset");
+                button.removeClass("d-none");
+            },
+            error: function () {
+                msg.html("Có lỗi xảy ra!");
+                $(".upload-spinner").addClass("d-none");
+                form.removeClass("d-none");
+                form.trigger("reset");
+                button.removeClass("d-none");
+            }
+        });
     })
     addCopyButtons(navigator.clipboard)
 
@@ -831,7 +862,6 @@ $(function () {
             db.collection("rooms").doc(getRoomID()).collection("submits").onSnapshot((querySnapshot) => {
                 $("#tbody-report-submit").html("")
                 $("#table-report-submit").removeClass("d-none");
-                $("#tbody-report-submit").html("")
                 querySnapshot.forEach((doc) => { //Duyet tung nguoi dung
                     var s = "";
                     for (let i = 0; i < getNumberOfSteps(); i++) {

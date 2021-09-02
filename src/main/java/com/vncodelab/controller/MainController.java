@@ -120,26 +120,26 @@ public class MainController {
         Elements img = doc.getElementsByTag("img");
 
         //Save to Fire Store
-//        {
-//            //Save to Storage {userID}/labs/{lab_name}
-//            StorageClient storageClient = StorageClient.getInstance();  //Storage
-//            for (Element el : img) {
-//                File file = new File(folderName + "/" + el.attr("src"));
-//                InputStream is = new FileInputStream(file);
-//                Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + newLab.getDocID() + "/" + file.getName(), is);
-//                String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
-//                el.attr("src", newUrl);
-//            }
-//        }
         {
+            //Save to Storage {userID}/labs/{lab_name}
+            StorageClient storageClient = StorageClient.getInstance();  //Storage
             for (Element el : img) {
                 File file = new File(folderName + "/" + el.attr("src"));
-                FileInputStream input1 = new FileInputStream(file);
-                MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain", IOUtils.toByteArray(input1));
-                String fileName = fileStorageService.storeFile(multipartFile);
-                el.attr("src", "/img/" + file.getName());
+                InputStream is = new FileInputStream(file);
+                Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + newLab.getDocID() + "/" + file.getName(), is);
+                String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
+                el.attr("src", newUrl);
             }
         }
+//        {
+//            for (Element el : img) {
+//                File file = new File(folderName + "/" + el.attr("src"));
+//                FileInputStream input1 = new FileInputStream(file);
+//                MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain", IOUtils.toByteArray(input1));
+//                String fileName = fileStorageService.storeFile(multipartFile);
+//                el.attr("src", "/img/" + file.getName());
+//            }
+//        }
 
         FileUtils.deleteDirectory(new File(folderName));
         Element codelab = doc.getElementsByTag("google-codelab").get(0);
@@ -236,7 +236,7 @@ public class MainController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<?> upload(@RequestParam("files") ArrayList<MultipartFile> files, @RequestParam("userID") String userID, @RequestParam("userName") String userName, @RequestParam("room") String room, @RequestParam("step") String step, @RequestParam("content") String content) throws IOException, InterruptedException, ExecutionException {
+    public ResponseEntity<?> upload(@RequestParam("files") ArrayList<MultipartFile> files, @RequestParam("userID") String userID, @RequestParam("uname") String uname, @RequestParam("room") String room, @RequestParam("survey_id") String survey_id) throws IOException, InterruptedException, ExecutionException {
         String url = "";
         ArrayList fileNames = new ArrayList<>();
         ArrayList fileLinks = new ArrayList<>();
@@ -246,53 +246,25 @@ public class MainController {
             if (multipartFile.getOriginalFilename() != null && !multipartFile.getOriginalFilename().isEmpty()) {
                 File file = convertToFile(multipartFile, multipartFile.getOriginalFilename());
                 InputStream is = new FileInputStream(file);
-                Blob blob = storageClient.bucket().create("submits/" + room + "/" + userID + "/" + step + "/" + file.getName(), is);
+                Blob blob = storageClient.bucket().create("submits/" + room + "/" + userID + "/" + survey_id + "/" + file.getName(), is);
                 String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
-                url = url + "<a class='text-primary' href = '" + newUrl + "' >" + file.getName() + "</a ><br>";
+                url = url + "<br><a class='text-primary' href = '" + newUrl + "' >" + file.getName() + "</a ><br>";
                 fileLinks.add(newUrl);
                 fileNames.add(file.getName());
                 //Xoa file
                 file.delete();
+
+                DocumentReference userRef = FirestoreClient.getFirestore().collection("rooms").document(room).collection("surveys").document(survey_id).collection("answers").document(userID);
+                HashMap mapSubmit = new HashMap();
+                mapSubmit.put("uname", uname);
+                mapSubmit.put("time", FieldValue.serverTimestamp());
+                mapSubmit.put("fileNames", fileNames);
+                mapSubmit.put("fileLinks", fileLinks);
+                userRef.set(mapSubmit);
             }
         }
 
-        Firestore dbFirestore = FirestoreClient.getFirestore();  //FireStorage
-        DocumentReference userRef = dbFirestore.collection("rooms").document(room).collection("submits").document(userID);  //Địa chỉ lưu bài của SV
-
-        ApiFuture<DocumentSnapshot> future = userRef.get();
-        DocumentSnapshot document = future.get();
-        ArrayList<HashMap> submitedSteps = null;
-
-        if (document.exists()) {
-            if (document.getData().get("steps") != null) {
-                submitedSteps = (ArrayList<HashMap>) document.getData().get("steps");
-                Iterator itr = submitedSteps.iterator();
-                while (itr.hasNext()) {
-                    HashMap hash = (HashMap) itr.next();
-                    if (hash.get("step").equals("" + step))
-                        itr.remove();
-                }
-            }
-        }
-        if (submitedSteps == null) {
-            submitedSteps = new ArrayList<>();
-        }
-        HashMap mapSubmit = new HashMap();
-        mapSubmit.put("step", step);
-        mapSubmit.put("content", content);  //Nội dung sv gõ
-        mapSubmit.put("fileNames", fileNames);
-        mapSubmit.put("fileLinks", fileLinks);
-        submitedSteps.add(mapSubmit);
-
-        Collections.sort(submitedSteps, Comparator.comparing(o -> o.get("step").toString()));   //Lấy các bài thực hành trước đây, để bổ sung
-
-        HashMap map = new HashMap<>();
-        map.put("userName", userName);
-        map.put("lastUpdate", FieldValue.serverTimestamp());
-        map.put("steps", submitedSteps);
-        userRef.set(map);
-
-        String output = "<div class = 'text-primary text-center'>Lưu thành công</div><p>";
+        String output = "<p>";
         if (url != null && url != "")
             output = output + "<b>File đã nộp</b>: " + url;
 

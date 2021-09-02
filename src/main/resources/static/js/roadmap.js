@@ -35,8 +35,14 @@ function MongoDB() {
             "icon": "/images/database.svg"
         },
         {
-            "text": "",
-            "icon": "/images/database.svg"
+            "text": "MongoDB Basic",
+            "icon": "/images/database.svg",
+            "lab": [
+                {
+                    "name": "Giới thiệu về MongoDB",
+                    "id": "NPpd7b"
+                }
+            ],
         },
         {
             "text": "",
