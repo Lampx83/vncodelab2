@@ -54,11 +54,12 @@ function afterLogin(user) {
         $(".lpx").removeClass("d-none")
     }
     if (page === "lab")
-        enterRoom(user);
+        enterLab();
     else if (page === "mylabs")
         loadLabs(user);
-    else if (window.location.pathname.startsWith("/lab"))
-        enterLab();
+
+    if (window.location.pathname.startsWith("/room"))
+        enterRoom(user);
 }
 
 function afterLogout() {
@@ -397,14 +398,14 @@ function showRegisterForm() {
 // }
 
 function presence(user) {
-    var uid = user.uid;
-    var userStatusDatabaseRef = firebase.database().ref('/status/' + uid);
-    var isOfflineForDatabase = {
+    let uid = user.uid;
+    let userStatusDatabaseRef = firebase.database().ref('/status/' + uid);
+    let isOfflineForDatabase = {
         state: 'offline',
         last_changed: firebase.database.ServerValue.TIMESTAMP,
         uname: user.displayName
     };
-    var isOnlineForDatabase = {
+    let isOnlineForDatabase = {
         state: 'online',
         last_changed: firebase.database.ServerValue.TIMESTAMP,
         uname: user.displayName

@@ -106,7 +106,7 @@ function JavaCoreNEU1() {
             ],
             "lab": [
                 {
-                    "name": "Lab 1",
+                    "name": "Chương 1",
                     "id": "KDTBN7"
                 }
             ]
@@ -121,7 +121,7 @@ function JavaCoreNEU1() {
             ],
             "lab": [
                 {
-                    "name": "Lab 2",
+                    "name": "Chương 2",
                     "id": "KVFPaL"
                 }
             ]
@@ -132,6 +132,12 @@ function JavaCoreNEU1() {
                 {
                     "name": "Slides",
                     "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/ES48baOlmD1Jk41LjfvMKIkBNvBd8GM9jhVsEATUORKf5A?e=FkkrPr"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "Chương 3",
+                    "id": "fGkLgt"
                 }
             ]
         },

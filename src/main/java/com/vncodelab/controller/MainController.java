@@ -339,9 +339,6 @@ public class MainController {
                 try {
                     Log log = document1.toObject(Log.class);
                     Step cStep = map.get(log.getLeave());
-                    if (log.getDuration() > 0) {
-                        System.out.println();
-                    }
                     if (cStep != null)
                         cStep.setNumber(cStep.getNumber() + log.getDuration());
                 } catch (Exception ex) {

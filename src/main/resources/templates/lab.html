@@ -150,7 +150,7 @@
             </svg>
             <span class="d-none d-sm-inline">Báo cáo</span>
         </button>
-        <button id="btnRoom" type="button" class="btn btn-primary ms-2 d-none" data-bs-toggle="collapse" data-bs-target="#collapse-online">
+        <button id="btnRoom" type="button" class="btn btn-primary ms-2 d-none room" data-bs-toggle="collapse" data-bs-target="#collapse-online">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
                 <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                 <path fill-rule="evenodd"
@@ -397,18 +397,21 @@
                     <li class="nav-item">
                         <a class="nav-link active" id="practice-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="practice" aria-selected="false">Thực hành</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" id="raisehand-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="raisehand" aria-selected="true">Giơ tay</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" id="submit-tab" data-bs-toggle="tab" href="#contact" role="tab" aria-controls="submit" aria-selected="false">Nộp bài</a>
                     </li>
+
                 </ul>
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade  pt-3" id="profile" role="tabpanel" aria-labelledby="practice-tab">
+                    <div class="tab-pane  active pt-3" id="profile" role="tabpanel" aria-labelledby="practice-tab">
                         <!--TAB PRACTICE-->
                         <div class="d-flex justify-content-center">
-                            <div class="spinner-border spinner-border" role="status" id="practice-spinner"></div>
+                            <div class="spinner-border" role="status" id="practice-spinner"></div>
                         </div>
                         <div class="table-responsive">
                             <table class="table table-borderless d-none" id="table-report-practice">
@@ -417,10 +420,11 @@
                             </table>
                         </div>
                     </div>
-                    <div class="tab-pane fade show active pt-3" id="home" role="tabpanel" aria-labelledby="raisehand-tab">
+
+                    <div class="tab-pane  show  pt-3" id="home" role="tabpanel" aria-labelledby="raisehand-tab">
                         <!--TAB RAISEHAND-->
                         <div class="d-flex justify-content-center">
-                            <div class="spinner-border spinner-border" role="status" id="raisehand-spinner"></div>
+                            <div class="spinner-border" role="status" id="raisehand-spinner"></div>
                         </div>
                         <div class="table-responsive">
                             <table class="table table-borderless d-none" id="table-report-raisehand">
@@ -429,10 +433,11 @@
                             </table>
                         </div>
                     </div>
-                    <div class="tab-pane fade  pt-3" id="contact" role="tabpanel" aria-labelledby="submit-tab">
+
+                    <div class="tab-pane   pt-3" id="contact" role="tabpanel" aria-labelledby="submit-tab">
                         <!--TAB SUBMITS-->
                         <div class="d-flex justify-content-center">
-                            <div class="spinner-border spinner-border" role="status" id="submit-spinner">
+                            <div class="spinner-border" role="status" id="submit-spinner">
                             </div>
                         </div>
                         <div class="table-responsive">
