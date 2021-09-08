@@ -50,7 +50,7 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "MongoDB Tools",
-                    "id": "NPpd7b"
+                    "id": "gl5W5L"
                 }
             ],
         },
