@@ -22,6 +22,7 @@ function tempalate() {
         }
     ];
 }
+
 function MongoDB() {
     return [
         {
@@ -100,6 +101,7 @@ function MongoDB() {
         }
     ];
 }
+
 function JavaCoreNEU1() {
     return [
         {
@@ -220,6 +222,7 @@ function JavaCoreNEU1() {
         },
     ];
 }
+
 function JavaCoreNEU2() {
     return [
         {
@@ -232,7 +235,7 @@ function JavaCoreNEU2() {
             ],
             "lab": [
                 {
-                    "name": "Lab 1",
+                    "name": "Chương 1",
                     "id": "kE0X5E"
                 }
             ]
@@ -244,6 +247,12 @@ function JavaCoreNEU2() {
                     "name": "Slides",
                     "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EeBpLpnpk91GgevAyVl2saEBg8VVYFhC05Lf5X9JtgEyfw?e=4KTc2d"
                 }
+            ],
+            "lab": [
+                {
+                    "name": "Chương 2",
+                    "id": "g1Bqdx"
+                }
             ]
         },
         {
@@ -252,6 +261,12 @@ function JavaCoreNEU2() {
                 {
                     "name": "Slides",
                     "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/ES48baOlmD1Jk41LjfvMKIkBNvBd8GM9jhVsEATUORKf5A?e=FkkrPr"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "Chương 3",
+                    "id": "oaIslJ"
                 }
             ]
         },
@@ -328,6 +343,7 @@ function JavaCoreNEU2() {
         },
     ];
 }
+
 function WebNEU() {
     return [
         {
@@ -398,6 +414,7 @@ function WebNEU() {
         },
     ];
 }
+
 function nhomJava() {
     return [
         {
@@ -691,6 +708,11 @@ function nhomJava() {
                     "name": "MongoDB Java Advanced",
                     "id": "OLrfqE"
                 }
+                ,
+                {
+                    "name": "MongoDB GeoJSON",
+                    "id": "bx9LwP"
+                }
             ]
         },
         {
@@ -727,6 +749,10 @@ function nhomJava() {
                 {
                     "name": "Mflix 7",
                     "id": "C9X2ov"
+                },
+                {
+                    "name": "Mflix 8",
+                    "id": "9koocq"
                 }
             ]
         },
@@ -949,7 +975,7 @@ label.fontSize = 22;
 
 function myFunction(ev) {
     var data = chart.data[ev.target.dataItem.index];
-    if(data.text!=="") {
+    if (data.text !== "") {
         $('#modal-title').html(data.text);
         var content = "";
         if (data.content != null)
