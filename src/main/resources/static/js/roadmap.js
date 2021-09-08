@@ -28,25 +28,31 @@ function MongoDB() {
             "text": "Introduction",
             "lab": [
                 {
-                    "name": "Giới thiệu về NoSQL",
+                    "name": "NoSQL Introduction",
                     "id": "rEHlLa"
                 }
             ],
             "icon": "/images/database.svg"
         },
         {
-            "text": "MongoDB Basic",
+            "text": "MongoDB Basic 1",
             "icon": "/images/database.svg",
             "lab": [
                 {
-                    "name": "Giới thiệu về MongoDB",
+                    "name": "MongoDB Introduction",
                     "id": "NPpd7b"
                 }
             ],
         },
         {
-            "text": "",
-            "icon": "/images/database.svg"
+            "text": "MongoDB Basic 2",
+            "icon": "/images/database.svg",
+            "lab": [
+                {
+                    "name": "MongoDB Tools",
+                    "id": "NPpd7b"
+                }
+            ],
         },
         {
             "text": "",

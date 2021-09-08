@@ -945,7 +945,8 @@ a #login:hover {
     border: none;
 }
 .slide .inner .table-lab .table-onerow ul,
-.slide .inner .table-lab .table-onerow h2
+.slide .inner .table-lab .table-onerow h2,
+.slide .inner .table-lab .table-onerow ol
 {
     text-align: left;
 }

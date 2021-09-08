@@ -53,13 +53,15 @@ function afterLogin(user) {
     if (hashCode(user.email) == "-448897477") {
         $(".lpx").removeClass("d-none")
     }
-    if (page === "lab")
-        enterLab();
-    else if (page === "mylabs")
+    if (page === "lab") {
+        if (window.location.pathname.startsWith("/lab"))
+            enterLab(user);
+        if (window.location.pathname.startsWith("/room"))
+            enterRoom(user);
+    } else if (page === "mylabs")
         loadLabs(user);
 
-    if (window.location.pathname.startsWith("/room"))
-        enterRoom(user);
+
 }
 
 function afterLogout() {

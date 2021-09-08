@@ -42,12 +42,25 @@ function getSubmitedObjects(step, arr) {
     return null;
 }
 
-function enterLab() {
+function enterLab(user) {
     $('#main').show();
     $('#drawer').show();
+
+    firebase.firestore().collection("labs").doc(getDocID()).get().then((doc) => {  //Đọc thông tin để bắt đầu vào phòng Lab chung
+        if (doc.exists) {
+            let obj = doc.data();
+            currentDocID = obj.docID;
+            if (obj.userID === user.uid) { //Teacher
+                $("#btnUpdate").removeClass("d-none")
+            }
+        }
+    })
+
 }
 
 function enterRoom(user) {
+    $('#main').show();
+    $('#drawer').show();
     $(".room").removeClass("d-none")
     let db = firebase.firestore();
     db.collection("rooms").doc(getRoomID()).get().then((doc) => {  //Đọc thông tin để bắt đầu vào phòng học
@@ -447,6 +460,13 @@ function hoverDiv(e, state) {
     }
 }
 
+function getDocID() {
+    // return "lXW9wS"; //TODO test  //lab thử nghiệm https://docs.google.com/document/d/1EEGARIc9dEj9mpnmKoYP8n4EA9KNH9qR0W2c6CYEWT0/edit#
+    // return (new URL(window.location.href)).searchParams.get('room')
+    let arr = (new URL(window.location.href)).pathname.split("/");
+    return arr[arr.length - 1]
+}
+
 function getRoomID() {
     // return "lXW9wS"; //TODO test  //lab thử nghiệm https://docs.google.com/document/d/1EEGARIc9dEj9mpnmKoYP8n4EA9KNH9qR0W2c6CYEWT0/edit#
     // return (new URL(window.location.href)).searchParams.get('room')
@@ -674,7 +694,7 @@ $(function () {
     $("#done").hide();
 
     $('.steps ol li').click(function (e) {
-        if (updateStep != null)
+        if (updateStep != null && refUsers != null)
             updateStep($(this).index());
     });
 
