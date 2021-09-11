@@ -38,79 +38,41 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link href="../static/css/chat.css" th:href="@{/css/chat.css}" rel="stylesheet"/>
     <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet"/>
+    <link href="../static/css/hightlight-default.min.css" th:href="@{/css/hightlight-default.min.css}" rel="stylesheet"/>
 
 </head>
 <body>
 
 <lab th:utext="${lab.html}" th:class="${lab.slides} ? 'slide' : ''"></lab>
-<!--TODO test-->
-<!--<google-codelab codelab-gaid="" id="title" title="Title" environment="web" feedback-link="">-->
+<!--<lab class="slide">-->
+<!--<google-codelab  codelab-gaid="" id="title" title="Title" environment="web" feedback-link="">-->
 <!--    <google-codelab-step label="Step 1" duration="0">-->
 <!--      a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc a  <p></p>bc-->
-
+<!--        <p>https://codepen.io/lampx83/pen/RwgVNpX</p>-->
 <!--    </google-codelab-step>-->
 <!--    <google-codelab-step label="Step 2" duration="0"></google-codelab-step>-->
-<!--    <google-codelab-step label="Step 3" duration="0"></google-codelab-step>-->
+<!--    <google-codelab-step label="Step 3" duration="0">-->
+<!--        <p>https://codepen.io/lampx83/pen/rNwmaoZ</p>-->
+<!--    </google-codelab-step>-->
 <!--    <google-codelab-step label="Step 4 (*)" duration="0">Nội dung bước số 4</google-codelab-step>-->
 <!--    <google-codelab-step label="Step 5" duration="0"></google-codelab-step>-->
 <!--    <google-codelab-step label="Step 6 (*)" duration="0"></google-codelab-step>-->
 <!--</google-codelab>-->
+<!--</lab>-->
 
-<!--<lab class="slide">-->
-<!--    <google-codelab codelab-gaid="" id="ch-ng-1" title="Chương 1" environment="web" feedback-link="">-->
-<!--        <google-codelab-step label="Heading 1" duration="3"><p> Duration:3:00 which uses dark grey 1 text.</p>-->
-<!--            <h2 is-upgraded>Heading 2 (*)</h2>-->
-<!--            <ul>-->
-<!--                <li>Gạch đầu dòng 1</li>-->
-<!--                <li>Gạch đầu dòng 2</li>-->
-<!--                <li>Gạch đầu dòng 3</li>-->
-<!--            </ul>-->
-<!--            <p>Nội dung gì đó</p>-->
-<!--            <ol type="1" start="1">-->
-<!--                <li>Gạch đầu dòng 1</li>-->
-<!--                <li>Gạch đầu dòng 2</li>-->
-<!--                <li>Gạch đầu dòng 3</li>-->
-<!--            </ol>-->
-<!--            <p><em>Nội dung không muốn đưa ra 1</em></p>-->
-<!--            <p><em>Nội dung không muốn đưa ra 2.</em></p>-->
-<!--            <p><em>Nội dung không muốn đưa ra 3</em></p>-->
-<!--            <p class="image-container"><img style="width: 132.50px" src="https://storage.googleapis.com/vncodelab2.appspot.com/labs/x3ryTAgcfnZYC2pFWiG0u9MK7Um1/ch-ng-1/6287aa28c16749ca.png?GoogleAccessId=firebase-adminsdk-q7yo7@vncodelab2.iam.gserviceaccount.com&amp;Expires=2493477623&amp;Signature=LyiO3793j5xm7%2Br8OvDN6B9cEzUNGEVdMd2K%2FhIQf3dvYyERHAiKzyIuw5hrOOwKJ4ltXr7tVU%2Fd7Ws%2Bs8%2FcJGpoJfwwOyIrLw3DgIsMR749r%2F5TFevmydwbbRP2QZAOFuay4uQkm0%2BG7iFJJHTPnfgyrCcxp5f5aSxmo%2FL9Vj8JwDlrGSqm3laru6erJ25roRq9gYPXcuYmtFZYDYdUTsiWq5Hrgyp1tERbLFvmlpg5v83JgmYBehA7pI%2BOfoRJwiHcf1HyToqfbJ7V5nSXHi2oLDpbeRXwePQXQOaza5mSBoCX%2Fwk3Nb3qdbCZoo5to%2FQyy9XdkFtptB63tj6hwA%3D%3D"></p>-->
-<!--            <aside class="warning"><p>Table single-cell with Light Orange 3 background</p></aside>-->
-<!--            <aside class="special"><p>Table single-cell with Light Green 3 background</p></aside>-->
-<!--            <pre>Table single-cell with Consolas font</pre>-->
-<!--            <pre><code>public class Helloworld(){//Use courier new font for code, xml ... }</code></pre>-->
-<!--            <p><a href="https://downloadfestival.co.uk/" target="_blank">-->
-<!--                <paper-button class="colored" raised> Download</paper-button>-->
-<!--            </a> (Text with Dark green 1 background + hyperlink)-->
-<!--            </p>-->
-<!--            <google-codelab-survey survey-id="ch-ng-1-1"><h4>Heading 4 in single-cell table with a light blue 3 background.</h4>-->
-<!--                <paper-radio-group>-->
-<!--                    <paper-radio-button> List item 1</paper-radio-button>-->
-<!--                    <paper-radio-button> List item 2</paper-radio-button>-->
-<!--                    <paper-radio-button> List item 3</paper-radio-button>-->
-<!--                </paper-radio-group>-->
-<!--            </google-codelab-survey>-->
-<!--        </google-codelab-step>-->
-<!--        <google-codelab-step label="Cài đặt Claat" duration="0"><p>Cài đặt go tại website</p>-->
-<!--            <p class="image-container"><img style="width: 601.70px" src="https://storage.googleapis.com/vncodelab2.appspot.com/labs/x3ryTAgcfnZYC2pFWiG0u9MK7Um1/ch-ng-1/2fea1c18b17cbf86.png?GoogleAccessId=firebase-adminsdk-q7yo7@vncodelab2.iam.gserviceaccount.com&amp;Expires=2493477624&amp;Signature=NKBbgWZ11BAs93J93BKNeJZfDdUcLetmQ0kyN8Jc3h35XC%2BxY0HkG4PxagEgjb%2FlY8n2ZZ57K8r15b9ryXB3QxSonzCM2PNmq6hGOGKs%2FMw69oCJzR%2Bx1YUilNTrfn5SUiZpje160C0kZqkIsqYfHX6A1uBPMKKRjHHgH3CLp4WlFA7Ifs3vMrWdQ6prcL1RsjOxVs03CrBl1gGUJcK5yqLQCz0pVpjSSDKBnq7%2FHVwv5D8fowdod1gLp4KeH0AyMSsJtlFovq8FXbQS%2Bmnlri66HE9c88K9%2BExR944RE%2BRD50zeqZ28nysViKen35aYJwOVMAiSx60EKeGBL0U2BA%3D%3D"></p>-->
-<!--            <p>Sau khi cài đặt xong go, tải claat bằng cách gõ lệnh sau:</p>-->
-<!--            <pre>go get github.com/googlecodelabs/tools/claat</pre>-->
-<!--            <p>Sau khi lệnh trên chạy xong claat được tải về</p>-->
-<!--            <p class="image-container"><img style="width: 601.70px" src="https://storage.googleapis.com/vncodelab2.appspot.com/labs/x3ryTAgcfnZYC2pFWiG0u9MK7Um1/ch-ng-1/9cba9c5f563a8019.png?GoogleAccessId=firebase-adminsdk-q7yo7@vncodelab2.iam.gserviceaccount.com&amp;Expires=2493477625&amp;Signature=NV8oxxTIbzYvGjV%2BJyk%2FD%2FQm1vaRHQGGqnD1X%2B5A7j5pm39UvLa0mPcRoJOWhC76xHrD6TbzBPB7%2FSbdWNiUjgt1zty%2Br1izxuYPvCCLepE%2F0uPz7BEZSgeHK25cXKyVBDuYf%2F9zqjcgIPYwujL7JeUC%2BCrlrEVd2GPZH3%2FHIKuFFeAISjv0PbzVMJ6trZlMMWAm3LxJmU4yuRnZtJgW%2BFg4Sw30KkhsyR8ruDpHNo0pU2kK%2FFAojkhg4i4gikmzVkyLqTuHjKRgZjd7isR54YUiuRUwgugfI7IluN8YD7ZU90QZBHwicwLFZ4wwQ8XgCbJYCCueolPs3wLD2CuK7g%3D%3D"></p>-->
-<!--            <p>Chạy claat bằng lệnh sau (chú ý thay đổi đường dẫn):</p>-->
-<!--            <pre>~/bin/claat export 1EEGARIc9dEj9mpnmKoYP8n4EA9KNH9qR0W2c6CYEWT0</pre>-->
-<!--        </google-codelab-step>-->
-<!--        <google-codelab-step label="Bước 3" duration="0"><p>Muốn có bài tập đánh *</p></google-codelab-step>-->
-<!--        <google-codelab-step label="Bước 4 (*)" duration="0"><p>Muốn có bài tập đánh *</p></google-codelab-step>-->
-<!--        <google-codelab-step label="Bước 5 (*)" duration="0"><p>Muốn có bài tập đánh *</p></google-codelab-step>-->
-<!--        <google-codelab-step label="Bước 6 (*)" duration="0"><p>Muốn có bài tập đánh *</p></google-codelab-step>-->
-<!--    </google-codelab>-->
-<!--</lab>s-->
 
 <div id="divtoshow" style="display: none; z-index: 2000" class="speech-bubble">Noi dung ben trong</div>
 <!--TOP BUTTON-->
 <div id="topButton">
     <div class="layout horizontal teacher" style="  justify-content: flex-end;">
+
+        <button id="btnPractice" type="button" class="btn btn-warning ms-2 d-none user" data-bs-toggle="modal" data-bs-target="#htmlPracticeModal">
+            <svg id="Bold" enable-background="new 0 0 24 24" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+                <path d="m.455 16.512 10.969 7.314c.374.23.774.233 1.152 0l10.969-7.314c.281-.187.455-.522.455-.857v-7.312c0-.335-.174-.67-.455-.857l-10.969-7.313c-.374-.23-.774-.232-1.152 0l-10.969 7.313c-.281.187-.455.522-.455.857v7.312c0 .335.174.67.455.857zm10.514 4.528-8.076-5.384 3.603-2.411 4.473 2.987zm2.062 0v-4.808l4.473-2.987 3.603 2.411zm8.907-7.314-2.585-1.727 2.585-1.728zm-8.907-10.767 8.076 5.384-3.603 2.411-4.473-2.987zm-1.031 6.602 3.643 2.438-3.643 2.438-3.643-2.438zm-1.031-6.602v4.808l-4.473 2.987-3.603-2.411zm-8.906 7.314v-.001l2.585 1.728-2.585 1.728z"/>
+            </svg>
+            <span class="d-none d-md-inline">Thực hành</span>
+        </button>
+
         <button id="btnUpdate" type="button" class="btn btn-danger ms-2 d-none teacher" onclick="updateHTML()">
             <?xml version="1.0" encoding="iso-8859-1"?>
             <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" viewBox="0 0 36.375 36.376">
@@ -120,7 +82,7 @@
                     c0.978-0.978,0.978-2.561,0-3.535l-7.5-7.498c-0.977-0.977-2.559-0.977-3.535,0l-7.5,7.498c-0.977,0.976-0.977,2.559,0,3.535
                     C9.895,12.743,11.479,12.743,12.456,11.766z"/>
             </svg>
-            <span class="d-none d-sm-inline">Cập nhật</span>
+            <span class="d-none d-md-inline">Cập nhật</span>
         </button>
 
         <button id="btnRaiseHand" type="button" class="btn btn-secondary ms-2 d-none" data-bs-toggle="button">
@@ -134,8 +96,10 @@
 		c-0.6-0.925-1.771-1.235-2.629-0.705c-0.855,0.542-1.067,1.724-0.475,2.646c0,0,3.266,4.943,4.658,7.059S11.408,26,15.625,26
 		c6.982,0,7.607-5.392,7.607-7s0-13.5,0-13.5H20.232z"/>
             </svg>
-            <span class="d-none d-sm-inline">Giơ tay</span>
+            <span class="d-none d-md-inline">Giơ tay</span>
         </button>
+
+
 
         <button id="btnReport" type="button" class="btn btn-success ms-2 d-none teacher" data-bs-toggle="modal" data-bs-target="#reportModal">
             <?xml version="1.0" encoding="iso-8859-1"?>
@@ -148,7 +112,7 @@
                 <path d="M0,369.6h142.4V512H0V369.6z"/>
                 <path d="M187.7,369.6h323.9V512H187.7V369.6z"/>
             </svg>
-            <span class="d-none d-sm-inline">Báo cáo</span>
+            <span class="d-none d-md-inline">Báo cáo</span>
         </button>
         <button id="btnRoom" type="button" class="btn btn-primary ms-2 d-none room" data-bs-toggle="collapse" data-bs-target="#collapse-online">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
@@ -157,7 +121,7 @@
                       d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
                 <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
             </svg>
-            <span class="d-none d-sm-inline">Phòng chat</span> <span class="badge badge-secondary bg-secondary" id="numOnline">0</span>
+            <span class="d-none d-md-inline">Phòng chat</span> <span class="badge badge-secondary bg-secondary" id="numOnline">0</span>
         </button>
 
         <button id="login" type="button" class="guest btn btn-primary ms-3 d-none btn-warning" data-bs-toggle="modal" data-bs-target="#modal-login"><span th:text="#{login}">Login</span></button>
@@ -350,36 +314,18 @@
     </div>
 </div>
 
-<!-- MODAL UPLOAD -->
-<!--<div id="uploadModal" class="modal" tabindex="-1" role="dialog">-->
-<!--    <div class="modal-dialog" role="document">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h5 class="modal-title">Nộp bài</h5>-->
-<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <form method='post' action='' enctype="multipart/form-data" id="upload-form">-->
-<!--                    <div class="mb-3">-->
-<!--                        <label for="contentInput" class="form-label">Nội dung:</label>-->
-<!--                        <textarea id="contentInput" ></textarea>-->
-<!--                    </div>-->
-<!--                    <div class="mb-3">-->
-<!--                        <label for="files" class="form-label">Tệp đính kèm:</label>-->
-<!--                        <input type='file' name='files' id='files' muliple>-->
-<!--                    </div>-->
-<!--                    <div class="d-flex justify-content-center">-->
-<!--                        <input type='button' class='btn btn-danger d-none' value='Nộp bài' id='btn_upload'>-->
-<!--                    </div>-->
-<!--                    <span id="msg"></span>-->
-<!--                </form>-->
-<!--                <div class="d-flex justify-content-center">-->
-<!--                    <div class="spinner-border spinner-border" role="status" id="upload-spinner"></div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<!-- MODAL HTML Practice-->
+<div id="htmlPracticeModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body" style="padding: 0px">
+                <p class="codepen" data-height="602" data-default-tab="html,result" data-slug-hash="PojmPwB" data-preview="true" data-editable="true" style="height: 602px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- MODAL REPORT -->
 <div id="reportModal" class="modal " tabindex="-1" role="dialog">
@@ -457,22 +403,25 @@
     var page = "lab"
 </script>
 
+<script type="text/javascript" src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+
 <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
 <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
-<script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+<script type="text/javascript" src="../static/js/codelab-elements.js" th:src="@{/js/codelab-elements.js}"></script>
+<!--<script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>-->
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth__vi.js"></script>
 
-<script type="text/javascript" src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 
-
-
+<script type="text/javascript" src="../static/js/ei.js" th:src="@{/js/ei.js}"></script>
 <script type="text/javascript" src="../static/js/main.js" th:src="@{/js/main.js}"></script>
 <script type="text/javascript" src="../static/js/lab.js" th:src="@{/js/lab.js}"></script>
 

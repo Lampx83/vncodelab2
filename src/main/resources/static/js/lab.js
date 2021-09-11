@@ -87,6 +87,7 @@ function enterRoom(user) {
 
     //Load cac bài tập đã nộp
     $("google-codelab-survey").each(function () {
+
         let text_area = $(this).find("textarea");
         let survey_id = $(this).attr("survey-id")
         let ref = firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").doc(currentUser.uid)
@@ -94,9 +95,13 @@ function enterRoom(user) {
         ref.get().then((doc) => {
             if (doc.exists) {
                 let obj = doc.data();
-                if (obj.content != null) {
-                    text_area.val(obj.content)
-                } else if (obj.fileNames != null) {
+                if (obj.choice != null) { //Cau hoi trac nghiem
+                    $(this).find(".form-check-input").eq(obj.choice).prop("checked", true);
+
+
+                } else if (obj.content != null) {  //Cau hoi dai
+                    text_area.val(decodeHtml(obj.content))
+                } else if (obj.fileNames != null) {  //File da nop
                     let url = "";
                     for (let i = 0; i < obj.fileNames.length; i++) {
                         url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a ><br>";
@@ -108,6 +113,12 @@ function enterRoom(user) {
     });
 }
 
+function decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+}
+
 let unsubscribe;
 
 function showQuizResult(me) {
@@ -117,33 +128,48 @@ function showQuizResult(me) {
     let temp = $(me).text();
     $(".show-result").text("Kết quả")
     $(me).text(temp)
-
-    $(".user-answer").html("")
-
+    $(".user-answer-choice").html("");
+    $(".user-answer-code").html("");
     let survey_id = $(me).closest("google-codelab-survey").attr('survey-id')
     if ($(me).text() === "Kết quả") {
-        unsubscribe = firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").onSnapshot((querySnapshot) => {
-            $(me).closest("google-codelab-survey").find(".user-answer").html("")
-            querySnapshot.forEach((doc) => { //Duyet tung cau tra loi
 
-                let obj = doc.data()
-                if (obj.choice != null)  //Nếu là câu hỏi trắc nghiệm
-                    $(me).parent().next().children().eq(obj.choice).find(".user-answer").append("[" + obj.uname + "] ")
-                else if (obj.content != null) //Nếu là câu trả lời dài
-                    $(me).closest("google-codelab-survey").find(".user-answer").append("<b>" + obj.uname + "</b>: " + obj.content + "<br>");
-                else if (obj.fileLinks != null) {  //Nếu là upload file
-                    let url = "";
-                    for (let i = 0; i < obj.fileLinks.length; i++) {
-                        url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a > ";
-                    }
-                    $(me).closest("google-codelab-survey").find(".user-answer").append("<b>" + obj.uname + "</b>: " + url + "<br>");
+        unsubscribe = firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").onSnapshot({includeMetadataChanges: false}, (snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                let doc = change.doc
+                let obj = change.doc.data()
+
+                if (change.type === "added") {  //Thêm
+                    $(me).parent().next().find('#' + doc.id).css('color', 'blue');
                 }
+
+                if (change.type === "modified") {  //Sửa
+                    $('#submit-' + doc.id).remove()  //Xóa bài đã làm
+                    $(me).parent().next().find('#' + doc.id).css('color', 'red');
+                }
+
+                if (obj.choice != null) //Nếu là câu hỏi trắc nghiệm
+                    $(me).parent().next().children().eq(obj.choice).find(".user-answer-choice").append("<span id='submit-" + doc.id + "'>[" + obj.uname + "] </span>")
+                else if (obj.content != null) //Nếu là câu trả lời dài
+                    $(me).closest("google-codelab-survey").find(".user-answer-code").append("<div id='submit-" + doc.id + "'>" + obj.uname + ": <pre><code>" + obj.content + "</code></pre></div>");
+
+
+                if (change.type === "removed") { //Xóa???
+                    console.log("Removed city: ", change.doc.data());
+                }
+
+
+                timer = setTimeout(function () {
+                    $(me).parent().next().find('#' + doc.id).css('color', '');
+                }, 2000);
             });
+
+            hljs.highlightAll();
+            addCopyButtons(navigator.clipboard)
             $("#submit-spinner").addClass("d-none");
         });
         $(me).text("Ẩn")
     } else {
-        $(me).closest("google-codelab-survey").find(".user-answer").html("");
+
         unsubscribe();
         $(me).text("Kết quả");
     }
@@ -406,7 +432,7 @@ let oldTime = 0;
 
 
 function updateStep(step) {  //Up to Realtime database
-    if (!isNaN(step)) {
+    if (!isNaN(step) && refUsers != null) {
 
         let newTime = Math.floor(Date.now() / 1000);
         let duration = newTime - oldTime;
@@ -543,14 +569,7 @@ function addCopyButtons(clipboard) {
                 console.error(error)
             })
         });
-
-
         $(pre).before(button);
-        //     let highlight = pre.parentNode;
-        //     highlight.parentNode.insertBefore(button, highlight)
-        // } else {
-        //     pre.parentNode.insertBefore(button, pre)
-        // }
     })
 }
 
@@ -574,11 +593,24 @@ function mofifyLab() {
 
     $('.slide .inner .table-lab table:has(tr:not(:eq(0):last-child))').addClass("table table-striped table-bordered")
 
+    $('span.option-text').closest("label.survey-option-wrapper").each(function () {
+        let text = $(this).text()
+        let input = $(this).find("input")
 
-    $('span.option-text:contains("Code"),span.option-text:contains("Mã nguồn")').closest("label.survey-option-wrapper").html("<div class='container-code'>" +
+        $(this).replaceWith("<div class='form-check'>" +
+            "  <input class='form-check-input' type='radio' name='" + input.attr("name") + "' id='" + input.attr("id") + "'>" +
+            "  <label class='form-check-label' for='" + input.attr("id") + "'>" +
+            text +
+            "  </label> <span class='user-answer-choice'></span>" +
+            "</div>")
+    })
+
+
+    $('label.form-check-label:contains("Code"),label.form-check-label:contains("Mã nguồn")').closest(".survey-question-options").replaceWith("<div class='container-code'>" +
         "    <textarea rows='10' class='textarea-code'></textarea>       " +
         "    <a href='#' class='btn btn-success btn-upload-code btn-right-corner'>Lưu</a>" +
-        "</div>")
+        "</div><div class='user-answer-code'></div>")
+
     $('span.option-text:contains("Text")').closest("label.survey-option-wrapper").html("<div class='container-code'>" +
         "    <textarea rows='10' class='textarea-text'></textarea>       " +
         "    <a href='#' class='btn btn-success btn-upload-code btn-right-corner'>Lưu</a>" +
@@ -588,8 +620,19 @@ function mofifyLab() {
     $("p:contains('https://www.youtube.com/watch?v=')").each(function () {
         let url = new URL($(this).text());
         $(this).html('<div class="youtube-container"><iframe src="https://www.youtube.com/embed/' + url.searchParams.get("v") + '" title="YouTube video player"  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen class="video"></iframe>')
-
     })
+
+
+    $("p:contains('https://codepen')").each(function () {
+        let url = new URL($(this).text());
+        let arr = url.pathname.split("/");
+
+        $(this).html('<p class="codepen" data-height="600" data-default-tab="html,result" data-slug-hash="' + arr[arr.length - 1] + '" data-preview="true" data-editable="true"\n' +
+            '   style="height: 600px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">\n' +
+            '</p>');
+    })
+
+
     $('span.option-text:contains("File")').closest("label.survey-option-wrapper").before(
         "<div class='container-code'>" +
         "    <form method='post' enctype='multipart/form-data'>" +
@@ -602,21 +645,23 @@ function mofifyLab() {
     $(".contentInput").text("")
     $(".msg").html("")
     $('span.option-text:contains("File")').closest("label.survey-option-wrapper").html("")
-    $('.survey-option-wrapper').append("<span class='user-answer'></span>")
-    $(".option-text").on('click', function (ev) { //Quiz
+    $('.survey-option-wrapper').append("<span class='user-answer-choice'></span>")
+    $(".form-check-input").on('click', function (ev) { //Quiz
         let me = ev.currentTarget;
         let survey_id = $(me).closest("google-codelab-survey").attr('survey-id')
-        let choice = $(me).closest(".survey-question-options").find("label").index($(me).closest("label"));
+        let choice = $(me).closest(".survey-question-options").find(".form-check-input").index($(me));
         firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").doc(currentUser.uid).set({
             uname: currentUser.displayName,
             time: firebase.firestore.FieldValue.serverTimestamp(),
             choice: choice
         })
 
+        $('header script').remove()
         updateAnswer(survey_id)
 
-        return true;
+
     })
+
 
     $(".btn-upload-code").on('click', function (ev) {  //Submit code
         let me = ev.currentTarget;
@@ -626,7 +671,7 @@ function mofifyLab() {
         firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").doc(currentUser.uid).set({
             uname: currentUser.displayName,
             time: firebase.firestore.FieldValue.serverTimestamp(),
-            content: content
+            content: $('<textarea/>').text(content).html()
         }).then(function () {
             $(me).removeClass("d-none")
         })
@@ -683,7 +728,7 @@ $(function () {
     // initialize and show Bootstrap 4 toast
 
     page = "lab";
-    $('#codelab-feedback').hide();
+    $('#drawer .metadata').remove();
     topButton = $("#topButton").detach()
 
     topButton.appendTo("#codelab-title");
@@ -694,7 +739,7 @@ $(function () {
     $("#done").hide();
 
     $('.steps ol li').click(function (e) {
-        if (updateStep != null && refUsers != null)
+        if (updateStep != null)
             updateStep($(this).index());
     });
 
@@ -900,16 +945,19 @@ $(function () {
 
     $(document).on('keydown', function (e) {
         if (e.keyCode === 37 || e.keyCode === 39) {
-            let curStep = new URL(window.location.href).hash.split("#")[1];
-            updateStep(Number(curStep))
+            // let curStep = new URL(window.location.href).hash.split("#")[1];
+            // updateStep(Number(curStep))
+            // e.preventDefault()
+            // e.stopPropagation();
         }
     });
 
     $("google-codelab-step .instructions").append("<div class='extend'></div>");
 
-
+    // $("#main").after("<div id = 'chat'>abc</div>")
     //Modify HTML Lab
     mofifyLab()
+
 });
 
 

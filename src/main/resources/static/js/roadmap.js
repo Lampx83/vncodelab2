@@ -352,17 +352,19 @@ function WebNEU() {
                 {
                     "name": "Giới thiệu",
                     "id": "XeS1pk"
-                },
-                {
-                    "name": "HTML phần 1",
-                    "id": "0ASEZ3"
                 }
             ],
             "icon": "/images/web.svg"
         },
         {
-            "text": "",
-            "icon": "/images/web.svg"
+            "text": "HTML 1",
+            "icon": "/images/web.svg",
+            "lab": [
+                {
+                    "name": "HTML 1",
+                    "id": "0ASEZ3"
+                }
+            ],
         },
         {
             "text": "",

@@ -188,6 +188,7 @@ public class MainController {
                 lab.setFeature(newLab.getFeature());
                 lab.setSlides(newLab.isSlides());
                 lab.setUserID(newLab.getUserID());
+                lab.setCateID(newLab.getCateID());
                 labService.save(lab);
             }
 
@@ -370,11 +371,33 @@ public class MainController {
         return ResponseEntity.ok().body(ajaxResponseBody);
     }
 
+    @GetMapping("/room/{roomID}")
+    public String room(Model model, @PathVariable(name = "roomID") String roomID) {
+        Room room = roomService.getByID(roomID);
+        Lab lab = labService.getByID(room.getDocID());
+        modifyLab(lab);
+        model.addAttribute("lab", lab);
+        return "lab";
+    }
 
     @GetMapping("/lab/{labID}")
     public String lab(Model model, @PathVariable(name = "labID") String labID) {
-        model.addAttribute("lab", labService.getByID(labID));
+        Lab lab = labService.getByID(labID);
+        modifyLab(lab);
+        model.addAttribute("lab", lab);
         return "lab";
+    }
+
+    private void modifyLab(Lab lab) {
+        Document doc = Jsoup.parse(lab.getHtml(), "UTF-8");
+        Elements selector = doc.select("script");
+        for (Element element : selector) {
+            element.remove();
+        }
+        if(lab.isSlides())
+             selector = doc.select("google-codelab");
+        selector.attr("no-arrows","true");
+        lab.setHtml(doc.html());
     }
 
     @PostMapping("/createRoom")
@@ -385,12 +408,7 @@ public class MainController {
         return ResponseEntity.ok().body(ajaxResponseBody);
     }
 
-    @GetMapping("/room/{roomID}")
-    public String room(Model model, @PathVariable(name = "roomID") String roomID) {
-        Room room = roomService.getByID(roomID);
-        model.addAttribute("lab", labService.getByID(room.getDocID()));
-        return "lab";
-    }
+
 
 
     @PostMapping("/deleteUserReport")
