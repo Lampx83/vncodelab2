@@ -156,6 +156,12 @@ function JavaCoreNEU1() {
                     "name": "Slides",
                     "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EVqvzRPfeKhIuf_T_QFZ9ZMBUouwEcDCsUpj6TqrRvIiYA?e=1CQRAg"
                 }
+            ],
+            "lab": [
+                {
+                    "name": "Chương 4",
+                    "id": "d0zsgc"
+                }
             ]
         },
         {
@@ -276,6 +282,13 @@ function JavaCoreNEU2() {
                 {
                     "name": "Slides",
                     "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EVqvzRPfeKhIuf_T_QFZ9ZMBUouwEcDCsUpj6TqrRvIiYA?e=1CQRAg"
+                }
+            ]
+            ,
+            "lab": [
+                {
+                    "name": "Chương 4",
+                    "id": "ig1EOw"
                 }
             ]
         },

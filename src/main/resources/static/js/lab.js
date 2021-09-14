@@ -15,23 +15,21 @@ const HAND_UP = 1;
 const HAND_DOWN = 0;
 
 function showToast(data) {
-    let suffix;
     if (data.type === TOAST_ENTER_ROOM) {
-        suffix = "enter-room";
-        $("#toast-body-" + suffix).text("Vào phòng")
+        $("#toast-body").text("Vào phòng")
+        $("#toast-title").text(data.uname)
     } else if (data.type === TOAST_LEAVE_ROOM) {
-        suffix = "leave-room";
-        $("#toast-body-" + suffix).text("Rời phòng")
+        $("#toast-body").text("Rời phòng")
+        $("#toast-title").text(data.uname)
     } else if (data.type === TOAST_RAISE_HAND) {
-        suffix = "raise-hand"
-        $("#toast-body-" + suffix).text("Giơ tay")
+        $("#toast-body").text("Giơ tay")
+        $("#toast-title").text(data.uname)
     } else if (data.type === TOAST_CHAT_ROOM) {
-        suffix = "chat-room"
-        $("#toast-body-" + suffix).text(data.message)
+        $("#toast-body").text(data.message)
+        $("#toast-title").text(data.uname)
     }
-    $("#toast-title-" + suffix).text(data.uname)
-    $("#toast-" + suffix).removeClass("d-none")
-    new bootstrap.Toast($("#toast-" + suffix)).show()
+    new bootstrap.Toast(document.getElementById('liveToast')).show()
+
 }
 
 function getSubmitedObjects(step, arr) {
@@ -59,14 +57,16 @@ function enterLab(user) {
 }
 
 function enterRoom(user) {
-    $('#main').show();
-    $('#drawer').show();
-    $(".room").removeClass("d-none")
+
+
     let db = firebase.firestore();
     db.collection("rooms").doc(getRoomID()).get().then((doc) => {  //Đọc thông tin để bắt đầu vào phòng học
         if (doc.exists) {
             let obj = doc.data();
             currentDocID = obj.docID;
+            $('#main').show();
+            $('#drawer').show();
+            $(".room").removeClass("d-none")
             if (obj.userID === user.uid) { //Teacher
                 $(".teacher").removeClass("d-none")
                 teacher = true;
@@ -151,7 +151,13 @@ function showQuizResult(me) {
                     $(me).parent().next().children().eq(obj.choice).find(".user-answer-choice").append("<span id='submit-" + doc.id + "'>[" + obj.uname + "] </span>")
                 else if (obj.content != null) //Nếu là câu trả lời dài
                     $(me).closest("google-codelab-survey").find(".user-answer-code").append("<div id='submit-" + doc.id + "'>" + obj.uname + ": <pre><code>" + obj.content + "</code></pre></div>");
-
+                else if (obj.fileLinks != null) {  //Nếu là upload file
+                    let url = "";
+                    for (let i = 0; i < obj.fileLinks.length; i++) {
+                        url = url + "<a class='text-primary' href = '" + obj.fileLinks[i] + "' >" + obj.fileNames[i] + "</a > ";
+                    }
+                    $(me).closest("google-codelab-survey").find(".user-answer-file").append("<div id='submit-" + doc.id + "'>" + obj.uname + ": " + url + "</div>");
+                }
 
                 if (change.type === "removed") { //Xóa???
                     console.log("Removed city: ", change.doc.data());
@@ -606,15 +612,27 @@ function mofifyLab() {
     })
 
 
-    $('label.form-check-label:contains("Code"),label.form-check-label:contains("Mã nguồn")').closest(".survey-question-options").replaceWith("<div class='container-code'>" +
+    $('label.form-check-label:contains("Code"),label.form-check-label:contains("Mã nguồn")').closest(".survey-question-options").replaceWith("" +
+        "<div class='container-code'>" +
         "    <textarea rows='10' class='textarea-code'></textarea>       " +
         "    <a href='#' class='btn btn-success btn-upload-code btn-right-corner'>Lưu</a>" +
         "</div><div class='user-answer-code'></div>")
 
-    $('span.option-text:contains("Text")').closest("label.survey-option-wrapper").html("<div class='container-code'>" +
+    $('label.form-check-label:contains("Text"),label.form-check-label:contains("Văn bản")').closest(".survey-question-options").replaceWith("" +
+        "<div class='container-code'>" +
         "    <textarea rows='10' class='textarea-text'></textarea>       " +
         "    <a href='#' class='btn btn-success btn-upload-code btn-right-corner'>Lưu</a>" +
         "</div>")
+
+
+    $('label.form-check-label:contains("File"),label.form-check-label:contains("Files")').closest(".survey-question-options").replaceWith("" +
+        "<div class='container-code'>" +
+        "    <form method='post' enctype='multipart/form-data'>" +
+        "       <input type='file' name='files' multiple>       " +
+        "       <a href='#' class='btn btn-success btn_upload_file btn-right-corner'>Lưu</a>" +
+        "       <div class='msg flex-grow-1'></div>" +
+        "   </form>" +
+        "</div><div class='user-answer-file'></div>")
 
     //Youtube
     $("p:contains('https://www.youtube.com/watch?v=')").each(function () {
@@ -633,14 +651,6 @@ function mofifyLab() {
     })
 
 
-    $('span.option-text:contains("File")').closest("label.survey-option-wrapper").before(
-        "<div class='container-code'>" +
-        "    <form method='post' enctype='multipart/form-data'>" +
-        "       <input type='file' name='files' multiple>       " +
-        "       <a href='#' class='btn btn-success btn_upload_file btn-right-corner'>Lưu</a>" +
-        "       <div class='msg flex-grow-1'></div>" +
-        "   </form>" +
-        "</div>")
     addCopyButtons(navigator.clipboard)
     $(".contentInput").text("")
     $(".msg").html("")
@@ -957,6 +967,13 @@ $(function () {
     // $("#main").after("<div id = 'chat'>abc</div>")
     //Modify HTML Lab
     mofifyLab()
+
+    $('#txtMessage').keypress(function (e) {
+        if (e.which == 13) {
+            sendMessage()
+            return false;    //<---- Add this line
+        }
+    });
 
 });
 

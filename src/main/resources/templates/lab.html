@@ -67,9 +67,21 @@
     <div class="layout horizontal teacher" style="  justify-content: flex-end;">
 
         <button id="btnPractice" type="button" class="btn btn-warning ms-2 d-none user" data-bs-toggle="modal" data-bs-target="#htmlPracticeModal">
-            <svg id="Bold" enable-background="new 0 0 24 24" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
-                <path d="m.455 16.512 10.969 7.314c.374.23.774.233 1.152 0l10.969-7.314c.281-.187.455-.522.455-.857v-7.312c0-.335-.174-.67-.455-.857l-10.969-7.313c-.374-.23-.774-.232-1.152 0l-10.969 7.313c-.281.187-.455.522-.455.857v7.312c0 .335.174.67.455.857zm10.514 4.528-8.076-5.384 3.603-2.411 4.473 2.987zm2.062 0v-4.808l4.473-2.987 3.603 2.411zm8.907-7.314-2.585-1.727 2.585-1.728zm-8.907-10.767 8.076 5.384-3.603 2.411-4.473-2.987zm-1.031 6.602 3.643 2.438-3.643 2.438-3.643-2.438zm-1.031-6.602v4.808l-4.473 2.987-3.603-2.411zm-8.906 7.314v-.001l2.585 1.728-2.585 1.728z"/>
+<!--            <svg id="Bold" enable-background="new 0 0 24 24" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">-->
+<!--                <path d="m.455 16.512 10.969 7.314c.374.23.774.233 1.152 0l10.969-7.314c.281-.187.455-.522.455-.857v-7.312c0-.335-.174-.67-.455-.857l-10.969-7.313c-.374-.23-.774-.232-1.152 0l-10.969 7.313c-.281.187-.455.522-.455.857v7.312c0 .335.174.67.455.857zm10.514 4.528-8.076-5.384 3.603-2.411 4.473 2.987zm2.062 0v-4.808l4.473-2.987 3.603 2.411zm8.907-7.314-2.585-1.727 2.585-1.728zm-8.907-10.767 8.076 5.384-3.603 2.411-4.473-2.987zm-1.031 6.602 3.643 2.438-3.643 2.438-3.643-2.438zm-1.031-6.602v4.808l-4.473 2.987-3.603-2.411zm-8.906 7.314v-.001l2.585 1.728-2.585 1.728z"/>-->
+<!--            </svg>-->
+
+            <svg fill="#000" id="_x31__x2C_5" enable-background="new 0 0 24 24" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+                <path d="m12 6c-1.228 0-12-.084-12-3s10.772-3 12-3 12 .084 12 3-10.772 3-12 3zm-10.412-3c.732.568 4.245 1.5 10.412 1.5s9.68-.932 10.412-1.5c-.732-.568-4.245-1.5-10.412-1.5s-9.68.932-10.412 1.5zm20.939.116h.01z"/>
+                <path d="m12 12c-1.228 0-12-.084-12-3 0-.414.336-.75.75-.75.385 0 .702.29.745.664.462.553 4.012 1.586 10.505 1.586s10.043-1.033 10.505-1.586c.043-.374.36-.664.745-.664.414 0 .75.336.75.75 0 2.916-10.772 3-12 3zm10.5-3.001c0 .001 0 .001 0 0zm-21 0c0 .001 0 .001 0 0z"/>
+                <path d="m12 18c-1.228 0-12-.084-12-3 0-.414.336-.75.75-.75.385 0 .702.29.745.664.462.553 4.012 1.586 10.505 1.586s10.043-1.033 10.505-1.586c.043-.374.36-.664.745-.664.414 0 .75.336.75.75 0 2.916-10.772 3-12 3zm10.5-3.001c0 .001 0 .001 0 0zm-21 0c0 .001 0 .001 0 0z"/>
+                <path d="m12 24c-1.228 0-12-.084-12-3v-18c0-.414.336-.75.75-.75s.75.336.75.75v17.919c.481.556 4.03 1.581 10.5 1.581s10.019-1.025 10.5-1.581v-17.919c0-.414.336-.75.75-.75s.75.336.75.75v18c0 2.916-10.772 3-12 3z"/>
+                <circle cx="5" cy="14" r="1"/>
+                <circle cx="5" cy="8" r="1"/>
+                <circle cx="5" cy="20" r="1"/>
             </svg>
+
+<!--            <img  th:src="@{/images/database.svg}" src="../../images/database.svg" data-bs-toggle="dropdown" width="16px" height="16px">-->
             <span class="d-none d-md-inline">Thực hành</span>
         </button>
 
@@ -167,118 +179,21 @@
     </div>
 </div>
 
-<div class="toast-container position-fixed bottom-0 end-0 p-5 mb-5" style="z-index: 1002">
-
-
-    <!-- Toast Chat Room -->
-    <div class="toast" id="toast-chat-room" role="alert" aria-live="assertive" aria-atomic="true">
+<div class="position-fixed bottom-0 end-0 p-5" style="z-index: 11">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-            <img src="../static/images/chat-right-text-fill.svg" th:src="@{/images/chat-right-text-fill.svg}" class="toast-icon rounded me-2">
-            <strong class="me-auto" id="toast-title-chat-room">Phòng chat</strong>
+            <img id="toast-icon" src="../static/images/bell.svg" th:src="@{/images/bell.svg}" class="toast-icon rounded me-2">
+            <strong class="me-auto" id="toast-title">Bootstrap</strong>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-        <div class="toast-body" id="toast-body-chat-room">
-            Tin nhắn
-        </div>
-    </div>
-
-    <!-- Toast Raise Hand -->
-    <div class="toast d-none" id="toast-raise-hand" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <img src="../static/images/raise_hand.svg" th:src="@{/images/raise_hand.svg}" class="toast-icon rounded me-2">
-            <strong class="me-auto" id="toast-title-raise-hand">Giơ tay</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body" id="toast-body-raise-hand">
-            Phạm Xuân Lâm
-        </div>
-    </div>
-
-    <!-- Chat Enter room -->
-    <div class="toast d-none" id="toast-enter-room" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <img src="../static/images/enter.svg" th:src="@{/images/enter.svg}" class="toast-icon rounded me-2">
-            <strong class="me-auto" id="toast-title-enter-room">Vào phòng</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body" id="toast-body-enter-room">
-            Phạm Xuân Lâm
-        </div>
-    </div>
-
-    <!-- Chat Leave room -->
-    <div class="toast d-none" id="toast-leave-room" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <img src="../static/images/leave.svg" th:src="@{/images/leave.svg}" class="toast-icon rounded me-2">
-            <strong class="me-auto" id="toast-title-leave-room">Vào phòng</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body" id="toast-body-leave-room">
-            Phạm Xuân Lâm
-        </div>
-    </div>
-
-</div>
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1002">
-
-    <div aria-live="polite" aria-atomic="true" class="position-relative toast-holder">
-        <div class="toast-container position-absolute top-0 end-0 p-3">
-
-
+        <div class="toast-body" id="toast-body">
+            Hello, world! This is a toast message.
         </div>
     </div>
 </div>
 
-
-<!--&lt;!&ndash;TOAST&ndash;&gt;-->
-<!--<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">-->
-<!--    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">-->
-<!--        <div class="toast-header">-->
-<!--            <img src="../static/images/chat-right-text-fill.svg" th:src="@{/images/chat-right-text-fill.svg}" class="rounded me-2" alt="...">-->
-<!--            <strong class="me-auto">Bootstrap</strong>-->
-<!--            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>-->
-<!--        </div>-->
-<!--        <div class="toast-body">-->
-<!--            Hello, world! This is a toast message.-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--<div aria-live="polite" aria-atomic="true" class="position-relative">-->
-<!--    &lt;!&ndash; Position it: &ndash;&gt;-->
-<!--    &lt;!&ndash; - `.toast-container` for spacing between toasts &ndash;&gt;-->
-<!--    &lt;!&ndash; - `.position-absolute`, `top-0` & `end-0` to position the toasts in the upper right corner &ndash;&gt;-->
-<!--    &lt;!&ndash; - `.p-3` to prevent the toasts from sticking to the edge of the container  &ndash;&gt;-->
-<!--    <div class="toast-container position-absolute top-0 end-0 p-3">-->
-
-<!--        &lt;!&ndash; Then put toasts within &ndash;&gt;-->
-<!--        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">-->
-<!--            <div class="toast-header">-->
-<!--                <img src="..." class="rounded me-2" alt="...">-->
-<!--                <strong class="me-auto">Bootstrap</strong>-->
-<!--                <small class="text-muted">just now</small>-->
-<!--                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>-->
-<!--            </div>-->
-<!--            <div class="toast-body">-->
-<!--                See? Just like this.-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">-->
-<!--            <div class="toast-header">-->
-<!--                <img src="..." class="rounded me-2" alt="...">-->
-<!--                <strong class="me-auto">Bootstrap</strong>-->
-<!--                <small class="text-muted">2 seconds ago</small>-->
-<!--                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>-->
-<!--            </div>-->
-<!--            <div class="toast-body">-->
-<!--                Heads up, toasts will stack automatically-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 <!--COLLAPSE CHAT ROOM-->
-<div class="collapse container row rounded-lg overflow-hidden shadow " id="collapse-online" aria-expanded="true">
+<div class="collapse container row rounded-lg overflow-hidden shadow" id="collapse-online" aria-expanded="true">
     <!-- Users box-->
     <div class="col-4 px-0 chat-leftside">
         <div class="messages-box">
@@ -320,8 +235,11 @@
         <div class="modal-content">
 
             <div class="modal-body" style="padding: 0px">
-                <p class="codepen" data-height="602" data-default-tab="html,result" data-slug-hash="PojmPwB" data-preview="true" data-editable="true" style="height: 602px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
-                </p>
+<!--                <p class="codepen" data-height="602" data-default-tab="html,result" data-slug-hash="PojmPwB" data-preview="true" data-editable="true" style="height: 602px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">-->
+<!--                </p>-->
+
+                <iframe src="https://mws.mongodb.com/?version=latest" width="1140px" height="600px">
+                </iframe>
             </div>
         </div>
     </div>

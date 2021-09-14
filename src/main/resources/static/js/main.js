@@ -440,7 +440,7 @@ var TimeAgo = (function () {
     // Public Methods
     self.locales = {
         prefix: '',
-        sufix: 'ago',
+        sufix: '',
         seconds: 'just now',
         minute: 'about a minute',
         minutes: '%d minutes',
