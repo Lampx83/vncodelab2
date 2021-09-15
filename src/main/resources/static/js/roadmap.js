@@ -56,8 +56,14 @@ function MongoDB() {
             ],
         },
         {
-            "text": "",
-            "icon": "/images/database.svg"
+            "text": "MongoDB CRUD",
+            "icon": "/images/database.svg",
+            "lab": [
+                {
+                    "name": "MongoDB CRUD",
+                    "id": "c0Ms9x"
+                }
+            ],
         },
         {
             "text": "",
