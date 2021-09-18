@@ -386,8 +386,16 @@ function WebNEU() {
             ],
         },
         {
-            "text": "",
-            "icon": "/images/web.svg"
+            "text": "HTML 1",
+            "icon": "/images/web.svg",
+            "lab": [
+                {
+                    "name": "HTML 2",
+                    "id": "YjuO47"
+                }
+            ],
+
+
         },
         {
             "text": "",

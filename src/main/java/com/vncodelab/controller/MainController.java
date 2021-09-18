@@ -15,8 +15,6 @@ import com.vncodelab.service.LabService;
 import com.vncodelab.service.RoomService;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -35,7 +33,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -133,11 +130,13 @@ public class MainController {
         }
 //        {
 //            for (Element el : img) {
-//                File file = new File(folderName + "/" + el.attr("src"));
-//                FileInputStream input1 = new FileInputStream(file);
-//                MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain", IOUtils.toByteArray(input1));
-//                String fileName = fileStorageService.storeFile(multipartFile);
-//                el.attr("src", "/img/" + file.getName());
+//                if(!el.attr("src").isEmpty()) {
+//                    File file = new File(folderName + "/" + el.attr("src"));
+//                    FileInputStream input1 = new FileInputStream(file);
+//                    MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain", IOUtils.toByteArray(input1));
+//                    String fileName = fileStorageService.storeFile(multipartFile);
+//                    el.attr("src", "/img/" + file.getName());
+//                }
 //            }
 //        }
 
@@ -394,9 +393,9 @@ public class MainController {
         for (Element element : selector) {
             element.remove();
         }
-        if(lab.isSlides())
-             selector = doc.select("google-codelab");
-        selector.attr("no-arrows","true");
+        if (lab.isSlides())
+            selector = doc.select("google-codelab");
+        selector.attr("no-arrows", "true");
         lab.setHtml(doc.html());
     }
 
@@ -407,8 +406,6 @@ public class MainController {
         ajaxResponseBody.setUpdate(true);
         return ResponseEntity.ok().body(ajaxResponseBody);
     }
-
-
 
 
     @PostMapping("/deleteUserReport")
