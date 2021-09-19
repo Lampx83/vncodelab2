@@ -82,9 +82,9 @@ public class FileController {
 //            System.out.println("Nhap vao mot so");
 //            int x = s.nextInt();
 //            System.out.println(x);
-            //Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export 1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4");
+            Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export 1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4");
 
-            Process p = Runtime.getRuntime().exec("./claat export 1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4");
+       //     Process p = Runtime.getRuntime().exec("./claat export 1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4");
 
             //    Process p = Runtime.getRuntime().exec("java -v");
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
