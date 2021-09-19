@@ -5,7 +5,9 @@ import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
 import com.google.firebase.cloud.FirestoreClient;
 import com.google.firebase.cloud.StorageClient;
+import com.google.gson.Gson;
 import com.vncodelab.entity.*;
+import com.vncodelab.json.LabInfo;
 import com.vncodelab.model.AjaxResponseBody;
 import com.vncodelab.others.MyFunc;
 import com.vncodelab.service.FileStorageService;
@@ -89,7 +91,7 @@ public class MainController {
 
     public void updateHTML(@RequestBody Lab newLab) throws IOException, InterruptedException {
 
-       //  ProcessBuilder builder = new ProcessBuilder("./claat", "export", newLab.getDocID()).inheritIO();
+        //   ProcessBuilder builder = new ProcessBuilder("./claat", "export", newLab.getDocID()).inheritIO();
         ProcessBuilder builder = new ProcessBuilder("/home/phamxuanlam/go/bin/claat", "export", newLab.getDocID()).inheritIO();
         //ProcessBuilder builder = new ProcessBuilder("./claat", "export", "1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4").inheritIO();
         builder.redirectErrorStream(true);
@@ -98,13 +100,9 @@ public class MainController {
         Process process = builder.start();
         process.waitFor();
         String content = FileUtils.readFileToString(fileOutput, StandardCharsets.UTF_8);
-
-
         String folderName = content.split("\t")[1].trim();
-
-
-//        LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
-//        newLab.setName(labInfo.getTitle());
+        LabInfo labInfo = new Gson().fromJson(FileUtils.readFileToString(new File(folderName + "/codelab.json"), StandardCharsets.UTF_8), LabInfo.class);
+        newLab.setName(labInfo.getTitle());
 
         File inputFile = new File(folderName + "/index.html");
         Document doc = Jsoup.parse(inputFile, "UTF-8");
@@ -116,7 +114,7 @@ public class MainController {
             StorageClient storageClient = StorageClient.getInstance();  //Storage
             for (Element el : img) {
                 File file = new File(folderName + "/" + el.attr("src"));
-                System.out.println(folderName + "/" + el.attr("src"));
+//                System.out.println(folderName + "/" + el.attr("src"));
                 InputStream is = new FileInputStream(file);
                 Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + newLab.getDocID() + "/" + file.getName(), is);
                 String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
@@ -138,6 +136,7 @@ public class MainController {
         FileUtils.deleteDirectory(new File(folderName));
         Element codelab = doc.getElementsByTag("google-codelab").get(0);
         newLab.setHtml(codelab.toString());
+
     }
 
 
