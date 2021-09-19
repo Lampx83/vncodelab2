@@ -116,7 +116,7 @@ public class MainController {
             StorageClient storageClient = StorageClient.getInstance();  //Storage
             for (Element el : img) {
                 File file = new File(folderName + "/" + el.attr("src"));
-                System.out.println(file.getAbsolutePath() + "/" + file.getName());
+                System.out.println(folderName + "/" + el.attr("src"));
                 InputStream is = new FileInputStream(file);
                 Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + newLab.getDocID() + "/" + file.getName(), is);
                 String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
