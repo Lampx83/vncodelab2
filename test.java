@@ -18,6 +18,7 @@ public class test {
             String totalLine = "";
             while ((line = br.readLine()) != null)
                 totalLine = totalLine + line;
+            System.out.println(totalLine);
             System.out.println("Done93");
         } catch (Exception ex) {
             System.out.println("Exception");
