@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -60,9 +61,6 @@ public class MainController {
         model.addAttribute("page", "mylabs");
         return "index";
     }
-
-
-
 
     @GetMapping("/img/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
@@ -95,46 +93,43 @@ public class MainController {
 
 
     public void updateHTML(@RequestBody Lab newLab) throws IOException, InterruptedException {
-        Process p = Runtime.getRuntime().exec("./claat export " + newLab.getDocID()); //Localhost
-         //  Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export " + newLab.getDocID());  //For Google Cloud
-       // Process p = Runtime.getRuntime().exec("ls");
 
 
 
-        //  ProcessBuilder builder = new ProcessBuilder();
-        //builder.command("classpath:claat", "export", newLab.getDocID());
-        //    Process p = builder.start();
-        p.waitFor();
 
-        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line = input.readLine();
-        System.out.println(line);
+       // ProcessBuilder builder = new ProcessBuilder("./claat", "export", newLab.getDocID()).inheritIO();
+        ProcessBuilder builder = new ProcessBuilder("/home/phamxuanlam/go/bin/claat", "export", newLab.getDocID()).inheritIO();
+        //ProcessBuilder builder = new ProcessBuilder("./claat", "export", "1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4").inheritIO();
+        builder.redirectErrorStream(true);
+        File fileOutput = new File("output.txt");
+        builder.redirectOutput(fileOutput);
+        Process process = builder.start();
+        process.waitFor();
+        String content = FileUtils.readFileToString(fileOutput, StandardCharsets.UTF_8);
 
 
-//        String folderName = line.split("\t")[1];
-//        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
-//        String totalLine = "";
-//        while ((line = br.readLine()) != null)
-//            totalLine = totalLine + line;
+        String folderName = content.split("\t")[1];
+
+
 //        LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
 //        newLab.setName(labInfo.getTitle());
-//
-//        File inputFile = new File(folderName + "/index.html");
-//        Document doc = Jsoup.parse(inputFile, "UTF-8");
-//        Elements img = doc.getElementsByTag("img");
-//
-//        //Save to Fire Store
-//        {
-//            //Save to Storage {userID}/labs/{lab_name}
-//            StorageClient storageClient = StorageClient.getInstance();  //Storage
-//            for (Element el : img) {
-//                File file = new File(folderName + "/" + el.attr("src"));
-//                InputStream is = new FileInputStream(file);
-//                Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + newLab.getDocID() + "/" + file.getName(), is);
-//                String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
-//                el.attr("src", newUrl);
-//            }
-//        }
+
+        File inputFile = new File(folderName.trim() + "/index.html");
+        Document doc = Jsoup.parse(inputFile, "UTF-8");
+        Elements img = doc.getElementsByTag("img");
+
+        //Save to Fire Store
+        {
+            //Save to Storage {userID}/labs/{lab_name}
+            StorageClient storageClient = StorageClient.getInstance();  //Storage
+            for (Element el : img) {
+                File file = new File(folderName + "/" + el.attr("src"));
+                InputStream is = new FileInputStream(file);
+                Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + newLab.getDocID() + "/" + file.getName(), is);
+                String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
+                el.attr("src", newUrl);
+            }
+        }
 //        {
 //            for (Element el : img) {
 //                if(!el.attr("src").isEmpty()) {
@@ -147,9 +142,9 @@ public class MainController {
 //            }
 //        }
 
-//        FileUtils.deleteDirectory(new File(folderName));
-//        Element codelab = doc.getElementsByTag("google-codelab").get(0);
-//        newLab.setHtml(codelab.toString());
+        FileUtils.deleteDirectory(new File(folderName));
+        Element codelab = doc.getElementsByTag("google-codelab").get(0);
+        newLab.setHtml(codelab.toString());
     }
 
 

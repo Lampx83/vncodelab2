@@ -2,6 +2,7 @@ package com.vncodelab.controller;
 
 import com.vncodelab.payload.UploadFileResponse;
 import com.vncodelab.service.FileStorageService;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -63,7 +64,7 @@ public class FileController {
         }
 
         // Fallback to the default content type if type could not be determined
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 
@@ -75,50 +76,17 @@ public class FileController {
 
 
     @GetMapping("/claat")
-    public String claat() {
-        try {
+    public String claat() throws Exception {
 
-//            Scanner s = new Scanner(System.in);
-//            System.out.println("Nhap vao mot so");
-//            int x = s.nextInt();
-//            System.out.println(x);
-          //  Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export 1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4");
-
-     //       Process p = Runtime.getRuntime().exec("./claat export 1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4");
-      //      Process p = Runtime.getRuntime().exec("java test");
-
-            ProcessBuilder pb = new ProcessBuilder("/home/phamxuanlam/go/bin/claat","export","1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4").inheritIO();
-            pb.redirectErrorStream(true);
-            Process process = pb.start();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null)
-                System.out.println("tasklist: " + line);
+            ProcessBuilder builder = new ProcessBuilder("./claat", "export", "1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4").inheritIO();
+            builder.redirectErrorStream(true);
+            File file = new File("output.txt");
+            builder.redirectOutput(file);
+            Process process = builder.start();
             process.waitFor();
+            String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+            return content;
 
 
-
-
-//            //    Process p = Runtime.getRuntime().exec("java -v");
-//            BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-//            String line = input.readLine();
-//            System.out.println("Dong "+ line);
-//            p.waitFor();
-//
-//            return line;
-//            System.out.println("Done87");
-//            String folderName = line.split("\t")[1];
-//            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
-//            String totalLine = "";
-//            while ((line = br.readLine()) != null)
-//                totalLine = totalLine + line;
-//            System.out.println(totalLine);
-//            System.out.println("Done93");
-
-        } catch (Exception ex) {
-            System.out.println("Exception");
-            ex.printStackTrace();
-        }
-        return "end";
     }
 }
