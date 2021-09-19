@@ -5,16 +5,13 @@ import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
 import com.google.firebase.cloud.FirestoreClient;
 import com.google.firebase.cloud.StorageClient;
-import com.google.gson.Gson;
 import com.vncodelab.entity.*;
-import com.vncodelab.json.LabInfo;
 import com.vncodelab.model.AjaxResponseBody;
 import com.vncodelab.others.MyFunc;
 import com.vncodelab.service.FileStorageService;
 import com.vncodelab.service.LabService;
 import com.vncodelab.service.RoomService;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,7 +21,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -91,13 +87,9 @@ public class MainController {
         return "roadmap";
     }
 
-
     public void updateHTML(@RequestBody Lab newLab) throws IOException, InterruptedException {
 
-
-
-
-       // ProcessBuilder builder = new ProcessBuilder("./claat", "export", newLab.getDocID()).inheritIO();
+        // ProcessBuilder builder = new ProcessBuilder("./claat", "export", newLab.getDocID()).inheritIO();
         ProcessBuilder builder = new ProcessBuilder("/home/phamxuanlam/go/bin/claat", "export", newLab.getDocID()).inheritIO();
         //ProcessBuilder builder = new ProcessBuilder("./claat", "export", "1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4").inheritIO();
         builder.redirectErrorStream(true);
@@ -124,6 +116,7 @@ public class MainController {
             StorageClient storageClient = StorageClient.getInstance();  //Storage
             for (Element el : img) {
                 File file = new File(folderName + "/" + el.attr("src"));
+                System.out.println(file.getAbsolutePath() + "/" + file.getName());
                 InputStream is = new FileInputStream(file);
                 Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + newLab.getDocID() + "/" + file.getName(), is);
                 String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
