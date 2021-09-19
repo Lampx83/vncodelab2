@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,5 +70,32 @@ public class FileController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+    }
+
+
+    @GetMapping("/claat")
+    public String claat() {
+        try {
+
+            Process p = Runtime.getRuntime().exec("/home/phamxuanlam/go/bin/claat export 1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4");
+            BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            String line = input.readLine();
+            System.out.println("Dong "+ line);
+            p.waitFor();
+            return "91";
+//            System.out.println("Done87");
+//            String folderName = line.split("\t")[1];
+//            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
+//            String totalLine = "";
+//            while ((line = br.readLine()) != null)
+//                totalLine = totalLine + line;
+//            System.out.println(totalLine);
+//            System.out.println("Done93");
+
+        } catch (Exception ex) {
+            System.out.println("Exception");
+            ex.printStackTrace();
+        }
+        return "end";
     }
 }

@@ -30,6 +30,9 @@ sudo nohup mvn spring-boot:run &
 ```
 ###Bật dịch vụ Web
 ```
+git pull
+sudo kill -9 $(sudo lsof -t -i:80)
+sudo kill -9 $(sudo lsof -t -i:443)
 sudo mvn spring-boot:run
 sudo nohup mvn spring-boot:run &
 ```
