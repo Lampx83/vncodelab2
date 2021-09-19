@@ -89,7 +89,7 @@ public class MainController {
 
     public void updateHTML(@RequestBody Lab newLab) throws IOException, InterruptedException {
 
-        // ProcessBuilder builder = new ProcessBuilder("./claat", "export", newLab.getDocID()).inheritIO();
+       //  ProcessBuilder builder = new ProcessBuilder("./claat", "export", newLab.getDocID()).inheritIO();
         ProcessBuilder builder = new ProcessBuilder("/home/phamxuanlam/go/bin/claat", "export", newLab.getDocID()).inheritIO();
         //ProcessBuilder builder = new ProcessBuilder("./claat", "export", "1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4").inheritIO();
         builder.redirectErrorStream(true);
@@ -100,13 +100,13 @@ public class MainController {
         String content = FileUtils.readFileToString(fileOutput, StandardCharsets.UTF_8);
 
 
-        String folderName = content.split("\t")[1];
+        String folderName = content.split("\t")[1].trim();
 
 
 //        LabInfo labInfo = new Gson().fromJson(totalLine, LabInfo.class);
 //        newLab.setName(labInfo.getTitle());
 
-        File inputFile = new File(folderName.trim() + "/index.html");
+        File inputFile = new File(folderName + "/index.html");
         Document doc = Jsoup.parse(inputFile, "UTF-8");
         Elements img = doc.getElementsByTag("img");
 
