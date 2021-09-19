@@ -98,11 +98,11 @@ public class MainController {
         //  ProcessBuilder builder = new ProcessBuilder();
         //builder.command("classpath:claat", "export", newLab.getDocID());
         //    Process p = builder.start();
-
+        p.waitFor();
         BufferedReader input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         String line = input.readLine();
         System.out.println(line);
-        p.waitFor();
+
 
         String folderName = line.split("\t")[1];
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(folderName + "/codelab.json")));
