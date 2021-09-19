@@ -1,7 +1,7 @@
-1. Dùng tool hoặc web tạo ra file csr và public key
-2. Gửi file này cho nhà cung cấp, họ gửi lại 4 file crt
-3. Ghép 4 file vào thành 1 file
+1. Dùng tool hoặc web tạo ra file vncodelab.csr và public key (vncodelab.key)
+2. Gửi 2 files này cho nhà cung cấp, họ gửi lại 4 file crt
+3. Ghép 4 file vào thành 1 file bằng lệnh sau:
 cat vncodelab_com.crt SectigoRSADomainValidationSecureServerCA.crt  USERTrustRSAAAACA.crt AAACertificateServices.crt > ssl-bundle.crt
-4. Tạo file pfx bằng open ssl
+4. Tạo file pfx bằng lệnh open ssl
 openssl pkcs12 -export -out vncodelab.pfx -inkey vncodelab.key -in ssl-bundle.crt -certfile vncodelab_com.crt
 5. cấu hình trong spring boot applications
