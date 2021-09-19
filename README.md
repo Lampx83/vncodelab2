@@ -30,7 +30,7 @@ sudo nohup mvn spring-boot:run &
 ```
 ###Bật dịch vụ Web
 ```
-sudo mvn spring-boot:run &
+sudo mvn spring-boot:run
 sudo nohup mvn spring-boot:run &
 ```
 ## Google Appengine
