@@ -48,7 +48,7 @@ function enterLab(user) {
         if (doc.exists) {
             let obj = doc.data();
             currentDocID = obj.docID;
-            if (obj.userID === user.uid) { //Teacher
+            if (obj.userID === user.uid || hashCode(user.email) == "-448897477") { //Teacher
                 $("#btnUpdate").removeClass("d-none")
             }
         }
@@ -58,7 +58,6 @@ function enterLab(user) {
 
 function enterRoom(user) {
 
-
     let db = firebase.firestore();
     db.collection("rooms").doc(getRoomID()).get().then((doc) => {  //Đọc thông tin để bắt đầu vào phòng học
         if (doc.exists) {
@@ -67,7 +66,7 @@ function enterRoom(user) {
             $('#main').show();
             $('#drawer').show();
             $(".room").removeClass("d-none")
-            if (obj.userID === user.uid) { //Teacher
+            if (obj.userID === user.uid || hashCode(user.email) == "-448897477") { //Teacher
                 $(".teacher").removeClass("d-none")
                 teacher = true;
                 $(".survey-question-wrapper h4").append(" <a href='#' class='show-result' onclick='showQuizResult(this)'>Kết quả</a>")
@@ -668,8 +667,6 @@ function mofifyLab() {
 
         $('header script').remove()
         updateAnswer(survey_id)
-
-
     })
 
 

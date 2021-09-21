@@ -91,8 +91,8 @@ public class MainController {
 
     public void updateHTML(@RequestBody Lab newLab) throws IOException, InterruptedException {
 
-        //   ProcessBuilder builder = new ProcessBuilder("./claat", "export", newLab.getDocID()).inheritIO();
-        ProcessBuilder builder = new ProcessBuilder("/home/phamxuanlam/go/bin/claat", "export", newLab.getDocID()).inheritIO();
+           ProcessBuilder builder = new ProcessBuilder("./claat", "export", newLab.getDocID()).inheritIO();
+       // ProcessBuilder builder = new ProcessBuilder("/home/phamxuanlam/go/bin/claat", "export", newLab.getDocID()).inheritIO();
         //ProcessBuilder builder = new ProcessBuilder("./claat", "export", "1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4").inheritIO();
         builder.redirectErrorStream(true);
         File fileOutput = new File("output.txt");
