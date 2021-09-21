@@ -545,9 +545,11 @@ function updateHTML() {
             showToast(data)
         },
         error: function (e) {
+            let data = {}
             data.uname = "Hệ thống"
             data.message = "Cập nhật thất bại"
             data.type = TOAST_CHAT_ROOM
+            showToast(data)
         }
     })
 };
