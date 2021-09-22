@@ -66,8 +66,14 @@ function MongoDB() {
             ],
         },
         {
-            "text": "",
-            "icon": "/images/database.svg"
+            "text": "MongoDB Atlas",
+            "icon": "/images/database.svg",
+            "lab": [
+                {
+                    "name": "MongoDB Query Practice",
+                    "id": "nz8d84"
+                }
+            ],
         },
         {
             "text": "",
