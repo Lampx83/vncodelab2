@@ -72,6 +72,10 @@ function MongoDB() {
                 {
                     "name": "MongoDB Query Practice",
                     "id": "nz8d84"
+                },
+                {
+                    "name": "MongoDB Atlas",
+                    "id": "tO683y"
                 }
             ],
         },
