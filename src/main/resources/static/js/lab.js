@@ -132,7 +132,7 @@ function showQuizResult(me) {
     let survey_id = $(me).closest("google-codelab-survey").attr('survey-id')
     if ($(me).text() === "Kết quả") {
 
-        unsubscribe = firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").onSnapshot({includeMetadataChanges: false}, (snapshot) => {
+        unsubscribe = firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").onSnapshot((snapshot) => {
             snapshot.docChanges().forEach((change) => {
                 let doc = change.doc
                 let obj = change.doc.data()
@@ -188,6 +188,8 @@ function realtime(user) {
     $('#drawer').show();
     refUsers = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/users');
     refUsers.on('value', (snapshot) => {  //Khi có bất kỳ sự thay đổi trong labs/docID_ABC/room_123/users
+
+        console.log("Thay doi")
         const data = snapshot.val();
         let count = []
         let totalUser = 0;
@@ -651,7 +653,6 @@ function mofifyLab() {
             '</p>');
     })
 
-
     addCopyButtons(navigator.clipboard)
     $(".contentInput").text("")
     $(".msg").html("")
@@ -676,7 +677,7 @@ function mofifyLab() {
         let me = ev.currentTarget;
         $(me).addClass("d-none")
         let survey_id = $(me).closest("google-codelab-survey").attr('survey-id')
-        let content = $(me).prev().val()
+        let content = $(me).closest("google-codelab-survey").find("textarea").val()
         firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").doc(currentUser.uid).set({
             uname: currentUser.displayName,
             time: firebase.firestore.FieldValue.serverTimestamp(),
@@ -812,6 +813,8 @@ $(function () {
         $(".spinner-border").removeClass("d-none");
         firebase.firestore().collection("rooms").doc(getRoomID()).collection("logs").onSnapshot((querySnapshot) => {
             querySnapshot.forEach((doc) => {
+
+
                 let obj = doc.data();
                 let s = "";
                 if (obj.lastAction != null)
@@ -843,12 +846,18 @@ $(function () {
         });
     });
 
+
     $("#practice-tab").click(function (ev) {
         $("#tbody-report-practice").html("")
         $(".spinner-border").removeClass("d-none");
-        firebase.firestore().collection("rooms").doc(getRoomID()).collection("logs").onSnapshot((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                let obj = doc.data();
+
+
+        firebase.firestore().collection("rooms").doc(getRoomID()).collection("logs").onSnapshot((snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+
+                let doc = change.doc
+                let obj = change.doc.data()
+
                 let s = "";
                 if (obj.lastAction != null)
                     s = s + "<td class='font14'>" + time_ago(obj.lastAction.toDate()) + "</td>";
@@ -863,7 +872,7 @@ $(function () {
                             step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize2' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><br><span class='report-detail d-none'>" + obj["s" + i] + "s</span></td>";
                         } else if (obj["s" + i] > 5 * 60) {  //5 min
                             step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize1' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><br><span class='report-detail d-none'>" + obj["s" + i] + "s</span></td>";
-                        } else if (obj["s" + i] > 15) {  //15 sec
+                        } else if (obj["s" + i] > 0) {  //15 sec
                             step = step + "<td class='tdcenter'><span class ='labStep blue' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><br><span class='report-detail d-none'>" + obj["s" + i] + "s</span></td>";
                         }
                     } else {
@@ -872,7 +881,17 @@ $(function () {
                 }
                 s = s + step;
                 let tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + doc.id + "\")'>Xóa</a> </div></td>";
-                $("#tbody-report-practice").append("<tr  id='tr-report-" + doc.id + "'><td class='user-name font14'>" + obj.userName + " <span class='report-detail d-none'><br>" + obj.email + "</span></td>" + s + tdThreeDots + "</tr>")
+
+                let stInfo = "<td class='user-name font14'>" + obj.userName + " <span class='report-detail d-none'><br>" + obj.email + "</span></td>" + s + tdThreeDots;
+
+                if (change.type === "added") {  //Thêm
+                    $("#tbody-report-practice").append("<tr  id='tr-report-" + doc.id + "'>" + stInfo + "</tr>")
+                }
+                if (change.type === "modified") {  //Sửa
+                    $('#tr-report-' + doc.id).empty()  //Xóa bài đã làm
+                    $('#tr-report-' + doc.id).html(stInfo)
+                }
+
                 $("#table-report-practice").removeClass("d-none");
             });
             if ($('#switch-showdetail').is(':checked')) {

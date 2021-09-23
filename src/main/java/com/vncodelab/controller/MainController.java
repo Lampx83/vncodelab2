@@ -14,6 +14,7 @@ import com.vncodelab.service.FileStorageService;
 import com.vncodelab.service.LabService;
 import com.vncodelab.service.RoomService;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,6 +24,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -91,9 +93,8 @@ public class MainController {
 
     public void updateHTML(@RequestBody Lab newLab) throws IOException, InterruptedException {
 
-         //  ProcessBuilder builder = new ProcessBuilder("./claat", "export", newLab.getDocID()).inheritIO();
+        //   ProcessBuilder builder = new ProcessBuilder("./claat", "export", newLab.getDocID()).inheritIO();
         ProcessBuilder builder = new ProcessBuilder("/home/phamxuanlam/go/bin/claat", "export", newLab.getDocID()).inheritIO();
-        //ProcessBuilder builder = new ProcessBuilder("./claat", "export", "1rz-UJcd5wQ-giAdIm81bEQoT94xuUJwTj5eik_8LDA4").inheritIO();
         builder.redirectErrorStream(true);
         File fileOutput = new File("output.txt");
         builder.redirectOutput(fileOutput);
@@ -109,34 +110,45 @@ public class MainController {
         Elements img = doc.getElementsByTag("img");
 
         //Save to Fire Store
-        {
-            //Save to Storage {userID}/labs/{lab_name}
-            StorageClient storageClient = StorageClient.getInstance();  //Storage
-            for (Element el : img) {
-                File file = new File(folderName + "/" + el.attr("src"));
-//                System.out.println(folderName + "/" + el.attr("src"));
-                InputStream is = new FileInputStream(file);
-                Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + newLab.getDocID() + "/" + file.getName(), is);
-                String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
-                el.attr("src", newUrl);
-            }
-        }
 //        {
+//            //Save to Storage {userID}/labs/{lab_name}
+//            StorageClient storageClient = StorageClient.getInstance();  //Storage
 //            for (Element el : img) {
-//                if(!el.attr("src").isEmpty()) {
-//                    File file = new File(folderName + "/" + el.attr("src"));
-//                    FileInputStream input1 = new FileInputStream(file);
-//                    MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain", IOUtils.toByteArray(input1));
-//                    String fileName = fileStorageService.storeFile(multipartFile);
-//                    el.attr("src", "/img/" + file.getName());
-//                }
+//                File file = new File(folderName + "/" + el.attr("src"));
+////                System.out.println(folderName + "/" + el.attr("src"));
+//                InputStream is = new FileInputStream(file);
+//                Blob blob = storageClient.bucket().create("labs/" + newLab.getUserID() + "/" + newLab.getDocID() + "/" + file.getName(), is);
+//                String newUrl = blob.signUrl(9999, TimeUnit.DAYS).toString();
+//                el.attr("src", newUrl);
 //            }
 //        }
+
+        {
+            for (Element el : img) {
+                if(!el.attr("src").isEmpty()) {
+                    File file = new File(folderName + "/" + el.attr("src"));
+                    FileInputStream input1 = new FileInputStream(file);
+                    MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain", IOUtils.toByteArray(input1));
+                    String fileName = fileStorageService.storeFile(multipartFile);
+                    el.attr("src", "/img/" + file.getName());
+                }
+            }
+        }
 
         FileUtils.deleteDirectory(new File(folderName));
         Element codelab = doc.getElementsByTag("google-codelab").get(0);
         newLab.setHtml(codelab.toString());
+    }
 
+
+
+    @GetMapping("/preview/{labID}")
+    public String previewLab(Model model, @PathVariable(name = "labID") String labID) throws IOException, InterruptedException {
+        Lab newLab = new Lab();
+        newLab.setDocID(labID);
+        updateHTML(newLab);  //Claat
+        model.addAttribute("lab", newLab);
+        return "lab";
     }
 
 

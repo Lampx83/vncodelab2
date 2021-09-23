@@ -11,7 +11,7 @@ public class Lab {
     private int order;
     private Boolean feature;
     private boolean updateImage = false;
-    private boolean slides = false;
+    private boolean slides = true;
 
     public boolean isSlides() {
         return slides;
