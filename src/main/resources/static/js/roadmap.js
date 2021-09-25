@@ -415,12 +415,26 @@ function WebNEU() {
                     "id": "YjuO47"
                 }
             ],
-
-
         },
         {
-            "text": "",
-            "icon": "/images/web.svg"
+            "text": "CSS 1",
+            "icon": "/images/web.svg",
+            "link": [
+                {
+                    "name": "Slides",
+                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EYu37ffEozlOuUEr219g4BoBlGAopd1AYYS7vVc-QHwUFA?e=zUTubd"
+                },
+                {
+                    "name": "W3 Schools",
+                    "id": "https://www.w3schools.com/css/"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "CSS 1",
+                    "id": "XpU4vT"
+                }
+            ],
         },
         {
             "text": "",
