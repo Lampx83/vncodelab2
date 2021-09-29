@@ -600,6 +600,8 @@ function mofifyLab() {
 
     $('.slide .inner .table-onerow td').addClass('align-middle');
 
+    $('.slide .warning').remove()
+
     $('.slide .inner .table-lab table:has(tr:not(:eq(0):last-child))').addClass("table table-striped table-bordered")
 
     $('span.option-text').closest("label.survey-option-wrapper").each(function () {
@@ -625,7 +627,7 @@ function mofifyLab() {
         "<div class='container-code'>" +
         "    <textarea rows='10' class='textarea-text'></textarea>       " +
         "    <a href='#' class='btn btn-success btn-upload-code btn-right-corner'>Lưu</a>" +
-        "</div>")
+        "</div></div><div class='user-answer-code'></div>")
 
 
     $('label.form-check-label:contains("File"),label.form-check-label:contains("Files")').closest(".survey-question-options").replaceWith("" +
@@ -949,7 +951,6 @@ $(function () {
                 let tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + id + "\")'>Xóa</a> </div></td>";
                 $("#tbody-report-submit").append("<tr  id='tr-report-" + id + "'><td class='user-name'>" + name + "</td>" + step + tdThreeDots + "</tr>")
             }
-
 
             if ($('#switch-showdetail').is(':checked')) {
                 $(".report-detail").removeClass("d-none")

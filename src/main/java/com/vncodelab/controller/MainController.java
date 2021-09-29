@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -91,10 +92,14 @@ public class MainController {
         return "roadmap";
     }
 
-    public void updateHTML(@RequestBody Lab newLab) throws IOException, InterruptedException {
+    public void updateHTML(@RequestBody Lab newLab, HttpServletRequest request) throws IOException, InterruptedException {
 
-        //   ProcessBuilder builder = new ProcessBuilder("./claat", "export", newLab.getDocID()).inheritIO();
-        ProcessBuilder builder = new ProcessBuilder("/home/phamxuanlam/go/bin/claat", "export", newLab.getDocID()).inheritIO();
+        String host = getHost(request);
+        ProcessBuilder builder;
+        if (host.equals("localhost"))
+            builder = new ProcessBuilder("./claat", "export", newLab.getDocID()).inheritIO();
+        else
+            builder = new ProcessBuilder("/home/phamxuanlam/go/bin/claat", "export", newLab.getDocID()).inheritIO();
         builder.redirectErrorStream(true);
         File fileOutput = new File("output.txt");
         builder.redirectOutput(fileOutput);
@@ -125,7 +130,7 @@ public class MainController {
 
         {
             for (Element el : img) {
-                if(!el.attr("src").isEmpty()) {
+                if (!el.attr("src").isEmpty()) {
                     File file = new File(folderName + "/" + el.attr("src"));
                     FileInputStream input1 = new FileInputStream(file);
                     MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain", IOUtils.toByteArray(input1));
@@ -141,19 +146,23 @@ public class MainController {
     }
 
 
-
     @GetMapping("/preview/{labID}")
-    public String previewLab(Model model, @PathVariable(name = "labID") String labID) throws IOException, InterruptedException {
+    public String previewLab(Model model, @PathVariable(name = "labID") String labID, HttpServletRequest request) throws IOException, InterruptedException {
         Lab newLab = new Lab();
         newLab.setDocID(labID);
-        updateHTML(newLab);  //Claat
+        updateHTML(newLab, request);  //Claat
         model.addAttribute("lab", newLab);
         return "lab";
     }
 
+    String getHost(HttpServletRequest request) throws MalformedURLException {
+        URL url = new URL(request.getRequestURL().toString());
+        return url.getHost();
+    }
+
 
     @PostMapping("/createLab")
-    public ResponseEntity<?> createLab(@RequestBody Lab newLab, @RequestParam String action) throws IOException, InterruptedException {
+    public ResponseEntity<?> createLab(@RequestBody Lab newLab, @RequestParam String action, HttpServletRequest request) throws IOException, InterruptedException {
         try {
             String docID = newLab.getDocID();
             if (docID.contains("docs.google.com")) {
@@ -176,15 +185,15 @@ public class MainController {
                 }
             }
             if (action.equals("insert")) {
-                updateHTML(newLab);  //Claat
+                updateHTML(newLab, request);  //Claat
                 newLab.setOrder(999);
                 labService.save(newLab);
             } else if (action.equals("updateAll")) {
-                updateHTML(newLab);  //Claat
+                updateHTML(newLab, request);  //Claat
                 labService.save(newLab);
             } else if (action.equals("updateHTML")) {
                 Lab lab = labService.getByID(newLab.getDocID());
-                updateHTML(lab);  //Claat
+                updateHTML(lab, request);  //Claat
                 labService.save(lab);
                 return ResponseEntity.ok().body(lab);
             } else if (action.equals("updateInfo")) {

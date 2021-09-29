@@ -1090,6 +1090,10 @@ a #login:hover {
     max-height: 100% !important;
 }
 
+.slide google-codelab pre{
+    padding-right: 80px;
+}
+
 
 .youtube-container {
     position: relative;

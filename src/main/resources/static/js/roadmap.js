@@ -80,8 +80,14 @@ function MongoDB() {
             ],
         },
         {
-            "text": "",
-            "icon": "/images/database.svg"
+            "text": "MongoDB Sample Dataset",
+            "icon": "/images/database.svg",
+            "lab": [
+                {
+                    "name": "MongoDB Sample Dataset",
+                    "id": "pTzQZ9"
+                }
+            ],
         },
         {
             "text": "",
