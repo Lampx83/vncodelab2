@@ -443,8 +443,20 @@ function WebNEU() {
             ],
         },
         {
-            "text": "",
-            "icon": "/images/web.svg"
+            "text": "CSS 2",
+            "icon": "/images/web.svg",
+            "link": [
+                {
+                    "name": "W3 Schools",
+                    "id": "https://www.w3schools.com/css/"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "CSS 2",
+                    "id": "O92vZ8"
+                }
+            ],
         },
         {
             "text": "",
