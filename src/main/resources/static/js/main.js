@@ -56,7 +56,7 @@ function afterLogin(user) {
     if (page === "lab") {
         if (window.location.pathname.startsWith("/lab"))
             enterLab(user);
-        if (window.location.pathname.startsWith("/room"))
+        if (window.location.pathname.startsWith("/room") || window.location.pathname.endsWith("lab.html"))
             enterRoom(user);
     } else if (page === "mylabs")
         loadLabs(user);

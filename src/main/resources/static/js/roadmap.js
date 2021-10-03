@@ -6,19 +6,13 @@ function getRoadMapID() {
 function tempalate() {
     return [
         {
-            "text": "Introduction",
-            "link": [
-                {
-                    "name": "",
-                    "id": ""
-                }
-            ],
-            "lab": [
-                {
-                    "name": "",
-                    "id": ""
-                }
-            ]
+            "text": "Bài 1",
+        },
+        {
+            "text": "Bài 2",
+        },
+        {
+            "text": "Bài 3",
         }
     ];
 }
@@ -947,6 +941,8 @@ else if (getRoadMapID() === "4")
     chart.data = JavaCoreNEU2();
 else if (getRoadMapID() === "5")
     chart.data = WebNEU();
+else
+    chart.data = tempalate()
 
 
 for (let i = 0; i < chart.data.length; i++) {

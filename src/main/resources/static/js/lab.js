@@ -13,6 +13,8 @@ const TOAST_RAISE_HAND = 3;
 const TOAST_CHAT_ROOM = 4;
 const HAND_UP = 1;
 const HAND_DOWN = 0;
+const ROOM_TEST = "tO683y";
+const LAB_TEST = "1bj-DXVSTiHlnxKLn7gWyRxoQjKV6fH5EzMIemZhRmbE"
 
 function showToast(data) {
     if (data.type === TOAST_ENTER_ROOM) {
@@ -58,8 +60,29 @@ function enterLab(user) {
 
 function enterRoom(user) {
 
-    let db = firebase.firestore();
-    db.collection("rooms").doc(getRoomID()).get().then((doc) => {  //Đọc thông tin để bắt đầu vào phòng học
+    if (getRoomID() === ROOM_TEST) { //Load Lab
+        firebase.firestore().collection("labs").doc(getDocID()).get().then((doc) => {  //Đọc thông tin để bắt đầu vào phòng Lab chung
+            if (doc.exists) {
+                let lab = doc.data();
+                currentDocID = lab.docID;
+                $("lab").html(lab.html)
+                topButton.appendTo("#codelab-title");
+                mofifyLab();
+                if (lab.userID === user.uid || hashCode(user.email) == "-448897477") { //Teacher
+                    $("#btnUpdate").removeClass("d-none")
+                }
+                $(".user").removeClass("d-none")
+                $("#login-spinner").addClass("d-none")
+                if (user.photoURL) {
+                    $(".avatar").attr("src", user.photoURL);
+                } else {
+                    $(".avatar").attr("src", "/images/user.svg");
+                }
+            }
+        })
+    }
+
+    firebase.firestore().collection("rooms").doc(getRoomID()).get().then((doc) => {  //Đọc thông tin để bắt đầu vào phòng học
         if (doc.exists) {
             let obj = doc.data();
             currentDocID = obj.docID;
@@ -78,7 +101,7 @@ function enterRoom(user) {
     })
 
     //Ghi log vao firestore
-    db.collection("rooms").doc(getRoomID()).collection("logs").doc(currentUser.uid).set({
+    firebase.firestore().collection("rooms").doc(getRoomID()).collection("logs").doc(currentUser.uid).set({
         lastEnter: firebase.firestore.FieldValue.serverTimestamp(),
         userName: user.displayName,
         email: user.email
@@ -189,7 +212,6 @@ function realtime(user) {
     refUsers = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/users');
     refUsers.on('value', (snapshot) => {  //Khi có bất kỳ sự thay đổi trong labs/docID_ABC/room_123/users
 
-        console.log("Thay doi")
         const data = snapshot.val();
         let count = []
         let totalUser = 0;
@@ -494,14 +516,16 @@ function hoverDiv(e, state) {
 }
 
 function getDocID() {
-    // return "lXW9wS"; //TODO test  //lab thử nghiệm https://docs.google.com/document/d/1EEGARIc9dEj9mpnmKoYP8n4EA9KNH9qR0W2c6CYEWT0/edit#
+    if (window.location.pathname.endsWith("lab.html"))
+        return LAB_TEST; //Bài Jquery
     // return (new URL(window.location.href)).searchParams.get('room')
     let arr = (new URL(window.location.href)).pathname.split("/");
     return arr[arr.length - 1]
 }
 
 function getRoomID() {
-    // return "lXW9wS"; //TODO test  //lab thử nghiệm https://docs.google.com/document/d/1EEGARIc9dEj9mpnmKoYP8n4EA9KNH9qR0W2c6CYEWT0/edit#
+    if (window.location.pathname.endsWith("lab.html"))
+        return ROOM_TEST; //Bài Jquery
     // return (new URL(window.location.href)).searchParams.get('room')
     let arr = (new URL(window.location.href)).pathname.split("/");
     return arr[arr.length - 1]
@@ -587,6 +611,46 @@ function updateAnswer(survey_id) {
         answers: firebase.firestore.FieldValue.arrayUnion(currentUser.uid + " - " + currentUser.displayName)
     }, {merge: true})
 }
+
+function showMemberList() {
+    firebase.firestore().collection("rooms").doc(getRoomID()).get().then((doc) => {
+        if (doc.exists) {
+            let obj = doc.data();
+            $("#txtMemberList-name").val(obj.memberList_name)
+            $("#txtMemberList-email").val(obj.memberList_email)
+        }
+    })
+    $('#memberListModal').modal('show')
+}
+
+function saveMemberList() {
+    firebase.firestore().collection("rooms").doc(getRoomID()).update({
+        memberList_email: $("#txtMemberList-email").val(),
+        memberList_name: $("#txtMemberList-name").val()
+    })
+}
+
+function showWheel() {
+
+    firebase.firestore().collection("rooms").doc(getRoomID()).get().then((doc) => {
+        if (doc.exists) {
+            var segments = [];
+            let obj = doc.data();
+            var ks = obj.memberList_name.split(/\r?\n/);
+            $.each(ks, function(k){
+                segments.push(ks[k]);
+            });
+            wheel.segments = segments;
+            wheel.init();
+            wheel.update();
+            setTimeout(function () {
+                window.scrollTo(0, 1);
+            }, 0);
+            $('#wheelModal').modal('show')
+        }
+    })
+}
+
 
 function mofifyLab() {
     $(".slide aside").on('click', function (ev) {
@@ -736,9 +800,9 @@ function mofifyLab() {
 
 }
 
+
 $(function () {
     // initialize and show Bootstrap 4 toast
-
     page = "lab";
     $('#drawer .metadata').remove();
     topButton = $("#topButton").detach()
