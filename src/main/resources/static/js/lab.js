@@ -611,6 +611,15 @@ function updateAnswer(survey_id) {
     }, {merge: true})
 }
 
+function showReport(){
+    if (firstReport) {
+        $("#practice-tab").click();
+        firstReport = false;
+    } else {
+        $("#" + $('.nav-tabs .active').attr("id")).click();
+    }
+    $('#reportModal').modal('show')
+}
 function showMemberList() {
     firebase.firestore().collection("rooms").doc(getRoomID()).get().then((doc) => {
         if (doc.exists) {
@@ -884,14 +893,6 @@ $(function () {
         updateStep(Number(curStep))
     });
 
-    $("#btnReport").click(function (ev) {
-        if (firstReport) {
-            $("#practice-tab").click();
-            firstReport = false;
-        } else {
-            $("#" + $('.nav-tabs .active').attr("id")).click();
-        }
-    });
 
     $("#raisehand-tab").click(function (ev) {
         $("#tbody-report-raisehand").html("")
