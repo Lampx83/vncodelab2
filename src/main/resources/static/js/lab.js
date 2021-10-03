@@ -204,7 +204,7 @@ function showQuizResult(me) {
 
 
 }
-
+let online_list;
 function realtime(user) {
     //Check realtime
     $('#main').show();
@@ -216,6 +216,7 @@ function realtime(user) {
         let count = []
         let totalUser = 0;
         $('#usersChat').empty()
+        online_list = data;
         for (let uid in data) {
             let step = data[uid].step;
             if (count[step] == undefined)
@@ -232,7 +233,6 @@ function realtime(user) {
             }
 
             //Add to chat room
-            // if (currentUser.uid != uid) {  //Kh
             let avatar = "<img src='" + data[uid].photo + "' alt='user' width='40' height='40'  class='rounded-circle'>";
             if (data[uid].photo !== undefined) {
                 avatar = "<img src='" + data[uid].photo + "' alt='user' width='40' height='40'  class='rounded-circle'>";
@@ -240,7 +240,6 @@ function realtime(user) {
                 avatar = "<img src='/images/user.svg' alt='user' width='40' height='40'  class='rounded-circle'>";
             }
             $('#usersChat').append("<a id='chat" + uid + "' href='#' onclick='showChat(this,\"" + uid + "\")' class='px-2 list-group-item list-group-item-action rounded-0 media uchat'>" + avatar + "<div class='media-body'>" + data[uid].name + "</div></a>")
-
 
             //Update in Chat room
             if (data[uid].isRaise) {
@@ -630,25 +629,45 @@ function saveMemberList() {
     })
 }
 
-function showWheel() {
+function showWheel(change) {
+    let selected = $('input[name=listSelect]:checked').val();
+    if (selected === "name" || selected === "email") {
+        firebase.firestore().collection("rooms").doc(getRoomID()).get().then((doc) => {
+            if (doc.exists) {
+                var segments = [];
+                let obj = doc.data();
+                var ks;
+                if (selected === "name")
+                     ks = obj.memberList_name.split(/\r?\n/);
+                if (selected === "email")
+                     ks = obj.memberList_email.split(/\r?\n/);
+                $.each(ks, function (k) {
+                    segments.push(ks[k]);
+                });
+                wheel.segments = segments;
+                wheel.init();
+                wheel.update();
+                setTimeout(function () {
+                    window.scrollTo(0, 1);
+                }, 0);
+                $('#wheelModal').modal('show')
+            }
+        })
+    } else {
+        var segments = [];
 
-    firebase.firestore().collection("rooms").doc(getRoomID()).get().then((doc) => {
-        if (doc.exists) {
-            var segments = [];
-            let obj = doc.data();
-            var ks = obj.memberList_name.split(/\r?\n/);
-            $.each(ks, function(k){
-                segments.push(ks[k]);
-            });
-            wheel.segments = segments;
-            wheel.init();
-            wheel.update();
-            setTimeout(function () {
-                window.scrollTo(0, 1);
-            }, 0);
-            $('#wheelModal').modal('show')
+        for (let uid in online_list) {
+            segments.push(online_list[uid].name);
         }
-    })
+
+        wheel.segments = segments;
+        wheel.init();
+        wheel.update();
+        setTimeout(function () {
+            window.scrollTo(0, 1);
+        }, 0);
+        $('#wheelModal').modal('show')
+    }
 }
 
 
@@ -1056,6 +1075,10 @@ $(function () {
             sendMessage()
             return false;    //<---- Add this line
         }
+    });
+
+    $('input[type=radio][name=listSelect]').change(function () {
+        showWheel(true)
     });
 
 });

@@ -116,7 +116,7 @@
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#reportModal">Báo cáo</a></li>
                 <li><a class="dropdown-item" href="#" id="memberList" onclick="showMemberList()">Danh sách lớp</a></li>
-                <li><a class="dropdown-item" href="#" id="showWheel" onclick="showWheel()">Picker Wheel</a></li>
+                <li><a class="dropdown-item" href="#" id="showWheel" onclick="showWheel(false)">Picker Wheel</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
@@ -347,20 +347,20 @@
                 <div class="modal-body">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active"  data-bs-toggle="tab" href="#student-name-tab" role="tab" aria-controls="student-name" aria-selected="false">Họ tên</a>
+                            <a class="nav-link active" data-bs-toggle="tab" href="#student-name-tab" role="tab" aria-controls="student-name" aria-selected="false">Họ tên</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-bs-toggle="tab" href="#student-email-tab" role="tab" aria-controls="student-email" aria-selected="true">Email</a>
                         </li>
 
                     </ul>
-                    <div class="tab-content" >
-                        <div class="tab-pane  active pt-3"  id="student-name-tab" role="tabpanel" aria-labelledby="student-name-tab">
+                    <div class="tab-content">
+                        <div class="tab-pane  active pt-3" id="student-name-tab" role="tabpanel" aria-labelledby="student-name-tab">
                             <label for="txtMemberList-name" class="form-label">Họ tên trên mỗi dòng</label>
                             <textarea class="form-control" id="txtMemberList-name" rows="25"></textarea>
                         </div>
 
-                        <div class="tab-pane  show  pt-3" id="student-email-tab"  role="tabpanel" aria-labelledby="student-email-tab">
+                        <div class="tab-pane  show  pt-3" id="student-email-tab" role="tabpanel" aria-labelledby="student-email-tab">
                             <label for="txtMemberList-email" class="form-label">Email trên mỗi dòng</label>
                             <textarea class="form-control" id="txtMemberList-email" rows="25"></textarea>
                         </div>
@@ -381,7 +381,21 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Danh sách lớp</h5>
+                <h5 class="modal-title">Picker Wheel</h5>
+
+                <div class="custom-control custom-switch d-none d-sm-inline">
+                    <span class="me-2">Danh sách:</span>
+                    <input type="radio" class="custom-control-input" name="listSelect" value="online" id="select-online" checked>
+                    <label class="custom-control-label me-2" for="select-online">Online</label></a>
+
+                    <input type="radio" class="custom-control-input" name="listSelect" value="name" id="select-name">
+                    <label class="custom-control-label me-2" for="select-name">Họ tên</label>
+
+                    <input type="radio" class="custom-control-input" name="listSelect" value="email" id="select-email">
+                    <label class="custom-control-label me-2" for="select-email">Email</label>
+
+                </div>
+
             </div>
             <div class="modal-body">
                 <section>
@@ -396,7 +410,6 @@
         </div>
     </div>
 </div>
-
 
 
 <script>
@@ -426,7 +439,6 @@
 
 
 <script type="text/javascript" src="../static/js/lab.js" th:src="@{/js/lab.js}"></script>
-
 
 
 </body>
