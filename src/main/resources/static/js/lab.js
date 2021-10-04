@@ -17,6 +17,7 @@ const ROOM_TEST = "tO683y";
 const LAB_TEST = "1bj-DXVSTiHlnxKLn7gWyRxoQjKV6fH5EzMIemZhRmbE"
 
 function showToast(data) {
+    $("#toast-container").removeClass("d-none")
     if (data.type === TOAST_ENTER_ROOM) {
         $("#toast-body").text("Vào phòng")
         $("#toast-title").text(data.uname)
@@ -31,6 +32,9 @@ function showToast(data) {
         $("#toast-title").text(data.uname)
     }
     new bootstrap.Toast(document.getElementById('liveToast')).show()
+    $('#liveToast').on('hidden.bs.toast', function () {
+        $("#toast-container").addClass("d-none")
+    })
 
 }
 
@@ -204,7 +208,9 @@ function showQuizResult(me) {
 
 
 }
+
 let online_list;
+
 function realtime(user) {
     //Check realtime
     $('#main').show();
@@ -611,7 +617,7 @@ function updateAnswer(survey_id) {
     }, {merge: true})
 }
 
-function showReport(){
+function showReport() {
     if (firstReport) {
         $("#practice-tab").click();
         firstReport = false;
@@ -620,6 +626,7 @@ function showReport(){
     }
     $('#reportModal').modal('show')
 }
+
 function showMemberList() {
     firebase.firestore().collection("rooms").doc(getRoomID()).get().then((doc) => {
         if (doc.exists) {
@@ -647,9 +654,9 @@ function showWheel(change) {
                 let obj = doc.data();
                 var ks;
                 if (selected === "name")
-                     ks = obj.memberList_name.split(/\r?\n/);
+                    ks = obj.memberList_name.split(/\r?\n/);
                 if (selected === "email")
-                     ks = obj.memberList_email.split(/\r?\n/);
+                    ks = obj.memberList_email.split(/\r?\n/);
                 $.each(ks, function (k) {
                     segments.push(ks[k]);
                 });

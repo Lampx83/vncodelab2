@@ -125,7 +125,7 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EeqnplMoGktOur0DvF_LV3IBcSs8loVmEi8KbANPGXT2RA?e=TWDSGd"
+                    "id": "https://www.dropbox.com/s/gq9q9h58zfcix3n/Chapter%201%20Introduction%20to%20Java.pdf?dl=0"
                 }
             ],
             "lab": [
@@ -140,7 +140,7 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EeBpLpnpk91GgevAyVl2saEBg8VVYFhC05Lf5X9JtgEyfw?e=4KTc2d"
+                    "id": "https://www.dropbox.com/s/1sya66435gawbk8/Chapter%202%20Java%20Language%201.pdf?dl=0"
                 }
             ],
             "lab": [
@@ -155,7 +155,7 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/ES48baOlmD1Jk41LjfvMKIkBNvBd8GM9jhVsEATUORKf5A?e=FkkrPr"
+                    "id": "https://www.dropbox.com/s/rxnf24g89ih2hkq/Chapter%203%20Java%20Language%202.pdf?dl=0"
                 }
             ],
             "lab": [
@@ -170,7 +170,7 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EVqvzRPfeKhIuf_T_QFZ9ZMBUouwEcDCsUpj6TqrRvIiYA?e=1CQRAg"
+                    "id": "https://www.dropbox.com/s/fm4axn585uz0c6z/Chapter%204%20Objects%20and%20Classes.pdf?dl=0"
                 }
             ],
             "lab": [
@@ -185,7 +185,7 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EXpPScArVfRJjRP0JSj6xN0Br1P2h_HTaDR_gln_M20jbQ?e=Kqyx9w"
+                    "id": "https://www.dropbox.com/s/dgfi6ncrig0q90j/Chapter%205%20Relationship%20among%20objects.pdf?dl=0"
                 }
             ],
             "lab": [
@@ -200,7 +200,13 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EbauG-0_C7xFpva_I1Z_DqEB7DOpS9MOmRO3zrZz2nmkbg?e=ufAA3P"
+                    "id": "https://www.dropbox.com/s/kkkqtlh8sb9zdnr/Chapter%206%20Exception%20and%20Debugging.pdf?dl=0"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "Chương 6",
+                    "id": "Miz2hA"
                 }
             ]
         },
@@ -209,7 +215,7 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EaiQHHE5ZQhDrizCuOl23LoBaJlJ2JeUIZQIIfBamCRlOA?e=DkkpBk"
+                    "id": "https://www.dropbox.com/s/ec90fubuxx6p7zx/Chapter%207%20Input%20and%20Output%20Facilities.pdf?dl=0"
                 }
             ]
         },
@@ -218,7 +224,7 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/ESsKtmelIgZAv9NzFish9OsBQqblDF_n5_Sdq_Cf59HvrQ?e=cxJT8K"
+                    "id": "https://www.dropbox.com/s/obi2zickhpn9aci/Chapter%208%20Concurrency.pdf?dl=0"
                 }
             ]
         },
@@ -227,7 +233,7 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/Ecospiu0Q6lMmNk3Rbn2ybgBLc1H2E94rgbGuTvZDfiz1Q?e=rCh0HN"
+                    "id": "https://www.dropbox.com/s/yb5h4px9voggq2y/Chapter%209%20Generic%20Programming%20And%20Collections.pdf?dl=0"
                 }
             ]
         },
@@ -258,7 +264,7 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EeqnplMoGktOur0DvF_LV3IBcSs8loVmEi8KbANPGXT2RA?e=TWDSGd"
+                    "id": "https://www.dropbox.com/s/gq9q9h58zfcix3n/Chapter%201%20Introduction%20to%20Java.pdf?dl=0"
                 }
             ],
             "lab": [
@@ -273,7 +279,7 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EeBpLpnpk91GgevAyVl2saEBg8VVYFhC05Lf5X9JtgEyfw?e=4KTc2d"
+                    "id": "https://www.dropbox.com/s/1sya66435gawbk8/Chapter%202%20Java%20Language%201.pdf?dl=0"
                 }
             ],
             "lab": [
@@ -288,7 +294,7 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/ES48baOlmD1Jk41LjfvMKIkBNvBd8GM9jhVsEATUORKf5A?e=FkkrPr"
+                    "id": "https://www.dropbox.com/s/rxnf24g89ih2hkq/Chapter%203%20Java%20Language%202.pdf?dl=0"
                 }
             ],
             "lab": [
@@ -303,7 +309,7 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EVqvzRPfeKhIuf_T_QFZ9ZMBUouwEcDCsUpj6TqrRvIiYA?e=1CQRAg"
+                    "id": "https://www.dropbox.com/s/fm4axn585uz0c6z/Chapter%204%20Objects%20and%20Classes.pdf?dl=0"
                 }
             ],
             "lab": [
@@ -318,7 +324,7 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EXpPScArVfRJjRP0JSj6xN0Br1P2h_HTaDR_gln_M20jbQ?e=Kqyx9w"
+                    "id": "https://www.dropbox.com/s/dgfi6ncrig0q90j/Chapter%205%20Relationship%20among%20objects.pdf?dl=0"
                 }
             ],
             "lab": [
@@ -333,7 +339,14 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EbauG-0_C7xFpva_I1Z_DqEB7DOpS9MOmRO3zrZz2nmkbg?e=ufAA3P"
+                    "id": "https://www.dropbox.com/s/kkkqtlh8sb9zdnr/Chapter%206%20Exception%20and%20Debugging.pdf?dl=0"
+                }
+            ]
+            ,
+            "lab": [
+                {
+                    "name": "Chương 6",
+                    "id": "T52YiL"
                 }
             ]
         },
@@ -342,7 +355,7 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EaiQHHE5ZQhDrizCuOl23LoBaJlJ2JeUIZQIIfBamCRlOA?e=DkkpBk"
+                    "id": "https://www.dropbox.com/s/ec90fubuxx6p7zx/Chapter%207%20Input%20and%20Output%20Facilities.pdf?dl=0"
                 }
             ]
         },
@@ -351,7 +364,7 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/ESsKtmelIgZAv9NzFish9OsBQqblDF_n5_Sdq_Cf59HvrQ?e=cxJT8K"
+                    "id": "https://www.dropbox.com/s/obi2zickhpn9aci/Chapter%208%20Concurrency.pdf?dl=0"
                 }
             ]
         },
@@ -360,7 +373,7 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/Ecospiu0Q6lMmNk3Rbn2ybgBLc1H2E94rgbGuTvZDfiz1Q?e=rCh0HN"
+                    "id": "https://www.dropbox.com/s/yb5h4px9voggq2y/Chapter%209%20Generic%20Programming%20And%20Collections.pdf?dl=0"
                 }
             ]
         },
