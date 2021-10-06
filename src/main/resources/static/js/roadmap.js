@@ -84,8 +84,14 @@ function MongoDB() {
             ],
         },
         {
-            "text": "",
-            "icon": "/images/database.svg"
+            "text": "MongoDB Indexes",
+            "icon": "/images/database.svg",
+            "lab": [
+                {
+                    "name": "MongoDB Indexes",
+                    "id": "oBP42D"
+                }
+            ],
         },
         {
             "text": "",

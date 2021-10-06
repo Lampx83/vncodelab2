@@ -1056,8 +1056,8 @@ a #login:hover {
     margin-bottom: 20px !important;
 }
 
-.slide #fabs {
-    max-width: 97% !important;
+.slide #controls {
+    display: none;
 }
 
 .slide .container-code {
@@ -1071,7 +1071,7 @@ a #login:hover {
     right: 10px;
     color: white !important;
     font-size: 16px;
-    z-index:15;
+    z-index: 15;
 }
 
 .slide .block-code {
@@ -1087,11 +1087,11 @@ a #login:hover {
     font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
 }
 
-.slide google-codelab #drawer .steps{
+.slide google-codelab #drawer .steps {
     max-height: 100% !important;
 }
 
-.slide google-codelab pre{
+.slide google-codelab pre {
     padding-right: 80px;
 }
 
