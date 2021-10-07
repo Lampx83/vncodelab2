@@ -312,7 +312,7 @@ function createRoom(docID) {
     var room = {}
     room["docID"] = docID;
     room["userID"] = currentUser.uid;
-    room["roomID"] = "makeid(6)";
+    room["roomID"] = makeid(6);
     $.ajax({
         url: "/createRoom",
         type: "POST",
