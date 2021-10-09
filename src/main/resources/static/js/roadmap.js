@@ -472,8 +472,18 @@ function WebNEU() {
             ],
         },
         {
-            "text": "",
-            "icon": "/images/web.svg"
+            "text": "CSS 3",
+            "icon": "/images/web.svg",
+            "lab": [
+                {
+                    "name": "Flexbox & Grid",
+                    "id": "O92vZ8"
+                },
+                {
+                    "name": "Flexbox Practice",
+                    "id": "Oob9Fq"
+                }
+            ],
         },
         {
             "text": "",
