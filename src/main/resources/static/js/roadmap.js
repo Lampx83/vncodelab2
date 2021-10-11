@@ -223,6 +223,12 @@ function JavaCoreNEU1() {
                     "name": "Slides",
                     "id": "https://www.dropbox.com/s/ec90fubuxx6p7zx/Chapter%207%20Input%20and%20Output%20Facilities.pdf?dl=0"
                 }
+            ],
+            "lab": [
+                {
+                    "name": "Chương 7",
+                    "id": "Y2RL2y"
+                }
             ]
         },
         {
@@ -362,6 +368,12 @@ function JavaCoreNEU2() {
                 {
                     "name": "Slides",
                     "id": "https://www.dropbox.com/s/ec90fubuxx6p7zx/Chapter%207%20Input%20and%20Output%20Facilities.pdf?dl=0"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "Chương 7",
+                    "id": "HEeutY"
                 }
             ]
         },
