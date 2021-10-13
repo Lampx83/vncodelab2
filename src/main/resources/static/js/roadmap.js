@@ -94,8 +94,14 @@ function MongoDB() {
             ],
         },
         {
-            "text": "",
-            "icon": "/images/database.svg"
+            "text": "MongoDB Aggregation",
+            "icon": "/images/database.svg",
+            "lab": [
+                {
+                    "name": "MongoDB Aggregation Pipeline",
+                    "id": "F1l7lc"
+                }
+            ],
         },
         {
             "text": "",
