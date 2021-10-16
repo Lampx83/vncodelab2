@@ -504,8 +504,14 @@ function WebNEU() {
             ],
         },
         {
-            "text": "",
-            "icon": "/images/web.svg"
+            "text": "CSS 4",
+            "icon": "/images/web.svg",
+            "lab": [
+                {
+                    "name": "Responsive Design",
+                    "id": "1C9cEf"
+                }
+            ],
         },
         {
             "text": "",
