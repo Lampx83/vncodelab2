@@ -1,8 +1,5 @@
 package com.vncodelab.controller;
 
-
-
-import com.mongodb.client.MongoCollection;
 import com.vncodelab.json.ischolar.Row;
 import com.vncodelab.respository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;

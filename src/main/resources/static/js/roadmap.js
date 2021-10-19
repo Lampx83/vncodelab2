@@ -244,6 +244,12 @@ function JavaCoreNEU1() {
                     "name": "Slides",
                     "id": "https://www.dropbox.com/s/obi2zickhpn9aci/Chapter%208%20Concurrency.pdf?dl=0"
                 }
+            ],
+            "lab": [
+                {
+                    "name": "Chương 8",
+                    "id": "1xoRw7"
+                }
             ]
         },
         {

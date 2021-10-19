@@ -15,8 +15,9 @@ public class SectionRepository extends AbsRepository {
 
     public Object getAllSection() {
         try {
-            InputStream is = SectionRepository.class.getResourceAsStream("/sections.json"); //Appengine
-            return new ObjectMapper().readValue(is, Object.class);
+            ArrayList<Document> movies = getDB().getCollection("phrase").find().into(new ArrayList<Document>());
+
+            return movies;
         } catch (Exception e) {
             e.printStackTrace();
         }
