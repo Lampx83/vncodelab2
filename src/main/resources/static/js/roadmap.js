@@ -94,18 +94,28 @@ function MongoDB() {
             ],
         },
         {
-            "text": "MongoDB Aggregation",
+            "text": "MongoDB Aggregation 1",
             "icon": "/images/database.svg",
             "lab": [
                 {
-                    "name": "MongoDB Aggregation Pipeline",
+                    "name": "MongoDB Aggregation Pipeline 1",
                     "id": "F1l7lc"
                 }
             ],
         },
         {
-            "text": "",
-            "icon": "/images/database.svg"
+            "text": "MongoDB Aggregation 2",
+            "icon": "/images/database.svg",
+            "lab": [
+                {
+                    "name": "GeoJSON",
+                    "id": "xlmZUI"
+                },
+                {
+                    "name": "MongoDB Aggregation Pipeline 2",
+                    "id": "F1l7lc"
+                }
+            ],
         },
         {
             "text": "",
