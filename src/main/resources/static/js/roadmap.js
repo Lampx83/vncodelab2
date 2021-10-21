@@ -113,7 +113,7 @@ function MongoDB() {
                 },
                 {
                     "name": "MongoDB Aggregation Pipeline 2",
-                    "id": "F1l7lc"
+                    "id": "LkeLaA"
                 }
             ],
         },
@@ -405,6 +405,12 @@ function JavaCoreNEU2() {
                 {
                     "name": "Slides",
                     "id": "https://www.dropbox.com/s/obi2zickhpn9aci/Chapter%208%20Concurrency.pdf?dl=0"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "Chương 7",
+                    "id": "94Npwy"
                 }
             ]
         },
