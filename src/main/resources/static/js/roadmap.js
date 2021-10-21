@@ -409,7 +409,7 @@ function JavaCoreNEU2() {
             ],
             "lab": [
                 {
-                    "name": "Chương 7",
+                    "name": "Chương 8",
                     "id": "94Npwy"
                 }
             ]
