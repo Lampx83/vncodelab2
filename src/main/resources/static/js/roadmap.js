@@ -536,8 +536,14 @@ function WebNEU() {
             ],
         },
         {
-            "text": "",
-            "icon": "/images/web.svg"
+            "text": "JavaScript 1",
+            "icon": "/images/web.svg",
+            "lab": [
+                {
+                    "name": "JavaScript 1",
+                    "id": "oX4VsT"
+                }
+            ],
         },
         {
             "text": "",
