@@ -269,6 +269,12 @@ function JavaCoreNEU1() {
                     "name": "Slides",
                     "id": "https://www.dropbox.com/s/yb5h4px9voggq2y/Chapter%209%20Generic%20Programming%20And%20Collections.pdf?dl=0"
                 }
+            ],
+            "lab": [
+                {
+                    "name": "Chương 9",
+                    "id": "kwNx66"
+                }
             ]
         },
         {
@@ -420,6 +426,12 @@ function JavaCoreNEU2() {
                 {
                     "name": "Slides",
                     "id": "https://www.dropbox.com/s/yb5h4px9voggq2y/Chapter%209%20Generic%20Programming%20And%20Collections.pdf?dl=0"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "Chương 9",
+                    "id": "i9VcJx"
                 }
             ]
         },
