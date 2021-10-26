@@ -282,13 +282,13 @@ function JavaCoreNEU1() {
             "icon": "/images/idea.svg"
         },
         {
-            "text": "Advantage Topic 1",
+            "text": "Advanced Topic 1",
         },
         {
-            "text": "Advantage  Topic 2",
+            "text": "Advanced  Topic 2",
         },
         {
-            "text": "Advantage  Topic 3",
+            "text": "Advanced  Topic 3",
         },
         {
             "text": "Final exam",
@@ -440,13 +440,13 @@ function JavaCoreNEU2() {
             "icon": "/images/idea.svg"
         },
         {
-            "text": "Advantage Topic 1",
+            "text": "Advanced Topic 1",
         },
         {
-            "text": "Advantage  Topic 2",
+            "text": "Advanced  Topic 2",
         },
         {
-            "text": "Advantage  Topic 3",
+            "text": "Advanced  Topic 3",
         },
         {
             "text": "Final exam",
