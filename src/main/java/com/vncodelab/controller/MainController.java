@@ -408,9 +408,17 @@ public class MainController {
         for (Element element : selector) {
             element.remove();
         }
-        if (lab.isSlides())
+        if (lab.isSlides()) {
             selector = doc.select("google-codelab");
-        selector.attr("no-arrows", "true");
+            selector.attr("no-arrows", "true");
+        }
+        if (lab.getDocID().equals("1X-ACutohLWIP9wmlT7ZF8KrkngS6Fuj2hssxpeTToAY")) {
+            Elements step = doc.getElementsByTag("google-codelab-step");
+            Collections.shuffle(step);
+
+            doc.getElementsByTag("google-codelab").get(0).html(step.toString());
+        }
+
         lab.setHtml(doc.html());
     }
 

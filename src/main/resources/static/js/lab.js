@@ -56,13 +56,18 @@ function enterLab(user) {
             currentDocID = obj.docID;
             if (obj.userID === user.uid || hashCode(user.email) == "-448897477") { //Teacher
                 $("#btnUpdate").removeClass("d-none")
+            } else {
+                $('.slide .warning').remove()
             }
         }
     })
 
 }
 
+let curUser;
+
 function enterRoom(user) {
+    curUser = user;
 
     if (getRoomID() === ROOM_TEST) { //Load Lab
         firebase.firestore().collection("labs").doc(getDocID()).get().then((doc) => {  //Đọc thông tin để bắt đầu vào phòng Lab chung
@@ -71,9 +76,11 @@ function enterRoom(user) {
                 currentDocID = lab.docID;
                 $("lab").html(lab.html)
                 topButton.appendTo("#codelab-title");
-                mofifyLab();
+                modifyLab();
                 if (lab.userID === user.uid || hashCode(user.email) == "-448897477") { //Teacher
                     $("#btnUpdate").removeClass("d-none")
+                } else {
+                    $('.slide .warning').remove()
                 }
                 $(".user").removeClass("d-none")
                 $("#login-spinner").addClass("d-none")
@@ -96,7 +103,10 @@ function enterRoom(user) {
             if (obj.userID === user.uid || hashCode(user.email) == "-448897477") { //Teacher
                 $(".teacher").removeClass("d-none")
                 teacher = true;
+                $('.slide .warning').show()
                 $(".survey-question-wrapper h4").append(" <a href='#' class='show-result' onclick='showQuizResult(this)'>Kết quả</a>")
+            } else {
+                $('.slide .warning').remove()
             }
             $("#btnSubmit").removeClass("d-none")
             $("#btnRaiseHand").removeClass("d-none")
@@ -137,6 +147,9 @@ function enterRoom(user) {
             }
         });
     });
+
+    //$('.steps ol li').shuffle();
+    //   $('#steps google-codelab-step').shuffle();
 }
 
 function decodeHtml(html) {
@@ -572,7 +585,7 @@ function updateHTML() {
             data.message = "Cập nhật thành công"
             data.type = TOAST_CHAT_ROOM
             topButton.appendTo("#codelab-title");
-            mofifyLab();
+            modifyLab();
             showToast(data)
         },
         error: function (e) {
@@ -687,7 +700,7 @@ function showWheel(change) {
 }
 
 
-function mofifyLab() {
+function modifyLab() {
     $(".slide aside").on('click', function (ev) {
         // let me = ev.currentTarget;
         // $(me).
@@ -696,13 +709,8 @@ function mofifyLab() {
     })
     $(".slide .inner > table").wrap("<div class='table-lab'></div>");
     $('.slide .inner .table-lab table:has(tr:eq(0):last-child)').addClass('table-onerow');
-
     $('.slide .inner .table-onerow td').addClass('align-middle');
-
-    $('.slide .warning').remove()
-
     $('.slide .inner .table-lab table:has(tr:not(:eq(0):last-child))').addClass("table table-striped table-bordered")
-
     $('span.option-text').closest("label.survey-option-wrapper").each(function () {
         let text = $(this).text()
         let input = $(this).find("input")
@@ -744,6 +752,7 @@ function mofifyLab() {
         $(this).html('<div class="youtube-container"><iframe src="https://www.youtube.com/embed/' + url.searchParams.get("v") + '" title="YouTube video player"  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen class="video"></iframe>')
     })
 
+    $('.slide .warning').hide()
 
     $("p:contains('https://codepen')").each(function () {
         let url = new URL($(this).text());
@@ -831,9 +840,36 @@ function mofifyLab() {
             }
         });
     })
+    //Ngau nhien
 
 
 }
+
+// function genRanStep(email, step) {
+//     const set = new Set()
+//     let t = Math.abs(hashCode(email)) % step;
+//     do {
+//         for (let i = 0; i < step; i++) {
+//             let r1 = (email.charCodeAt((i + t) % email.length) + t) % step
+//             set.add(r1)
+//         }
+//         t++;
+//     } while (set.size < step)
+//     return set;
+// }
+//
+// (function ($) {
+//     $.fn.shuffle = function () {
+//         var allElems = this.get()
+//         let array = Array.from(genRanStep(curUser.uid, getNumberOfSteps()));
+//         var shuffled = $(this).clone().get()
+//         this.each(function (i) {
+//             $(shuffled[array[i]]).find("a").attr("href", "#" + i)
+//             $(this).replaceWith(shuffled[array[i]]);
+//         });
+//         return $(allElems);
+//     };
+// })(jQuery);
 
 
 $(function () {
@@ -1076,7 +1112,7 @@ $(function () {
 
     // $("#main").after("<div id = 'chat'>abc</div>")
     //Modify HTML Lab
-    mofifyLab()
+    modifyLab()
 
     $('#txtMessage').keypress(function (e) {
         if (e.which == 13) {
@@ -1088,6 +1124,7 @@ $(function () {
     $('input[type=radio][name=listSelect]').change(function () {
         showWheel(true)
     });
+
 
 });
 

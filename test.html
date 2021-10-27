@@ -1,5 +1,37 @@
 ﻿<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+</head>
 <body>
 
+<ul id="list">
+    <li>Xuan lam1</li>
+    <li>Xuan lam2</li>
+    <li>Xuan lam3</li>
+    <li>Xuan lam4</li>
+    <li>Xuan lam5</li>
+    <li>Xuan lam6</li>
+    <li>Xuan lam7</li>
+    <li>Xuan lam8</li>
+    <li>Xuan lam9</li>
+</ul>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+
+    hashCode = function (s) {
+        return s.split("").reduce(function (a, b) {
+            a = ((a << 5) - a) + b.charCodeAt(0);
+            return a & a
+        }, 0);
+    }
+
+
+</script>
 </body>
 </html>
