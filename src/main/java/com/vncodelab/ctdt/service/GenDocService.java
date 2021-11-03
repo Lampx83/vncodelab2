@@ -40,27 +40,33 @@ public class GenDocService {
             for (IBodyElement p : doc.getBodyElements()) {
                 resut = resut + replace2(p, phList);
             }
-            String fileName = phList.get("code") + "_" + phList.get("nameVi") + ".docx";
-            InRaManHinh(resut);
-            ByteArrayOutputStream b = new ByteArrayOutputStream();
-            FileOutputStream out = new FileOutputStream("/Users/xuanlam/OneDrive/OneDrive - National Economics University/0. NEU/1. Chuong trinh dao tao & de cuong/3. De Cuong K63/" + fileName);
-            doc.write(out);
-            doc.write(b); // doc should be a XWPFDocument
+            if(phList.get("khoikt_CNTT")!=null) {
 
 
-            InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(b.toByteArray()));
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
-            headers.add("Pragma", "no-cache");
-            headers.add("Expires", "0");
+                String fileName = phList.get("code") + "_" + phList.get("nameVi") + "_" + phList.get("soTC") + "TC_Chi tiết.docx";
+                fileName = VNCharacterUtils.removeAccent(fileName);
 
-            headers.add("Content-Disposition", "attachment; filename=" + fileName);
-            doc.close();
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .contentLength(b.size())
-                    .contentType(MediaType.parseMediaType("application/octet-stream;charset=UTF-8"))
-                    .body(resource);
+                InRaManHinh(resut);
+                ByteArrayOutputStream b = new ByteArrayOutputStream();
+                FileOutputStream out = new FileOutputStream("/Users/xuanlam/OneDrive/OneDrive - National Economics University/0. NEU/1. Chuong trinh dao tao & de cuong/3. De Cuong K63/" + fileName);
+                doc.write(out);
+                doc.write(b); // doc should be a XWPFDocument
+
+
+                InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(b.toByteArray()));
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+                headers.add("Pragma", "no-cache");
+                headers.add("Expires", "0");
+
+                headers.add("Content-Disposition", "attachment; filename=" + fileName);
+                doc.close();
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .contentLength(b.size())
+                        .contentType(MediaType.parseMediaType("application/octet-stream;charset=UTF-8"))
+                        .body(resource);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -258,4 +264,6 @@ public class GenDocService {
             return bundle;
         }
     }
+
+
 }

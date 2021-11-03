@@ -118,12 +118,18 @@ function MongoDB() {
             ],
         },
         {
-            "text": "",
+            "text": "Midterm exam",
             "icon": "/images/idea.svg"
         },
         {
-            "text": "",
-            "icon": "/images/database.svg"
+            "text": "Neo4J",
+            "icon": "/images/database.svg",
+            "lab": [
+                {
+                    "name": "Neo4J Basic",
+                    "id": "B8DcJY"
+                }
+            ],
         },
         {
             "text": "",
