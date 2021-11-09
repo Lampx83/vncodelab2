@@ -21,7 +21,7 @@ public class GenDocService {
     public static void main(String[] args) {
         ExcelReader excelReader = new ExcelReader<HocPhan>();
         try {
-            ArrayList<HashMap<String, Object>> list = excelReader.readExcel("/Users/xuanlam/Google Drive/Thông tin.xlsx", 0);
+            ArrayList<HashMap<String, Object>> list = excelReader.readExcel("/Users/xuanlam/OneDrive/OneDrive - National Economics University/0. NEU/9. Cong viec/41. Cập nhật đề cương/PLO/Thông tin.xlsx", 0);
             GenDocService genDocService = new GenDocService();
             for (HashMap<String, Object> item : list) {
                 genDocService.genDoc(item);
@@ -33,15 +33,14 @@ public class GenDocService {
 
     public ResponseEntity<InputStreamResource> genDoc(HashMap<String, Object> phList) {
         try {
-            String template = "/ctdt/3.2.MẪU Đề cương học phần chi tiết -NEU 9.2021.docx";
+            String template = "/ctdt/Mẫu đề cương KHMT.docx";
             XWPFDocument doc = new XWPFDocument(GenDocService.class.getResourceAsStream(template)); //Appengine
             //   XWPFDocument doc = new XWPFDocument(new FileInputStream(new File(getClass().getClassLoader().getResource("Paper.docx").getFile()))); //Appengine
             String resut = "";
             for (IBodyElement p : doc.getBodyElements()) {
                 resut = resut + replace2(p, phList);
             }
-            if(phList.get("khoikt_CNTT")!=null) {
-
+            if(phList.get("khoikt_KHMT")!=null) {
 
                 String fileName = phList.get("code") + "_" + phList.get("nameVi") + "_" + phList.get("soTC") + "TC_Chi tiết.docx";
                 fileName = VNCharacterUtils.removeAccent(fileName);
