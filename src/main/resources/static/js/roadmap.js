@@ -454,6 +454,12 @@ function JavaCoreNEU2() {
         },
         {
             "text": "Advanced Topic 1",
+            "lab": [
+                {
+                    "name": "Java 8 (1)",
+                    "id": "ODXfBr"
+                }
+            ]
         },
         {
             "text": "Advanced  Topic 2",
