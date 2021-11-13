@@ -635,7 +635,7 @@ function WebNEU() {
             ],
         },
         {
-            "text": "Thi giữa kỳ",
+            "text": "Midterm Exam",
             "icon": "/images/idea.svg",
             "lab": [
                 {
@@ -673,7 +673,7 @@ function WebNEU() {
             ],
         },
         {
-            "text": "Thi cuối kỳ",
+            "text": "Final Exam",
             "icon": "/images/idea.svg"
         },
     ];
