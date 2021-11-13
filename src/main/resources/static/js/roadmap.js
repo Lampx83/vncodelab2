@@ -673,10 +673,6 @@ function WebNEU() {
             ],
         },
         {
-            "text": "",
-            "icon": "/images/web.svg"
-        },
-        {
             "text": "Thi cuối kỳ",
             "icon": "/images/idea.svg"
         },
