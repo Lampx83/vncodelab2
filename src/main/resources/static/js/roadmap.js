@@ -489,6 +489,16 @@ function WebNEU() {
         {
             "text": "HTML 1",
             "icon": "/images/web.svg",
+            "link": [
+                {
+                    "name": "Slide",
+                    "id": "https://www.dropbox.com/s/6agc1gbmvefx4j5/Chapter%201%20HTML.pdf?dl=0"
+                },
+                {
+                    "name": "W3 Schools",
+                    "id": "https://www.w3schools.com/html/"
+                }
+            ],
             "lab": [
                 {
                     "name": "HTML 1",
@@ -499,6 +509,16 @@ function WebNEU() {
         {
             "text": "HTML 1",
             "icon": "/images/web.svg",
+            "link": [
+                {
+                    "name": "Slide",
+                    "id": "https://www.dropbox.com/s/6agc1gbmvefx4j5/Chapter%201%20HTML.pdf?dl=0"
+                },
+                {
+                    "name": "W3 Schools",
+                    "id": "https://www.w3schools.com/html/"
+                }
+            ],
             "lab": [
                 {
                     "name": "HTML 2",
@@ -511,8 +531,8 @@ function WebNEU() {
             "icon": "/images/web.svg",
             "link": [
                 {
-                    "name": "Slides",
-                    "id": "https://stneuedu-my.sharepoint.com/:p:/g/personal/lampx_neu_edu_vn/EYu37ffEozlOuUEr219g4BoBlGAopd1AYYS7vVc-QHwUFA?e=zUTubd"
+                    "name": "Slide",
+                    "id": "https://www.dropbox.com/s/lium2r5876vg020/Chapter%202%20CSS.pdf?dl=0"
                 },
                 {
                     "name": "W3 Schools",
@@ -531,6 +551,16 @@ function WebNEU() {
             "icon": "/images/web.svg",
             "link": [
                 {
+                    "name": "Slide",
+                    "id": "https://www.dropbox.com/s/lium2r5876vg020/Chapter%202%20CSS.pdf?dl=0"
+                },
+                {
+                    "name": "W3 Schools",
+                    "id": "https://www.w3schools.com/css/"
+                }
+            ],
+            "link": [
+                {
                     "name": "W3 Schools",
                     "id": "https://www.w3schools.com/css/"
                 }
@@ -545,6 +575,12 @@ function WebNEU() {
         {
             "text": "CSS 3",
             "icon": "/images/web.svg",
+            "link": [
+                {
+                    "name": "Slide",
+                    "id": "https://www.dropbox.com/s/ye41xz6e3s7j8gr/Chapter%203%20Design%20Layout%2C%20Responsive.pdf?dl=0"
+                }
+            ],
             "lab": [
                 {
                     "name": "Flexbox & Grid",
@@ -559,6 +595,12 @@ function WebNEU() {
         {
             "text": "CSS 4",
             "icon": "/images/web.svg",
+            "link": [
+                {
+                    "name": "JavaScript",
+                    "id": "https://www.dropbox.com/s/ye41xz6e3s7j8gr/Chapter%203%20Design%20Layout%2C%20Responsive.pdf?dl=0"
+                }
+            ],
             "lab": [
                 {
                     "name": "Responsive Design",
@@ -569,6 +611,12 @@ function WebNEU() {
         {
             "text": "JavaScript 1",
             "icon": "/images/web.svg",
+            "link": [
+                {
+                    "name": "JavaScript",
+                    "id": "https://www.dropbox.com/s/vjq3j7i2p4rnqop/Chapter%204%20JavaScript.pdf?dl=0"
+                }
+            ],
             "lab": [
                 {
                     "name": "JavaScript 1",
@@ -577,20 +625,52 @@ function WebNEU() {
             ],
         },
         {
-            "text": "",
-            "icon": "/images/web.svg"
+            "text": "JavaScript 2",
+            "icon": "/images/web.svg",
+            "link": [
+                {
+                    "name": "JavaScript",
+                    "id": "https://www.dropbox.com/s/vjq3j7i2p4rnqop/Chapter%204%20JavaScript.pdf?dl=0"
+                }
+            ],
         },
         {
             "text": "Thi giữa kỳ",
-            "icon": "/images/idea.svg"
+            "icon": "/images/idea.svg",
+            "lab": [
+                {
+                    "name": "JavaScript 1",
+                    "id": "oX4VsT"
+                }
+            ],
         },
         {
-            "text": "",
-            "icon": "/images/web.svg"
+            "text": "CSS Framework",
+            "icon": "/images/web.svg",
+            "link": [
+                {
+                    "name": "Slide",
+                    "id": "https://www.dropbox.com/s/l5r7x7207mzi7qq/Chapter%205%20CSS%20Framework.pdf?dl=0"
+                },
+                {
+                    "name": "Bootstrap Docs",
+                    "id": "https://getbootstrap.com/docs/5.1/getting-started/introduction/"
+                }
+            ],
         },
         {
-            "text": "",
-            "icon": "/images/web.svg"
+            "text": "JavaScript Framework",
+            "icon": "/images/web.svg",
+            "link": [
+                {
+                    "name": "Slide",
+                    "id": "https://www.dropbox.com/s/icoja7r23gnx4hr/Chapter%206%20JavaScript%20Framework.pdf?dl=0"
+                },
+                {
+                    "name": "jQuery Learn Center",
+                    "id": "https://learn.jquery.com/"
+                }
+            ],
         },
         {
             "text": "",
