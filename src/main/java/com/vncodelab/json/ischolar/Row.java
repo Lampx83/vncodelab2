@@ -1,5 +1,7 @@
 package com.vncodelab.json.ischolar;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import org.bson.types.ObjectId;
 
@@ -7,13 +9,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Row implements Serializable {
-
+    @JsonIgnore
     private ObjectId id;
+    private String _id;
     private String name;
     private Integer type;
     private String media;
-    private String desc;
+    private String description;
     private String sheet;
     private String section;
     private String item;

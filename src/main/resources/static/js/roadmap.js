@@ -299,10 +299,14 @@ function JavaCoreNEU1() {
         },
         {
             "text": "Advanced  Topic 2",
+            "lab": [
+                {
+                    "name": "Java 8 (1)",
+                    "id": "ODXfBr"
+                }
+            ]
         },
-        {
-            "text": "Advanced  Topic 3",
-        },
+
         {
             "text": "Final exam",
             "icon": "/images/idea.svg"

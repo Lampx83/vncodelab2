@@ -1,7 +1,8 @@
 package com.vncodelab.controller;
 
+import com.vncodelab.entity.ischolar.Item;
 import com.vncodelab.json.ischolar.Row;
-import com.vncodelab.respository.SectionRepository;
+import com.vncodelab.respository.PhraseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,18 +14,17 @@ import java.util.ArrayList;
 public class ApiController {
 
     @Autowired
-    SectionRepository sectionRepository;
+    PhraseRepository phraseRepository;
 
-    @GetMapping("/sections")
-    public Object getSections() {
-        return sectionRepository.getAllSection();
+    @GetMapping("/phrases/all")
+    public Object getAllPhrases() {
+        return phraseRepository.getAllPhrases();
     }
 
-    @RequestMapping(value = "/section", method = RequestMethod.POST)
+    @GetMapping(value = "/phrases")
     @ResponseBody
-    public Row getSectionByID(@RequestBody String sectionID) {
-        return sectionRepository.getSectionByID(sectionID);
+    public ArrayList<Item> getPhrasesBySectionID(@RequestParam("sectionID") String sectionID) {
+        return phraseRepository.getSectionByID(sectionID);
     }
-
 
 }
