@@ -127,20 +127,37 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "Neo4J Basic",
-                    "id": "B8DcJY"
+                    "id": "3XhWmF"
                 }
             ],
         },
         {
-            "text": "",
-            "icon": "/images/database.svg"
+            "text": "Redis",
+            "icon": "/images/database.svg",
+            "lab": [
+                {
+                    "name": "Redis Basic",
+                    "id": "HXLrmY"
+                }
+            ],
         },
         {
-            "text": "",
-            "icon": "/images/database.svg"
+            "text": "Cassandra, MongoDB Chart",
+            "icon": "/images/database.svg",
+            "lab": [
+                {
+                    "name": "Cassandra Basic",
+                    "id": "N5Kfbi"
+                },
+                {
+                    "name": "MongoDB Chart",
+                    "id": "gyC4gq"
+                }
+            ],
+
         },
         {
-            "text": "",
+            "text": "Final Exam",
             "icon": "/images/idea.svg"
         }
     ];
