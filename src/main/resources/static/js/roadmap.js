@@ -474,7 +474,7 @@ function JavaCoreNEU2() {
             "icon": "/images/idea.svg"
         },
         {
-            "text": "Advanced Topic 1",
+            "text": "Java 8 (1)",
             "lab": [
                 {
                     "name": "Java 8 (1)",
@@ -483,10 +483,16 @@ function JavaCoreNEU2() {
             ]
         },
         {
-            "text": "Advanced  Topic 2",
+            "text": "Java 8 (2)",
+            "lab": [
+                {
+                    "name": "Java 8 (2)",
+                    "id": "ODXfBr"
+                }
+            ]
         },
         {
-            "text": "Advanced  Topic 3",
+            "text": "Advanced  Topic 2",
         },
         {
             "text": "Final exam",
