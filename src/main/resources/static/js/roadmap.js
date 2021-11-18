@@ -1121,7 +1121,34 @@ function nhomJava() {
                     "id": "TxnyPQ"
                 }
             ]
-        }
+        },
+        {
+            "text": "Spring",
+            "icon": "/images/spring.svg",
+            "link": [
+                {
+                    "name": "Spring Guide",
+                    "id": "https://spring.io/guides"
+                }
+            ],
+            "lab": [
+                {
+                    "name": "RESTFul API",
+                    "id": "WOp3mD"
+                }
+            ]
+        },
+        {
+            "text": "Project 2",
+            "category": "  ",
+            "icon": "/images/idea.svg",
+            "lab": [
+                {
+                    "name": "ESSME 1",
+                    "id": "aTlEqu"
+                }
+            ]
+        },
     ];
 }
 
