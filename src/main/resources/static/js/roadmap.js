@@ -1123,6 +1123,17 @@ function nhomJava() {
             ]
         },
         {
+            "text": "Project 2",
+            "category": "  ",
+            "icon": "/images/idea.svg",
+            "lab": [
+                {
+                    "name": "ESSME 1",
+                    "id": "aTlEqu"
+                }
+            ]
+        },
+        {
             "text": "Spring",
             "icon": "/images/spring.svg",
             "link": [
@@ -1135,17 +1146,6 @@ function nhomJava() {
                 {
                     "name": "RESTFul API",
                     "id": "WOp3mD"
-                }
-            ]
-        },
-        {
-            "text": "Project 2",
-            "category": "  ",
-            "icon": "/images/idea.svg",
-            "lab": [
-                {
-                    "name": "ESSME 1",
-                    "id": "aTlEqu"
                 }
             ]
         },
