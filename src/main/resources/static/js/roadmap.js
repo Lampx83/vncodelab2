@@ -698,6 +698,12 @@ function WebNEU() {
                     "id": "https://learn.jquery.com/"
                 }
             ],
+            "lab": [
+                {
+                    "name": "JQuery Lab",
+                    "id": "MleWzN"
+                }
+            ],
         },
         {
             "text": "Final Exam",

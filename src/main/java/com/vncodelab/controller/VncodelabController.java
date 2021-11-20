@@ -20,6 +20,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -38,16 +39,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 @Controller
-public class MainController {
+public class VncodelabController {
 
     @Autowired
     private LabService labService;
     @Autowired
     private RoomService roomService;
-
     @Autowired
     private FileStorageService fileStorageService;
 
@@ -87,13 +86,12 @@ public class MainController {
                 .body(resource);
     }
 
-    @GetMapping("/roadmap/{roadID}")
-    public String roadmap(Model model, @PathVariable(name = "roadID") String roadID) {
+    @GetMapping("/roadmap")
+    public String roadmap() {
         return "roadmap";
     }
 
     public void updateHTML(@RequestBody Lab newLab, HttpServletRequest request) throws IOException, InterruptedException {
-
         String host = getHost(request);
         ProcessBuilder builder;
         if (host.equals("localhost"))
@@ -145,7 +143,6 @@ public class MainController {
         newLab.setHtml(codelab.toString());
     }
 
-
     @GetMapping("/preview/{labID}")
     public String previewLab(Model model, @PathVariable(name = "labID") String labID, HttpServletRequest request) throws IOException, InterruptedException {
         Lab newLab = new Lab();
@@ -159,7 +156,6 @@ public class MainController {
         URL url = new URL(request.getRequestURL().toString());
         return url.getHost();
     }
-
 
     @PostMapping("/createLab")
     public ResponseEntity<?> createLab(@RequestBody Lab newLab, @RequestParam String action, HttpServletRequest request) throws IOException, InterruptedException {
@@ -240,7 +236,6 @@ public class MainController {
         return null;
     }
 
-
     @GetMapping("/cate/{cateID}")
     public String index(Model model, @PathVariable(name = "cateID") String cateID) {
         List<Lab> list = labService.getFeatureLabsByCate(cateID);
@@ -295,95 +290,94 @@ public class MainController {
         return tempFile;
     }
 
-    @PostMapping("/report_raisehand")
-    public ResponseEntity<?> report_raisehand(@RequestBody Room room) throws InterruptedException, ExecutionException {
-        Firestore db = FirestoreClient.getFirestore();  //FireStorage
-        ApiFuture<QuerySnapshot> future = db.collection("rooms").document(room.getRoomID()).collection("logs").get();
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-        String s = "";
-        for (DocumentSnapshot document : documents) {
-            TreeMap<Integer, Step> map = new TreeMap<>();
-
-            for (int i = 0; i < room.getNumberOfStep(); i++) {
-                Step step = new Step();
-                map.put(i, step);
-            }
-
-            ApiFuture<QuerySnapshot> future1 = document.getReference().collection("hands").whereEqualTo("type", 0).get();
-            List<QueryDocumentSnapshot> documents1 = future1.get().getDocuments();
-            for (DocumentSnapshot document1 : documents1) {
-                Log log = document1.toObject(Log.class);
-                map.get(log.getStep()).setNumber(map.get(log.getStep()).getNumber() + 1);
-            }
-            User user = document.toObject(User.class);
-            user.setUserID(document.getId());
-            String step = "";
-            for (int i = 0; i < room.getNumberOfStep(); i++) {
-                String detail = "<span class='report-detail d-none'>" + map.get(i).getNumber() + "</span>";
-                if (map.get(i).getNumber() >= 1) {
-                    step = step + "<td><span class ='labStep blue' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span>" + detail + "</td>";
-                } else {
-                    step = step + "<td><span class ='labStep' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span>" + detail + "</td>";
-                }
-            }
-            String tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + user.getUserID() + "\")'>Xóa</a> </div></td>";
-            s = s + "<tr id='tr-report-" + user.getUserID() + "' ><td  class='user-name'>" + user.getUserName() + "</td><td>" + step + "</td>" + tdThreeDots + "</tr>";
-        }
-        AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
-        ajaxResponseBody.setMsg(s);
-        return ResponseEntity.ok().body(ajaxResponseBody);
-    }
-
-    @PostMapping("/report_practice")
-    public ResponseEntity<?> report_practice(@RequestBody Room room) throws InterruptedException, ExecutionException {
-        Firestore db = FirestoreClient.getFirestore();  //FireStorage
-        ApiFuture<QuerySnapshot> future = db.collection("rooms").document(room.getRoomID()).collection("logs").get();
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-        String s = "";
-        for (DocumentSnapshot document : documents) {
-            TreeMap<Integer, Step> map = new TreeMap<>();
-
-            for (int i = 0; i < room.getNumberOfStep(); i++) {
-                Step step = new Step();
-                map.put(i, step);
-            }
-
-            ApiFuture<QuerySnapshot> future1 = document.getReference().collection("steps").get();
-            List<QueryDocumentSnapshot> documents1 = future1.get().getDocuments();
-            for (DocumentSnapshot document1 : documents1) {
-                try {
-                    Log log = document1.toObject(Log.class);
-                    Step cStep = map.get(log.getLeave());
-                    if (cStep != null)
-                        cStep.setNumber(cStep.getNumber() + log.getDuration());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-            User user = document.toObject(User.class);
-            user.setUserID(document.getId());
-            String step = "";
-            for (int i = 0; i < room.getNumberOfStep(); i++) {
-                if (map.get(i).getNumber() > 10 * 60) {
-                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize3' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
-                } else if (map.get(i).getNumber() > 6 * 60) {
-                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize2' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
-                } else if (map.get(i).getNumber() > 3 * 60) {
-                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize1' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
-                } else if (map.get(i).getNumber() > 15) {
-                    step = step + "<td class='tdcenter'><span class ='labStep blue' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
-                } else {
-                    step = step + "<td class='tdcenter'><span class ='labStep' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
-                }
-            }
-            String tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + user.getUserID() + "\")'>Xóa</a> </div></td>";
-            s = s + "<tr id='tr-report-" + user.getUserID() + "'><td class='user-name'>" + user.getUserName() + "</td><td>" + step + "</td>" + tdThreeDots + "</tr>";
-        }
-
-        AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
-        ajaxResponseBody.setMsg(s);
-        return ResponseEntity.ok().body(ajaxResponseBody);
-    }
+//    @PostMapping("/report_raisehand")
+//    public ResponseEntity<?> report_raisehand(@RequestBody Room room) throws InterruptedException, ExecutionException {
+//        Firestore db = FirestoreClient.getFirestore();  //FireStorage
+//        ApiFuture<QuerySnapshot> future = db.collection("rooms").document(room.getRoomID()).collection("logs").get();
+//        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+//        String s = "";
+//        for (DocumentSnapshot document : documents) {
+//            TreeMap<Integer, Step> map = new TreeMap<>();
+//
+//            for (int i = 0; i < room.getNumberOfStep(); i++) {
+//                Step step = new Step();
+//                map.put(i, step);
+//            }
+//
+//            ApiFuture<QuerySnapshot> future1 = document.getReference().collection("hands").whereEqualTo("type", 0).get();
+//            List<QueryDocumentSnapshot> documents1 = future1.get().getDocuments();
+//            for (DocumentSnapshot document1 : documents1) {
+//                Log log = document1.toObject(Log.class);
+//                map.get(log.getStep()).setNumber(map.get(log.getStep()).getNumber() + 1);
+//            }
+//            User user = document.toObject(User.class);
+//            user.setUserID(document.getId());
+//            String step = "";
+//            for (int i = 0; i < room.getNumberOfStep(); i++) {
+//                String detail = "<span class='report-detail d-none'>" + map.get(i).getNumber() + "</span>";
+//                if (map.get(i).getNumber() >= 1) {
+//                    step = step + "<td><span class ='labStep blue' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span>" + detail + "</td>";
+//                } else {
+//                    step = step + "<td><span class ='labStep' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span>" + detail + "</td>";
+//                }
+//            }
+//            String tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + user.getUserID() + "\")'>Xóa</a> </div></td>";
+//            s = s + "<tr id='tr-report-" + user.getUserID() + "' ><td  class='user-name'>" + user.getUserName() + "</td><td>" + step + "</td>" + tdThreeDots + "</tr>";
+//        }
+//        AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
+//        ajaxResponseBody.setMsg(s);
+//        return ResponseEntity.ok().body(ajaxResponseBody);
+//    }
+//    @PostMapping("/report_practice")
+//    public ResponseEntity<?> report_practice(@RequestBody Room room) throws InterruptedException, ExecutionException {
+//        Firestore db = FirestoreClient.getFirestore();  //FireStorage
+//        ApiFuture<QuerySnapshot> future = db.collection("rooms").document(room.getRoomID()).collection("logs").get();
+//        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+//        String s = "";
+//        for (DocumentSnapshot document : documents) {
+//            TreeMap<Integer, Step> map = new TreeMap<>();
+//
+//            for (int i = 0; i < room.getNumberOfStep(); i++) {
+//                Step step = new Step();
+//                map.put(i, step);
+//            }
+//
+//            ApiFuture<QuerySnapshot> future1 = document.getReference().collection("steps").get();
+//            List<QueryDocumentSnapshot> documents1 = future1.get().getDocuments();
+//            for (DocumentSnapshot document1 : documents1) {
+//                try {
+//                    Log log = document1.toObject(Log.class);
+//                    Step cStep = map.get(log.getLeave());
+//                    if (cStep != null)
+//                        cStep.setNumber(cStep.getNumber() + log.getDuration());
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//            User user = document.toObject(User.class);
+//            user.setUserID(document.getId());
+//            String step = "";
+//            for (int i = 0; i < room.getNumberOfStep(); i++) {
+//                if (map.get(i).getNumber() > 10 * 60) {
+//                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize3' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
+//                } else if (map.get(i).getNumber() > 6 * 60) {
+//                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize2' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
+//                } else if (map.get(i).getNumber() > 3 * 60) {
+//                    step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize1' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
+//                } else if (map.get(i).getNumber() > 15) {
+//                    step = step + "<td class='tdcenter'><span class ='labStep blue' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
+//                } else {
+//                    step = step + "<td class='tdcenter'><span class ='labStep' id=" + user.getUserID() + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + map.get(i).getNumber() + "s</span></td>";
+//                }
+//            }
+//            String tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + user.getUserID() + "\")'>Xóa</a> </div></td>";
+//            s = s + "<tr id='tr-report-" + user.getUserID() + "'><td class='user-name'>" + user.getUserName() + "</td><td>" + step + "</td>" + tdThreeDots + "</tr>";
+//        }
+//
+//        AjaxResponseBody ajaxResponseBody = new AjaxResponseBody();
+//        ajaxResponseBody.setMsg(s);
+//        return ResponseEntity.ok().body(ajaxResponseBody);
+//    }
 
     @GetMapping("/room/{roomID}")
     public String room(Model model, @PathVariable(name = "roomID") String roomID) {
@@ -418,7 +412,6 @@ public class MainController {
 
             doc.getElementsByTag("google-codelab").get(0).html(step.toString());
         }
-
         lab.setHtml(doc.html());
     }
 
@@ -430,7 +423,6 @@ public class MainController {
         return ResponseEntity.ok().body(ajaxResponseBody);
     }
 
-
     @PostMapping("/deleteUserReport")
     public ResponseEntity<?> deleteUserReport(@RequestBody Room room) throws ExecutionException, InterruptedException {
         roomService.deleteUserReport(room);
@@ -439,26 +431,10 @@ public class MainController {
         return ResponseEntity.ok().body(ajaxResponseBody);
     }
 
-//    public static void main(String[] args) throws IOException, InterruptedException {
-//        Lab newLab = new Lab();
-//        newLab.setDocID("11gRpdzlXHIwZ__YS0N9yNBo9E7vjyDgZ_0-wnQvCUDA");
-//        new MainController().save(newLab);
-//    }
-
-    private static class StreamGobbler implements Runnable {
-        private InputStream inputStream;
-        private Consumer<String> consumer;
-
-        public StreamGobbler(InputStream inputStream, Consumer<String> consumer) {
-            this.inputStream = inputStream;
-            this.consumer = consumer;
-        }
-
-        @Override
-        public void run() {
-            new BufferedReader(new InputStreamReader(inputStream)).lines().forEach(consumer);
-            System.out.println("run");
-        }
+    @GetMapping("/room/export_report/{roomID}")
+    @ResponseBody
+    public ResponseEntity<InputStreamResource> room(@PathVariable(name = "roomID") String roomID) {
+        return roomService.genExcel(roomID);
     }
 }
 

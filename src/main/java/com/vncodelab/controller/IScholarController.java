@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @RestController
 @CrossOrigin
 @RequestMapping("/api/v1")
-public class ApiController {
+public class IScholarController {
 
     @Autowired
     PhraseRepository phraseRepository;
