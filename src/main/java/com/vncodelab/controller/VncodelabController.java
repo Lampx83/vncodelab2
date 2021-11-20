@@ -86,7 +86,7 @@ public class VncodelabController {
                 .body(resource);
     }
 
-    @GetMapping("/roadmap")
+    @GetMapping("/roadmap/{roadID}")
     public String roadmap() {
         return "roadmap";
     }
