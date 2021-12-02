@@ -147,12 +147,12 @@ function MongoDB() {
         {
             "text": "Final",
             "icon": "/images/idea.svg",
-            "report": [
-                {
-                    "name": "Participant",
-                    "roomID": "3"
-                }
-            ],
+            // "report": [
+            //     {
+            //         "name": "Participant",
+            //         "roomID": "3"
+            //     }
+            // ],
         }
     ];
 }
@@ -702,12 +702,12 @@ function WebNEU() {
         {
             "text": "Final Exam",
             "icon": "/images/idea.svg",
-            "report": [
-                {
-                    "name": "Participant",
-                    "roomID": "3"
-                }
-            ],
+            // "report": [
+            //     {
+            //         "name": "Participant",
+            //         "roomID": "3"
+            //     }
+            // ],
         },
     ];
 }
