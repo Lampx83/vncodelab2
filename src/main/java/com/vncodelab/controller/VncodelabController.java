@@ -1,6 +1,5 @@
 package com.vncodelab.controller;
 
-import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.cloud.storage.Blob;
 import com.google.firebase.cloud.FirestoreClient;
@@ -90,6 +89,7 @@ public class VncodelabController {
     public String roadmap() {
         return "roadmap";
     }
+
 
     public void updateHTML(@RequestBody Lab newLab, HttpServletRequest request) throws IOException, InterruptedException {
         String host = getHost(request);
@@ -435,6 +435,12 @@ public class VncodelabController {
     @ResponseBody
     public ResponseEntity<InputStreamResource> room(@PathVariable(name = "roomID") String roomID) {
         return roomService.genExcel(roomID);
+    }
+
+    @PostMapping("/roadmap/export_report")
+    @ResponseBody
+    public ResponseEntity<InputStreamResource> roadmap_export(@RequestBody ArrayList<RoadMap> roadMap) {
+        return roomService.genExcel(roadMap);
     }
 }
 

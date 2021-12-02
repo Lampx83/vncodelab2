@@ -3,19 +3,7 @@ function getRoadMapID() {
     return arr[arr.length - 1]
 }
 
-function tempalate() {
-    return [
-        {
-            "text": "Bài 1",
-        },
-        {
-            "text": "Bài 2",
-        },
-        {
-            "text": "Bài 3",
-        }
-    ];
-}
+
 
 function MongoDB() {
     return [
@@ -24,7 +12,7 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "NoSQL Introduction",
-                    "id": "rEHlLa"
+                    "roomID": "rEHlLa"
                 }
             ],
             "icon": "/images/database.svg"
@@ -35,7 +23,7 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "MongoDB Introduction",
-                    "id": "NPpd7b"
+                    "roomID": "NPpd7b"
                 }
             ],
         },
@@ -45,7 +33,7 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "MongoDB Tools",
-                    "id": "gl5W5L"
+                    "roomID": "gl5W5L"
                 }
             ],
         },
@@ -55,7 +43,7 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "MongoDB CRUD",
-                    "id": "c0Ms9x"
+                    "roomID": "c0Ms9x"
                 }
             ],
         },
@@ -65,11 +53,11 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "MongoDB Query Practice",
-                    "id": "nz8d84"
+                    "roomID": "nz8d84"
                 },
                 {
                     "name": "MongoDB Atlas",
-                    "id": "tO683y"
+                    "roomID": "tO683y"
                 }
             ],
         },
@@ -79,7 +67,7 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "MongoDB Sample Dataset",
-                    "id": "pTzQZ9"
+                    "roomID": "pTzQZ9"
                 }
             ],
         },
@@ -89,7 +77,7 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "MongoDB Indexes",
-                    "id": "oBP42D"
+                    "roomID": "oBP42D"
                 }
             ],
         },
@@ -99,7 +87,7 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "MongoDB Aggregation Pipeline 1",
-                    "id": "F1l7lc"
+                    "roomID": "F1l7lc"
                 }
             ],
         },
@@ -109,11 +97,11 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "GeoJSON",
-                    "id": "xlmZUI"
+                    "roomID": "xlmZUI"
                 },
                 {
                     "name": "MongoDB Aggregation Pipeline 2",
-                    "id": "LkeLaA"
+                    "roomID": "LkeLaA"
                 }
             ],
         },
@@ -127,7 +115,7 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "Neo4J Basic",
-                    "id": "3XhWmF"
+                    "roomID": "3XhWmF"
                 }
             ],
         },
@@ -137,7 +125,7 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "Redis Basic",
-                    "id": "HXLrmY"
+                    "roomID": "HXLrmY"
                 }
             ],
         },
@@ -147,18 +135,24 @@ function MongoDB() {
             "lab": [
                 {
                     "name": "Cassandra Basic",
-                    "id": "N5Kfbi"
+                    "roomID": "N5Kfbi"
                 },
                 {
                     "name": "MongoDB Chart",
-                    "id": "gyC4gq"
+                    "roomID": "gyC4gq"
                 }
             ],
 
         },
         {
-            "text": "Final Exam",
-            "icon": "/images/idea.svg"
+            "text": "Final",
+            "icon": "/images/idea.svg",
+            "report": [
+                {
+                    "name": "Participant",
+                    "roomID": "3"
+                }
+            ],
         }
     ];
 }
@@ -170,13 +164,13 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/gq9q9h58zfcix3n/Chapter%201%20Introduction%20to%20Java.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/gq9q9h58zfcix3n/Chapter%201%20Introduction%20to%20Java.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 1",
-                    "id": "KDTBN7"
+                    "roomID": "KDTBN7"
                 }
             ]
         },
@@ -185,13 +179,13 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/1sya66435gawbk8/Chapter%202%20Java%20Language%201.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/1sya66435gawbk8/Chapter%202%20Java%20Language%201.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 2",
-                    "id": "KVFPaL"
+                    "roomID": "KVFPaL"
                 }
             ]
         },
@@ -200,13 +194,13 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/rxnf24g89ih2hkq/Chapter%203%20Java%20Language%202.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/rxnf24g89ih2hkq/Chapter%203%20Java%20Language%202.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 3",
-                    "id": "fGkLgt"
+                    "roomID": "fGkLgt"
                 }
             ]
         },
@@ -215,13 +209,13 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/fm4axn585uz0c6z/Chapter%204%20Objects%20and%20Classes.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/fm4axn585uz0c6z/Chapter%204%20Objects%20and%20Classes.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 4",
-                    "id": "d0zsgc"
+                    "roomID": "d0zsgc"
                 }
             ]
         },
@@ -230,13 +224,13 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/dgfi6ncrig0q90j/Chapter%205%20Relationship%20among%20objects.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/dgfi6ncrig0q90j/Chapter%205%20Relationship%20among%20objects.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 5",
-                    "id": "JCYFZC"
+                    "roomID": "JCYFZC"
                 }
             ]
         },
@@ -245,13 +239,13 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/kkkqtlh8sb9zdnr/Chapter%206%20Exception%20and%20Debugging.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/kkkqtlh8sb9zdnr/Chapter%206%20Exception%20and%20Debugging.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 6",
-                    "id": "Miz2hA"
+                    "roomID": "Miz2hA"
                 }
             ]
         },
@@ -260,13 +254,13 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/ec90fubuxx6p7zx/Chapter%207%20Input%20and%20Output%20Facilities.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/ec90fubuxx6p7zx/Chapter%207%20Input%20and%20Output%20Facilities.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 7",
-                    "id": "Y2RL2y"
+                    "roomID": "Y2RL2y"
                 }
             ]
         },
@@ -275,13 +269,13 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/obi2zickhpn9aci/Chapter%208%20Concurrency.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/obi2zickhpn9aci/Chapter%208%20Concurrency.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 8",
-                    "id": "1xoRw7"
+                    "roomID": "1xoRw7"
                 }
             ]
         },
@@ -290,13 +284,13 @@ function JavaCoreNEU1() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/yb5h4px9voggq2y/Chapter%209%20Generic%20Programming%20And%20Collections.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/yb5h4px9voggq2y/Chapter%209%20Generic%20Programming%20And%20Collections.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 9",
-                    "id": "kwNx66"
+                    "roomID": "kwNx66"
                 }
             ]
         },
@@ -309,7 +303,7 @@ function JavaCoreNEU1() {
             "lab": [
                 {
                     "name": "Java 8 (1)",
-                    "id": "ODXfBr"
+                    "roomID": "ODXfBr"
                 }
             ]
 
@@ -319,7 +313,7 @@ function JavaCoreNEU1() {
             "lab": [
                 {
                     "name": "Java 8 (1)",
-                    "id": "ODXfBr"
+                    "roomID": "ODXfBr"
                 }
             ]
         },
@@ -338,13 +332,13 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/gq9q9h58zfcix3n/Chapter%201%20Introduction%20to%20Java.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/gq9q9h58zfcix3n/Chapter%201%20Introduction%20to%20Java.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 1",
-                    "id": "kE0X5E"
+                    "roomID": "kE0X5E"
                 }
             ]
         },
@@ -353,13 +347,13 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/1sya66435gawbk8/Chapter%202%20Java%20Language%201.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/1sya66435gawbk8/Chapter%202%20Java%20Language%201.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 2",
-                    "id": "g1Bqdx"
+                    "roomID": "g1Bqdx"
                 }
             ]
         },
@@ -368,13 +362,13 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/rxnf24g89ih2hkq/Chapter%203%20Java%20Language%202.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/rxnf24g89ih2hkq/Chapter%203%20Java%20Language%202.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 3",
-                    "id": "oaIslJ"
+                    "roomID": "oaIslJ"
                 }
             ]
         },
@@ -383,13 +377,13 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/fm4axn585uz0c6z/Chapter%204%20Objects%20and%20Classes.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/fm4axn585uz0c6z/Chapter%204%20Objects%20and%20Classes.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 4",
-                    "id": "ig1EOw"
+                    "roomID": "ig1EOw"
                 }
             ]
         },
@@ -398,13 +392,13 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/dgfi6ncrig0q90j/Chapter%205%20Relationship%20among%20objects.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/dgfi6ncrig0q90j/Chapter%205%20Relationship%20among%20objects.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 5",
-                    "id": "Lly1em"
+                    "roomID": "Lly1em"
                 }
             ]
         },
@@ -413,14 +407,14 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/kkkqtlh8sb9zdnr/Chapter%206%20Exception%20and%20Debugging.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/kkkqtlh8sb9zdnr/Chapter%206%20Exception%20and%20Debugging.pdf?dl=0"
                 }
             ]
             ,
             "lab": [
                 {
                     "name": "Chương 6",
-                    "id": "T52YiL"
+                    "roomID": "T52YiL"
                 }
             ]
         },
@@ -429,13 +423,13 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/ec90fubuxx6p7zx/Chapter%207%20Input%20and%20Output%20Facilities.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/ec90fubuxx6p7zx/Chapter%207%20Input%20and%20Output%20Facilities.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 7",
-                    "id": "HEeutY"
+                    "roomID": "HEeutY"
                 }
             ]
         },
@@ -444,13 +438,13 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/obi2zickhpn9aci/Chapter%208%20Concurrency.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/obi2zickhpn9aci/Chapter%208%20Concurrency.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 8",
-                    "id": "94Npwy"
+                    "roomID": "94Npwy"
                 }
             ]
         },
@@ -459,13 +453,13 @@ function JavaCoreNEU2() {
             "link": [
                 {
                     "name": "Slides",
-                    "id": "https://www.dropbox.com/s/yb5h4px9voggq2y/Chapter%209%20Generic%20Programming%20And%20Collections.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/yb5h4px9voggq2y/Chapter%209%20Generic%20Programming%20And%20Collections.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Chương 9",
-                    "id": "i9VcJx"
+                    "roomID": "i9VcJx"
                 }
             ]
         },
@@ -478,7 +472,7 @@ function JavaCoreNEU2() {
             "lab": [
                 {
                     "name": "Java 8 (1)",
-                    "id": "ODXfBr"
+                    "roomID": "ODXfBr"
                 }
             ]
         },
@@ -487,7 +481,7 @@ function JavaCoreNEU2() {
             "lab": [
                 {
                     "name": "Java 8 (2)",
-                    "id": "ODXfBr"
+                    "roomID": "ODXfBr"
                 }
             ]
         },
@@ -508,7 +502,7 @@ function WebNEU() {
             "lab": [
                 {
                     "name": "Giới thiệu",
-                    "id": "XeS1pk"
+                    "roomID": "XeS1pk"
                 }
             ],
             "icon": "/images/web.svg"
@@ -519,17 +513,17 @@ function WebNEU() {
             "link": [
                 {
                     "name": "Slide",
-                    "id": "https://www.dropbox.com/s/6agc1gbmvefx4j5/Chapter%201%20HTML.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/6agc1gbmvefx4j5/Chapter%201%20HTML.pdf?dl=0"
                 },
                 {
                     "name": "W3 Schools",
-                    "id": "https://www.w3schools.com/html/"
+                    "roomID": "https://www.w3schools.com/html/"
                 }
             ],
             "lab": [
                 {
                     "name": "HTML 1",
-                    "id": "0ASEZ3"
+                    "roomID": "0ASEZ3"
                 }
             ],
         },
@@ -539,17 +533,17 @@ function WebNEU() {
             "link": [
                 {
                     "name": "Slide",
-                    "id": "https://www.dropbox.com/s/6agc1gbmvefx4j5/Chapter%201%20HTML.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/6agc1gbmvefx4j5/Chapter%201%20HTML.pdf?dl=0"
                 },
                 {
                     "name": "W3 Schools",
-                    "id": "https://www.w3schools.com/html/"
+                    "roomID": "https://www.w3schools.com/html/"
                 }
             ],
             "lab": [
                 {
                     "name": "HTML 2",
-                    "id": "YjuO47"
+                    "roomID": "YjuO47"
                 }
             ],
         },
@@ -559,17 +553,17 @@ function WebNEU() {
             "link": [
                 {
                     "name": "Slide",
-                    "id": "https://www.dropbox.com/s/lium2r5876vg020/Chapter%202%20CSS.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/lium2r5876vg020/Chapter%202%20CSS.pdf?dl=0"
                 },
                 {
                     "name": "W3 Schools",
-                    "id": "https://www.w3schools.com/css/"
+                    "roomID": "https://www.w3schools.com/css/"
                 }
             ],
             "lab": [
                 {
                     "name": "CSS 1",
-                    "id": "XpU4vT"
+                    "roomID": "XpU4vT"
                 }
             ],
         },
@@ -579,23 +573,23 @@ function WebNEU() {
             "link": [
                 {
                     "name": "Slide",
-                    "id": "https://www.dropbox.com/s/lium2r5876vg020/Chapter%202%20CSS.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/lium2r5876vg020/Chapter%202%20CSS.pdf?dl=0"
                 },
                 {
                     "name": "W3 Schools",
-                    "id": "https://www.w3schools.com/css/"
+                    "roomID": "https://www.w3schools.com/css/"
                 }
             ],
             "link": [
                 {
                     "name": "W3 Schools",
-                    "id": "https://www.w3schools.com/css/"
+                    "roomID": "https://www.w3schools.com/css/"
                 }
             ],
             "lab": [
                 {
                     "name": "CSS 2",
-                    "id": "O92vZ8"
+                    "roomID": "O92vZ8"
                 }
             ],
         },
@@ -605,17 +599,17 @@ function WebNEU() {
             "link": [
                 {
                     "name": "Slide",
-                    "id": "https://www.dropbox.com/s/ye41xz6e3s7j8gr/Chapter%203%20Design%20Layout%2C%20Responsive.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/ye41xz6e3s7j8gr/Chapter%203%20Design%20Layout%2C%20Responsive.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Flexbox & Grid",
-                    "id": "fJVuod"
+                    "roomID": "fJVuod"
                 },
                 {
                     "name": "Flexbox Practice",
-                    "id": "Oob9Fq"
+                    "roomID": "Oob9Fq"
                 }
             ],
         },
@@ -625,13 +619,13 @@ function WebNEU() {
             "link": [
                 {
                     "name": "JavaScript",
-                    "id": "https://www.dropbox.com/s/ye41xz6e3s7j8gr/Chapter%203%20Design%20Layout%2C%20Responsive.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/ye41xz6e3s7j8gr/Chapter%203%20Design%20Layout%2C%20Responsive.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "Responsive Design",
-                    "id": "1C9cEf"
+                    "roomID": "1C9cEf"
                 }
             ],
         },
@@ -641,13 +635,13 @@ function WebNEU() {
             "link": [
                 {
                     "name": "JavaScript",
-                    "id": "https://www.dropbox.com/s/vjq3j7i2p4rnqop/Chapter%204%20JavaScript.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/vjq3j7i2p4rnqop/Chapter%204%20JavaScript.pdf?dl=0"
                 }
             ],
             "lab": [
                 {
                     "name": "JavaScript 1",
-                    "id": "oX4VsT"
+                    "roomID": "oX4VsT"
                 }
             ],
         },
@@ -657,7 +651,7 @@ function WebNEU() {
             "link": [
                 {
                     "name": "JavaScript",
-                    "id": "https://www.dropbox.com/s/vjq3j7i2p4rnqop/Chapter%204%20JavaScript.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/vjq3j7i2p4rnqop/Chapter%204%20JavaScript.pdf?dl=0"
                 }
             ],
         },
@@ -667,7 +661,7 @@ function WebNEU() {
             "lab": [
                 {
                     "name": "JavaScript 1",
-                    "id": "oX4VsT"
+                    "roomID": "oX4VsT"
                 }
             ],
         },
@@ -677,11 +671,11 @@ function WebNEU() {
             "link": [
                 {
                     "name": "Slide",
-                    "id": "https://www.dropbox.com/s/l5r7x7207mzi7qq/Chapter%205%20CSS%20Framework.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/l5r7x7207mzi7qq/Chapter%205%20CSS%20Framework.pdf?dl=0"
                 },
                 {
                     "name": "Bootstrap Docs",
-                    "id": "https://getbootstrap.com/docs/5.1/getting-started/introduction/"
+                    "roomID": "https://getbootstrap.com/docs/5.1/getting-started/introduction/"
                 }
             ],
         },
@@ -691,23 +685,29 @@ function WebNEU() {
             "link": [
                 {
                     "name": "Slide",
-                    "id": "https://www.dropbox.com/s/icoja7r23gnx4hr/Chapter%206%20JavaScript%20Framework.pdf?dl=0"
+                    "roomID": "https://www.dropbox.com/s/icoja7r23gnx4hr/Chapter%206%20JavaScript%20Framework.pdf?dl=0"
                 },
                 {
                     "name": "jQuery Learn Center",
-                    "id": "https://learn.jquery.com/"
+                    "roomID": "https://learn.jquery.com/"
                 }
             ],
             "lab": [
                 {
                     "name": "JQuery Lab",
-                    "id": "MleWzN"
+                    "roomID": "MleWzN"
                 }
             ],
         },
         {
             "text": "Final Exam",
-            "icon": "/images/idea.svg"
+            "icon": "/images/idea.svg",
+            "report": [
+                {
+                    "name": "Participant",
+                    "roomID": "3"
+                }
+            ],
         },
     ];
 }
@@ -720,7 +720,7 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Code Academy",
-                    "id": "https://www.codecademy.com/learn/learn-java"
+                    "roomID": "https://www.codecademy.com/learn/learn-java"
                 }
             ]
         },
@@ -730,7 +730,7 @@ function nhomJava() {
             "link": [
                 {
                     "name": "W3 Schools",
-                    "id": "https://www.w3schools.com/java/java_oop.asp"
+                    "roomID": "https://www.w3schools.com/java/java_oop.asp"
                 }
             ]
         },
@@ -740,7 +740,7 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Oracle Docs",
-                    "id": "https://docs.oracle.com/javase/tutorial/"
+                    "roomID": "https://docs.oracle.com/javase/tutorial/"
                 }
             ]
         },
@@ -751,7 +751,7 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Jet Brains",
-                    "id": "https://www.jetbrains.com/help/idea/getting-started.html"
+                    "roomID": "https://www.jetbrains.com/help/idea/getting-started.html"
                 }
             ]
         },
@@ -761,7 +761,7 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Javatpoint",
-                    "id": "https://www.javatpoint.com/java-swing"
+                    "roomID": "https://www.javatpoint.com/java-swing"
                 }
             ]
         },
@@ -771,7 +771,7 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Infoworld",
-                    "id": "https://www.infoworld.com/article/2853780/socket-programming-for-scalable-systems.html"
+                    "roomID": "https://www.infoworld.com/article/2853780/socket-programming-for-scalable-systems.html"
                 }
             ]
         },
@@ -782,7 +782,7 @@ function nhomJava() {
             "link": [
                 {
                     "name": "W3 Schools",
-                    "id": "https://www.w3schools.com/html/default.asp"
+                    "roomID": "https://www.w3schools.com/html/default.asp"
                 }
             ]
         },
@@ -791,49 +791,49 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Javatpoint",
-                    "id": "https://www.javatpoint.com/servlet-tutorial"
+                    "roomID": "https://www.javatpoint.com/servlet-tutorial"
                 }
             ],
             "lab": [
                 {
                     "name": "Servlet Helloworld",
-                    "id": "c2A7FR"
+                    "roomID": "c2A7FR"
                 },
                 {
                     "name": "Form - Collaboration - Config - Context",
-                    "id": "AVhBz0"
+                    "roomID": "AVhBz0"
                 },
                 {
                     "name": "Cookie - Session",
-                    "id": "VMUxUn"
+                    "roomID": "VMUxUn"
                 },
                 {
                     "name": "Event Listener",
-                    "id": "L3AQvs"
+                    "roomID": "L3AQvs"
                 },
                 {
                     "name": "Filter",
-                    "id": "G9OehA"
+                    "roomID": "G9OehA"
                 },
                 {
                     "name": "Annotation",
-                    "id": "o4Ersx"
+                    "roomID": "o4Ersx"
                 },
                 {
                     "name": "Textfile",
-                    "id": "ckm9AE"
+                    "roomID": "ckm9AE"
                 },
                 {
                     "name": "Upload and Download",
-                    "id": "urTsqo"
+                    "roomID": "urTsqo"
                 },
                 {
                     "name": "Login",
-                    "id": "QvVu4f"
+                    "roomID": "QvVu4f"
                 },
                 {
                     "name": "Database Access",
-                    "id": "6vx3G0"
+                    "roomID": "6vx3G0"
                 }
             ]
         },
@@ -844,7 +844,7 @@ function nhomJava() {
             "link": [
                 {
                     "name": "W3 Schools",
-                    "id": "https://www.w3schools.com/css/default.asp"
+                    "roomID": "https://www.w3schools.com/css/default.asp"
                 }
             ]
         },
@@ -855,7 +855,7 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Mysql Tutorial",
-                    "id": "https://www.mysqltutorial.org/"
+                    "roomID": "https://www.mysqltutorial.org/"
                 }
             ]
         },
@@ -864,41 +864,41 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Javatpoint",
-                    "id": "https://www.javatpoint.com/jsp-tutorial"
+                    "roomID": "https://www.javatpoint.com/jsp-tutorial"
                 }
             ],
             "lab": [
                 {
                     "name": "JSP Tag",
-                    "id": "nIwBuu"
+                    "roomID": "nIwBuu"
                 },
                 {
                     "name": "JSP Implicit Objects",
-                    "id": "31YcoD"
+                    "roomID": "31YcoD"
                 },
                 {
                     "name": "JSP directives",
-                    "id": "HsnuTs"
+                    "roomID": "HsnuTs"
                 },
                 {
                     "name": "JSP Action Tags",
-                    "id": "pJ3UJk"
+                    "roomID": "pJ3UJk"
                 },
                 {
                     "name": "Expression Language",
-                    "id": "bAf1Ke"
+                    "roomID": "bAf1Ke"
                 },
                 {
                     "name": "JSP Standard Tag Library (JSTL)",
-                    "id": "P7c9uw"
+                    "roomID": "P7c9uw"
                 },
                 {
                     "name": "MVC Model 1",
-                    "id": "CzKHi1"
+                    "roomID": "CzKHi1"
                 },
                 {
                     "name": "MVC Model 2",
-                    "id": "uDQPmC"
+                    "roomID": "uDQPmC"
                 }
             ]
         },
@@ -908,29 +908,29 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Javatpoint",
-                    "id": "https://www.javatpoint.com/jpa-tutorial"
+                    "roomID": "https://www.javatpoint.com/jpa-tutorial"
                 }
             ],
             "lab": [
                 {
                     "name": "JPA Basic",
-                    "id": "1CoyBL"
+                    "roomID": "1CoyBL"
                 },
                 {
                     "name": "Query",
-                    "id": "aCM6Z4"
+                    "roomID": "aCM6Z4"
                 },
                 {
                     "name": "Embed",
-                    "id": "aGqcQm"
+                    "roomID": "aGqcQm"
                 },
                 {
                     "name": "Relationship",
-                    "id": "kr0o6E"
+                    "roomID": "kr0o6E"
                 },
                 {
                     "name": "Cascading",
-                    "id": "1SxPtt"
+                    "roomID": "1SxPtt"
                 }
             ]
         },
@@ -941,7 +941,7 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Apache Maven",
-                    "id": "https://maven.apache.org/guides/index.html"
+                    "roomID": "https://maven.apache.org/guides/index.html"
                 }
             ]
         },
@@ -952,17 +952,17 @@ function nhomJava() {
             "link": [
                 {
                     "name": "MVC in JSP",
-                    "id": "https://www.javatpoint.com/MVC-in-jsp"
+                    "roomID": "https://www.javatpoint.com/MVC-in-jsp"
                 }
             ],
             "lab": [
                 {
                     "name": "MVC Model 1",
-                    "id": "CzKHi1"
+                    "roomID": "CzKHi1"
                 },
                 {
                     "name": "MVC Model 2",
-                    "id": "uDQPmC"
+                    "roomID": "uDQPmC"
                 }
             ]
         },
@@ -973,42 +973,42 @@ function nhomJava() {
             "link": [
                 {
                     "name": "MongoDB University",
-                    "id": "https://university.mongodb.com/"
+                    "roomID": "https://university.mongodb.com/"
                 },
                 {
                     "name": "MongoDB Java Drive",
-                    "id": "https://mongodb.github.io/mongo-java-driver/4.3/"
+                    "roomID": "https://mongodb.github.io/mongo-java-driver/4.3/"
                 }
             ],
             "lab": [
                 {
                     "name": "MongoDB",
-                    "id": "UZJr83"
+                    "roomID": "UZJr83"
                 },
                 {
                     "name": "MongoDB Java Basic",
-                    "id": "BncrHF"
+                    "roomID": "BncrHF"
                 },
                 {
                     "name": "Mongo Atlas",
-                    "id": "bi9CnV"
+                    "roomID": "bi9CnV"
                 },
                 {
                     "name": "MongoDB Aggregation",
-                    "id": "uoqmex"
+                    "roomID": "uoqmex"
                 },
                 {
                     "name": "MongoDB Indexes",
-                    "id": "BWghAT"
+                    "roomID": "BWghAT"
                 },
                 {
                     "name": "MongoDB Java Advanced",
-                    "id": "OLrfqE"
+                    "roomID": "OLrfqE"
                 }
                 ,
                 {
                     "name": "MongoDB GeoJSON",
-                    "id": "bx9LwP"
+                    "roomID": "bx9LwP"
                 }
             ]
         },
@@ -1019,37 +1019,37 @@ function nhomJava() {
             "lab": [
                 {
                     "name": "Mflix 1",
-                    "id": "xncTjt"
+                    "roomID": "xncTjt"
                 },
                 {
                     "name": "Mflix 2",
-                    "id": "RFFH4T"
+                    "roomID": "RFFH4T"
                 },
                 {
                     "name": "Mflix 3",
-                    "id": "tvj14u"
+                    "roomID": "tvj14u"
                 },
                 {
                     "name": "Mflix 4",
-                    "id": "6fNT47"
+                    "roomID": "6fNT47"
                 },
                 {
                     "name": "Mflix 5",
-                    "id": "02qHiD"
+                    "roomID": "02qHiD"
                 }
                 ,
                 {
                     "name": "Mflix 6",
-                    "id": "B1H83u"
+                    "roomID": "B1H83u"
                 }
                 ,
                 {
                     "name": "Mflix 7",
-                    "id": "C9X2ov"
+                    "roomID": "C9X2ov"
                 },
                 {
                     "name": "Mflix 8",
-                    "id": "9koocq"
+                    "roomID": "9koocq"
                 }
             ]
         },
@@ -1060,7 +1060,7 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Getbootstrap",
-                    "id": "https://getbootstrap.com/docs/5.0/getting-started/introduction/"
+                    "roomID": "https://getbootstrap.com/docs/5.0/getting-started/introduction/"
                 }
             ]
         },
@@ -1070,13 +1070,13 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Thymeleaf",
-                    "id": "https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html"
+                    "roomID": "https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html"
                 }
             ],
             "lab": [
                 {
                     "name": "Thymeleaf",
-                    "id": "UgScHX"
+                    "roomID": "UgScHX"
                 }
             ]
         },
@@ -1087,13 +1087,13 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Authentication",
-                    "id": "https://firebase.google.com/docs/auth"
+                    "roomID": "https://firebase.google.com/docs/auth"
                 }
             ],
             "lab": [
                 {
                     "name": "Hello Firebase",
-                    "id": "tNG1z3"
+                    "roomID": "tNG1z3"
                 }
             ],
         },
@@ -1103,17 +1103,17 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Jersey User Guide",
-                    "id": "https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/index.html"
+                    "roomID": "https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/index.html"
                 }
             ],
             "lab": [
                 {
                     "name": "Jersey Client",
-                    "id": "WobKq2"
+                    "roomID": "WobKq2"
                 },
                 {
                     "name": "Jersey Server",
-                    "id": "JENBWx"
+                    "roomID": "JENBWx"
                 }
             ]
         },
@@ -1124,13 +1124,13 @@ function nhomJava() {
             "link": [
                 {
                     "name": "jQuery Learning Center",
-                    "id": "https://learn.jquery.com/"
+                    "roomID": "https://learn.jquery.com/"
                 }
             ],
             "lab": [
                 {
                     "name": "jQuery",
-                    "id": "TxnyPQ"
+                    "roomID": "TxnyPQ"
                 }
             ]
         },
@@ -1141,7 +1141,7 @@ function nhomJava() {
             "lab": [
                 {
                     "name": "ESSME 1",
-                    "id": "aTlEqu"
+                    "roomID": "aTlEqu"
                 }
             ]
         },
@@ -1151,13 +1151,17 @@ function nhomJava() {
             "link": [
                 {
                     "name": "Spring Guide",
-                    "id": "https://spring.io/guides"
+                    "roomID": "https://spring.io/guides"
                 }
             ],
             "lab": [
                 {
                     "name": "RESTFul API",
-                    "id": "WOp3mD"
+                    "roomID": "WOp3mD"
+                },
+                {
+                    "name": "Spring + MongoDB",
+                    "roomID": "FTXOAL"
                 }
             ]
         },
@@ -1312,14 +1316,22 @@ function myFunction(ev) {
         if (data.link != null) {
             content = content + "<tr><td><b>Links:</b></td></tr>";
             for (let i = 0; i < data.link.length; i++) {
-                let row = "<tr id='" + data.link[i].id + "'><td class='align-middle'>" + (i + 1) + ". " + data.link[i].name + "</td><td class='text-end align-middle'> <a href='" + data.link[i].id + "' class='text-primary' target='_blank'>Link</a></td> <td class='text-end align-middle'><a href='#' class='bi bi-three-dots-vertical link-dark d-none' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='xem(\"" + data.link[i].id + "\")'>Xóa</a> </div></td></tr>";
+                let row = "<tr id='" + data.link[i].roomID + "'><td class='align-middle'>" + (i + 1) + ". " + data.link[i].name + "</td><td class='text-end align-middle'> <a href='" + data.link[i].roomID + "' class='text-primary' target='_blank'>Link</a></td> <td class='text-end align-middle'><a href='#' class='bi bi-three-dots-vertical link-dark d-none' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='xem(\"" + data.link[i].roomID + "\")'>Xóa</a> </div></td></tr>";
                 content = content + row;
             }
         }
         if (data.lab != null) {
             content = content + "<tr><td><b>Labs:</b></td></tr>";
             for (let i = 0; i < data.lab.length; i++) {
-                let row = "<tr id='" + data.lab[i].id + "'><td class='align-middle'>" + (i + 1) + ". " + data.lab[i].name + "</td><td class='text-end align-middle'> <a href='" + baseUrl + data.lab[i].id + "' class='text-primary' target='_blank'>Vào phòng</a></td> <td class='text-end align-middle'><a href='#' class='bi bi-three-dots-vertical link-dark d-none' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='xem(\"" + data.lab[i].id + "\")'>Xóa</a> </div></td></tr>";
+                let row = "<tr id='" + data.lab[i].roomID + "'><td class='align-middle'>" + (i + 1) + ". " + data.lab[i].name + "</td><td class='text-end align-middle'> <a href='" + baseUrl + data.lab[i].roomID + "' class='text-primary' target='_blank'>Vào phòng</a></td> <td class='text-end align-middle'><a href='#' class='bi bi-three-dots-vertical link-dark d-none' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='xem(\"" + data.lab[i].roomID + "\")'>Xóa</a> </div></td></tr>";
+                content = content + row;
+            }
+        }
+
+        if (data.report != null) {
+            content = content + "<tr><td><b>Report:</b></td></tr>";
+            for (let i = 0; i < data.report.length; i++) {
+                let row = "<tr id='" + data.report[i].roomID + "'><td class='align-middle'>" + (i + 1) + ". " + data.report[i].name + "</td><td class='text-end align-middle'> <a href='#' class='text-primary' onclick='report()'>Xuất báo cáo</a></td> <td class='text-end align-middle'><a href='#' class='bi bi-three-dots-vertical link-dark d-none' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'></div></td></tr>";
                 content = content + row;
             }
         }
@@ -1331,5 +1343,21 @@ function myFunction(ev) {
 }
 
 imageBullet1.events.on("hit", myFunction, this);
+
+function report(){
+    $.ajax({
+        url: "/roadmap/export_report",
+        type: "POST",
+        data: JSON.stringify(chart.data),
+        dataType: "json",
+        contentType: "application/json",
+        success: function(response) {
+            alert("abc");
+        },
+        error: function (e) {
+            console.log(e)
+        }
+    })
+}
 
 
