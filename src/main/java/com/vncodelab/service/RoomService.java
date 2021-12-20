@@ -154,9 +154,16 @@ public class RoomService {
                 header.createCell(columnCount).setCellValue("No");
                 row.createCell(columnCount++).setCellValue(rowCount - 1);
                 header.createCell(columnCount).setCellValue("Name");
-                row.createCell(columnCount++).setCellValue("None");
-                header.createCell(columnCount).setCellValue("Email");
+                String name = null;
+                for (Map.Entry<String, StudentInfo> entry : studentInfo.entrySet())
+                    if (entry.getValue().getName() != null) {
+                        name = entry.getValue().getName();
+                        break;
+                    }
+                row.createCell(columnCount++).setCellValue(name);
 
+
+                header.createCell(columnCount).setCellValue("Email");
                 String email = null;
                 for (Map.Entry<String, StudentInfo> entry : studentInfo.entrySet())
                     if (entry.getValue().getEmail() != null) {
@@ -166,13 +173,22 @@ public class RoomService {
 
                 row.createCell(columnCount++).setCellValue(email);
                 for (String roomID : studentInfo.keySet()) {
-                    header.createCell(columnCount).setCellValue(roomID);
+                    header.createCell(columnCount).setCellValue(roomID + "(time)");
                     if (studentInfo.get(roomID) != null)
                         row.createCell(columnCount++).setCellValue(studentInfo.get(roomID).getTimeDuration());
                     else {
                         System.out.println(studentInfo);
                     }
                 }
+                for (String roomID : studentInfo.keySet()) {
+                    header.createCell(columnCount).setCellValue(roomID + "(ans)");
+                    if (studentInfo.get(roomID) != null)
+                        row.createCell(columnCount++).setCellValue(studentInfo.get(roomID).getTotalAnswer());
+                    else {
+                        System.out.println(studentInfo);
+                    }
+                }
+
                 first = false;
 
             } else {
@@ -189,6 +205,13 @@ public class RoomService {
                 for (String roomID : studentInfo.keySet()) {
                     if (studentInfo.get(roomID) != null)
                         row.createCell(columnCount++).setCellValue(studentInfo.get(roomID).getTimeDuration());
+                    else {
+                        System.out.println(studentInfo);
+                    }
+                }
+                for (String roomID : studentInfo.keySet()) {
+                    if (studentInfo.get(roomID) != null)
+                        row.createCell(columnCount++).setCellValue(studentInfo.get(roomID).getTotalAnswer());
                     else {
                         System.out.println(studentInfo);
                     }
@@ -297,10 +320,10 @@ public class RoomService {
             }
 
             //Survey
-            HashMap<String, Double> mapAnswer = new HashMap<>();
+            HashMap<String, Double> mapAnswer = new HashMap<>();  //UserID //Number Answer
             future = dbFirestore.collection("rooms/" + roomID + "/surveys").get();
             documents = future.get().getDocuments();
-            ArrayList<Survey> listSurvey = new ArrayList<>();
+
             documents.forEach(d -> {
                 Survey survey = d.toObject(Survey.class);
                 if (survey.getAnswers() != null) {
@@ -347,11 +370,17 @@ public class RoomService {
                 StudentInfo studentInfo = new StudentInfo();
                 studentInfo.setTimeDuration(time_duration);
                 studentInfo.setEmail(log.getEmail());
-                info.put(log.getUserID(), studentInfo);
-                if (mapAnswer.get(log.getUserID()) != null)
+                studentInfo.setName(log.getUserName());
+
+                if (mapAnswer.get(log.getUserID()) != null) {
                     row.createCell(columnCount++).setCellValue(mapAnswer.get(log.getUserID()));
-                else
+                    studentInfo.setTotalAnswer(mapAnswer.get(log.getUserID()));
+                } else {
                     row.createCell(columnCount++).setCellValue(0);
+                    studentInfo.setTotalAnswer(0);
+                }
+
+                info.put(log.getUserID(), studentInfo);
             }
 
 

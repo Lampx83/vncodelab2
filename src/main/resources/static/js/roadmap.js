@@ -3,8 +3,6 @@ function getRoadMapID() {
     return arr[arr.length - 1]
 }
 
-
-
 function MongoDB() {
     return [
         {
@@ -309,18 +307,17 @@ function JavaCoreNEU1() {
 
         },
         {
-            "text": "Advanced  Topic 2",
-            "lab": [
-                {
-                    "name": "Java 8 (1)",
-                    "roomID": "ODXfBr"
-                }
-            ]
+            "text": "Advanced  Topic 2"
         },
-
         {
             "text": "Final exam",
-            "icon": "/images/idea.svg"
+            "icon": "/images/idea.svg",
+            "report": [
+                {
+                    "name": "Participant",
+                    "roomID": "3"
+                }
+            ],
         },
     ];
 }
@@ -477,20 +474,17 @@ function JavaCoreNEU2() {
             ]
         },
         {
-            "text": "Java 8 (2)",
-            "lab": [
-                {
-                    "name": "Java 8 (2)",
-                    "roomID": "ODXfBr"
-                }
-            ]
-        },
-        {
             "text": "Advanced  Topic 2",
         },
         {
             "text": "Final exam",
-            "icon": "/images/idea.svg"
+            "icon": "/images/idea.svg",
+            "report": [
+                {
+                    "name": "Participant",
+                    "roomID": "3"
+                }
+            ],
         },
     ];
 }
@@ -1344,14 +1338,14 @@ function myFunction(ev) {
 
 imageBullet1.events.on("hit", myFunction, this);
 
-function report(){
+function report() {
     $.ajax({
         url: "/roadmap/export_report",
         type: "POST",
         data: JSON.stringify(chart.data),
         dataType: "json",
         contentType: "application/json",
-        success: function(response) {
+        success: function (response) {
             alert("abc");
         },
         error: function (e) {

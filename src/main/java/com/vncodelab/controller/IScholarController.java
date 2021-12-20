@@ -21,6 +21,8 @@ public class IScholarController {
         return phraseRepository.getAllPhrases();
     }
 
+    //Example
+    //https://localhost//api/v1/phrases?sectionID=Abstract
     @GetMapping(value = "/phrases")
     @ResponseBody
     public ArrayList<Item> getPhrasesBySectionID(@RequestParam("sectionID") String sectionID) {
