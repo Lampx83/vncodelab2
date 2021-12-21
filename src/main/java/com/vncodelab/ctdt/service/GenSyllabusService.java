@@ -17,12 +17,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class GenDocService {
+public class GenSyllabusService {
     public static void main(String[] args) {
         ExcelReader excelReader = new ExcelReader<HocPhan>();
         try {
             ArrayList<HashMap<String, Object>> list = excelReader.readExcel("/Users/xuanlam/OneDrive/OneDrive - National Economics University/0. NEU/9. Cong viec/41. Cập nhật đề cương/PLO/Thông tin.xlsx", 0);
-            GenDocService genDocService = new GenDocService();
+            GenSyllabusService genDocService = new GenSyllabusService();
             for (HashMap<String, Object> item : list) {
                 genDocService.genDoc(item);
             }
@@ -34,7 +34,7 @@ public class GenDocService {
     public ResponseEntity<InputStreamResource> genDoc(HashMap<String, Object> phList) {
         try {
             String template = "/ctdt/Mẫu đề cương KHMT.docx";
-            XWPFDocument doc = new XWPFDocument(GenDocService.class.getResourceAsStream(template)); //Appengine
+            XWPFDocument doc = new XWPFDocument(GenSyllabusService.class.getResourceAsStream(template)); //Appengine
             //   XWPFDocument doc = new XWPFDocument(new FileInputStream(new File(getClass().getClassLoader().getResource("Paper.docx").getFile()))); //Appengine
             String resut = "";
             for (IBodyElement p : doc.getBodyElements()) {

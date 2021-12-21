@@ -11,14 +11,17 @@ import java.util.Arrays;
 @Repository
 public class PhraseRepository extends AbsRepository {
 
-    public Object getAllPhrases() {
-        try {
-            ArrayList<Document> movies = getDB().getCollection("phrase").find().into(new ArrayList<>());
-            return movies;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public ArrayList<Item> getAllPhrases() {
+        AggregateIterable<Item> result = getDB().getCollection("phrase", Item.class).aggregate(Arrays.asList(
+                new Document("$group",
+                        new Document("_id", "$item")
+                                .append("phrases",
+                                        new Document("$push",
+                                                new Document("option", "$option")
+                                                        .append("description", "$description"))))));
+        ArrayList<Item> list = new ArrayList<>();
+        result.forEach(list::add);
+        return list;
     }
 
 //    public Row getSectionByID(String sectionsName) {
