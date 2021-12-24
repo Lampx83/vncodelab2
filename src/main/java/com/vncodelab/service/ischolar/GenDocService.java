@@ -9,6 +9,7 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -81,7 +82,7 @@ public class GenDocService {
                 resut = resut + replace2(p, phList);
             }
 
-            InRaManHinh(resut);
+            // InRaManHinh(resut);
             ByteArrayOutputStream b = new ByteArrayOutputStream();
             doc.write(b); // doc should be a XWPFDocument
             InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(b.toByteArray()));
@@ -102,7 +103,6 @@ public class GenDocService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -228,7 +228,7 @@ public class GenDocService {
                             found3 = true;
                         }
                         if (!getPart(x, 1).isEmpty()) {  //Co part 2
-                            r.isHighlighted(true);
+                            r.isHighlighted();
                         }
                         r.setText(txt, k);
                     }
@@ -272,7 +272,7 @@ public class GenDocService {
 
     public static TreeMap<Integer, XWPFRun> getPosToRuns(XWPFParagraph paragraph) {
         int pos = 0;
-        TreeMap<Integer, XWPFRun> map = new TreeMap<Integer, XWPFRun>();
+        TreeMap<Integer, XWPFRun> map = new TreeMap<>();
         for (XWPFRun run : paragraph.getRuns()) {
             String runText = run.text();
             if (runText != null && runText.length() > 0) {
