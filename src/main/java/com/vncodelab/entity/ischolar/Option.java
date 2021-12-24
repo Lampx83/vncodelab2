@@ -6,4 +6,6 @@ import lombok.Data;
 public class Option {
     String option;
     String description;
+    String item;
+    String section;
 }

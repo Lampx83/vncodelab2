@@ -1,8 +1,8 @@
 package com.vncodelab.service.ischolar;
 
 import com.vncodelab.entity.ischolar.Item;
+import com.vncodelab.entity.ischolar.Option;
 import com.vncodelab.json.ischolar.Jsmind;
-import com.vncodelab.json.ischolar.Row;
 import com.vncodelab.respository.PhraseRepository;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -64,23 +64,23 @@ public class GenDocService {
                 buildPH(p, phList, listPhrases, jsmind);
             }
 
-            Locale.setDefault(new Locale("vi", "VN"));
-            ResourceBundle mybundle = ResourceBundle.getBundle("text", new UTF8Control());
-
-            Enumeration<String> keys = mybundle.getKeys();
-            while (keys.hasMoreElements()) {
-                String key = keys.nextElement();
-                String value = mybundle.getString(key);
-                if (jsmind.meta.language == "English")
-                    phList.put(key, value);
-                else
-                    phList.put(key, key.replace("_", " "));
-            }
+//            Locale.setDefault(new Locale("vi", "VN"));
+//            ResourceBundle mybundle = ResourceBundle.getBundle("text", new UTF8Control());
+//            Enumeration<String> keys = mybundle.getKeys();
+//            while (keys.hasMoreElements()) {
+//                String key = keys.nextElement();
+//                String value = mybundle.getString(key);
+//                if (jsmind.meta.language == "English")
+//                    phList.put(key, value);
+//                else
+//                    phList.put(key, key.replace("_", " "));
+//            }
 
             String resut = "";
             for (XWPFParagraph p : doc.getParagraphs()) {
                 resut = resut + replace2(p, phList);
             }
+
             InRaManHinh(resut);
             ByteArrayOutputStream b = new ByteArrayOutputStream();
             doc.write(b); // doc should be a XWPFDocument
@@ -117,34 +117,29 @@ public class GenDocService {
 
     private String lookUp(ArrayList<Item> listPhrases, String key, Jsmind jsmind) {
         String s = "";
-        String arr[] = key.split("-");
-        String sheet = "";
-        int stt = 0;
-        if (arr.length == 2) {
-            sheet = arr[0];
-            stt = Integer.parseInt(arr[1]);
-        }
-        ArrayList<Row> list = new ArrayList<>();
-//        for (Item item : listPhrases) {
-//            if (row.getName().equals(sheet)) {
-//                Row item = row.rows.get(stt - 1);
-//                if (jsmind.meta.language.equals("English"))
-//                    s = item.getName() + "|";
-//                else
-//                    s = item.getDescription() + "|";
-//                list = item.rows;
-//            }
-//        }
-
-
-        for (int i = 1; i <= jsmind.meta.number_of_sample; i++)
-            if (list.size() > 0) {
-                int r = new Random().nextInt(list.size());
-                if (jsmind.meta.language.equals("English")) {
-                    s = s + list.get(r).getName(); //Vietnam
+        ArrayList<Item> list = new ArrayList<>();
+        for (Item item : listPhrases) {
+            for (Option option : item.getPhrases()) {
+                if (option.getSection().equals(key)) {
+                    list.add(item);
+                    break;
                 } else
-                    s = s + list.get(r).getDescription(); //English
+                    break;
             }
+        }
+
+        for (Item item : list) {
+            s = s + " (" + item.getId().trim() + ") ";
+            for (int i = 1; i <= jsmind.meta.number_of_sample; i++)
+                if (list.size() > 0) {
+                    int r = new Random().nextInt(item.getPhrases().size());
+                    if (jsmind.meta.language.equals("English")) {
+                        s = s + item.getPhrases().get(r).getOption().trim() + " "; //Vietnam
+                    } else
+                        s = s + item.getPhrases().get(r).getDescription().trim() + " "; //English
+                }
+            s = s + "\n";
+        }
         return s;
     }
 
@@ -233,7 +228,7 @@ public class GenDocService {
                             found3 = true;
                         }
                         if (!getPart(x, 1).isEmpty()) {  //Co part 2
-                            r.isHighlighted();
+                            r.isHighlighted(true);
                         }
                         r.setText(txt, k);
                     }
