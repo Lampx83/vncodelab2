@@ -117,7 +117,7 @@ function enterRoom(user) {
     //Ghi log vao firestore
     firebase.firestore().collection("rooms").doc(getRoomID()).collection("logs").doc(currentUser.uid).set({
         lastEnter: firebase.firestore.FieldValue.serverTimestamp(),
-        userName: user.displayName,
+        userName: getUserName(),
         email: user.email
     }, {merge: true});
 
@@ -131,12 +131,12 @@ function enterRoom(user) {
         ref.get().then((doc) => {
             if (doc.exists) {
                 let obj = doc.data();
-                if (obj.choice != null) { //Cau hoi trac nghiem
+                if (obj.choice != null) { //Cau hoi trac nghiem Quiz
                     $(this).find(".form-check-input").eq(obj.choice).prop("checked", true);
-
-
                 } else if (obj.content != null) {  //Cau hoi dai
                     text_area.val(decodeHtml(obj.content))
+                    text_area.next().addClass("btn-success")
+                    text_area.next().removeClass("btn-danger")
                 } else if (obj.fileNames != null) {  //File da nop
                     let url = "";
                     for (let i = 0; i < obj.fileNames.length; i++) {
@@ -145,12 +145,14 @@ function enterRoom(user) {
                     $(".msg").html("<p></p><b>File đã nộp</b>: <br>" + url);
                 }
             }
+            text_area.next().removeClass("d-none")
         });
     });
 
     //$('.steps ol li').shuffle();
     //   $('#steps google-codelab-step').shuffle();
 }
+
 
 function decodeHtml(html) {
     var txt = document.createElement("textarea");
@@ -230,7 +232,6 @@ function realtime(user) {
     $('#drawer').show();
     refUsers = firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/users');
     refUsers.on('value', (snapshot) => {  //Khi có bất kỳ sự thay đổi trong labs/docID_ABC/room_123/users
-
         const data = snapshot.val();
         let count = []
         let totalUser = 0;
@@ -243,7 +244,6 @@ function realtime(user) {
             count[step].count++;
             count[step].user = count[step].user + data[uid].name + "<br>";
             totalUser++;
-
             if (teacher) {  //For Teacher only
                 $('[id^=' + uid + ']').removeClass("yellow")
                 if (data[uid].isRaise) {
@@ -313,7 +313,7 @@ function realtime(user) {
 
     let leave_notify = {
         uid: currentUser.uid,
-        uname: currentUser.displayName,
+        uname: getUserName(),
         time: firebase.database.ServerValue.TIMESTAMP,
         type: TOAST_LEAVE_ROOM
     }
@@ -321,7 +321,7 @@ function realtime(user) {
     firebase.database().ref('/labs/' + currentDocID + '/' + getRoomID() + '/notifies/all').onDisconnect().update(leave_notify);
     let enter_notify = {
         uid: currentUser.uid,
-        uname: currentUser.displayName,
+        uname: getUserName(),
         time: firebase.database.ServerValue.TIMESTAMP,
         type: TOAST_ENTER_ROOM
     }
@@ -335,7 +335,7 @@ function realtime(user) {
     enter[user.uid] = {
         step: curStep,
         time: firebase.database.ServerValue.TIMESTAMP,
-        name: $("#name").text(),
+        name: getUserName(),
         photo: user.photoURL
     };
 
@@ -399,7 +399,7 @@ function sendMessage() {
         let change = {};
         change[refChat.push().key] = {
             uid: currentUser.uid,
-            name: currentUser.displayName,
+            name: getUserName(),
             photo: currentUser.photoURL,
             time: firebase.database.ServerValue.TIMESTAMP,
             message: $('#txtMessage').val()
@@ -433,7 +433,7 @@ function sendNotify(sendTo, message, type) {
     }
     ref.set({
         uid: currentUser.uid,
-        uname: currentUser.displayName,
+        uname: getUserName(),
         message: message,
         time: firebase.database.ServerValue.TIMESTAMP,
         type: type
@@ -503,7 +503,7 @@ function updateStep(step) {  //Up to Realtime database
             change[currentUser.uid] = {
                 step: step,
                 time: firebase.database.ServerValue.TIMESTAMP,
-                name: $("#name").text(),
+                name: getUserName(),
                 photo: currentUser.photoURL
             };
 
@@ -515,7 +515,7 @@ function updateStep(step) {  //Up to Realtime database
         oldStep = step
         oldTime = Math.floor(Date.now() / 1000);
 
-        //Load Submitted
+
     }
 }
 
@@ -626,7 +626,7 @@ function addCopyButtons(clipboard) {
 
 function updateAnswer(survey_id) {
     firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).set({  //Lưu vào array
-        answers: firebase.firestore.FieldValue.arrayUnion(currentUser.uid + " - " + currentUser.displayName)
+        answers: firebase.firestore.FieldValue.arrayUnion(currentUser.uid + " - " + getUserName())
     }, {merge: true})
 }
 
@@ -727,13 +727,13 @@ function modifyLab() {
     $('label.form-check-label:contains("Code"),label.form-check-label:contains("Mã nguồn")').closest(".survey-question-options").replaceWith("" +
         "<div class='container-code'>" +
         "    <textarea rows='10' class='textarea-code'></textarea>       " +
-        "    <a href='#' class='btn btn-success btn-upload-code btn-right-corner'>Lưu</a>" +
+        "    <a href='#' class='btn btn-danger d-none btn-upload-code btn-right-corner'>Lưu</a>" +
         "</div><div class='user-answer-code'></div>")
 
     $('label.form-check-label:contains("Text"),label.form-check-label:contains("Văn bản")').closest(".survey-question-options").replaceWith("" +
         "<div class='container-code'>" +
         "    <textarea rows='10' class='textarea-text'></textarea>       " +
-        "    <a href='#' class='btn btn-success btn-upload-code btn-right-corner'>Lưu</a>" +
+        "    <a href='#' class='btn btn-danger d-none btn-upload-code btn-right-corner'>Lưu</a>" +
         "</div></div><div class='user-answer-code'></div>")
 
 
@@ -741,7 +741,7 @@ function modifyLab() {
         "<div class='container-code'>" +
         "    <form method='post' enctype='multipart/form-data'>" +
         "       <input type='file' name='files' multiple>       " +
-        "       <a href='#' class='btn btn-success btn_upload_file btn-right-corner'>Lưu</a>" +
+        "       <a href='#' class='btn btn-danger btn_upload_file btn-right-corner'>Lưu</a>" +
         "       <div class='msg flex-grow-1'></div>" +
         "   </form>" +
         "</div><div class='user-answer-file'></div>")
@@ -773,7 +773,7 @@ function modifyLab() {
         let survey_id = $(me).closest("google-codelab-survey").attr('survey-id')
         let choice = $(me).closest(".survey-question-options").find(".form-check-input").index($(me));
         firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").doc(currentUser.uid).set({
-            uname: currentUser.displayName,
+            uname: getUserName(),
             time: firebase.firestore.FieldValue.serverTimestamp(),
             choice: choice
         })
@@ -788,22 +788,23 @@ function modifyLab() {
         $(me).addClass("d-none")
         let survey_id = $(me).closest("google-codelab-survey").attr('survey-id')
         let content = $(me).closest("google-codelab-survey").find("textarea").val()
+
         firebase.firestore().collection("rooms").doc(getRoomID()).collection("surveys").doc(survey_id).collection("answers").doc(currentUser.uid).set({
-            uname: currentUser.displayName,
+            uname: getUserName(),
             time: firebase.firestore.FieldValue.serverTimestamp(),
-            content: $('<textarea/>').text(content).html()
+            content: content
         }).then(function () {
             $(me).removeClass("d-none")
+            $(me).removeClass("btn-danger")
+            $(me).addClass("btn-success")
         })
 
         updateAnswer(survey_id)
-
         return true;
     })
 
     $(".btn_upload_file").on('click', function (ev) {  //Upload file
         let me = $(ev.currentTarget);
-
         $(me).addClass("d-none")
         let survey_id = $(me).closest("google-codelab-survey").attr('survey-id')
         let form = me.closest("form")
@@ -813,7 +814,7 @@ function modifyLab() {
         $(".btn_upload").addClass("d-none");
         let formData = new FormData(form[0]);
         formData.append("userID", currentUser.uid);
-        formData.append("uname", currentUser.displayName);
+        formData.append("uname", getUserName());
         formData.append("survey_id", survey_id);
         formData.append("room", getRoomID());
 
@@ -948,7 +949,7 @@ $(function () {
                 let s = "";
                 if (obj.lastAction != null)
                     s = s + "<td class='font14'>" + time_ago(obj.lastAction.toDate()) + "</td>";
-                else
+                else if (obj.lastEnter != null)
                     s = s + "<td class='font14'>" + time_ago(obj.lastEnter.toDate()) + "</td>";
                 let step = "";
                 for (let i = 0; i < getNumberOfSteps(); i++) {
@@ -978,43 +979,73 @@ $(function () {
 
     $("#practice-tab").click(function (ev) {
         $("#tbody-report-practice").html("")
+        t.clear().draw();
         $(".spinner-border").removeClass("d-none");
-
 
         firebase.firestore().collection("rooms").doc(getRoomID()).collection("logs").onSnapshot((snapshot) => {
             snapshot.docChanges().forEach((change) => {
-
                 let doc = change.doc
                 let obj = change.doc.data()
-
                 let s = "";
                 if (obj.lastAction != null)
                     s = s + "<td class='font14'>" + time_ago(obj.lastAction.toDate()) + "</td>";
                 else
                     s = s + "<td class='font14'>" + time_ago(obj.lastEnter.toDate()) + "</td>";
                 let step = "";
+                // for (let i = 0; i < getNumberOfSteps(); i++) {
+                //     if (obj["s" + i] != null) {
+                //         if (obj["s" + i] > 20 * 60) {  //20 min
+                //             step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize3' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><br><span class='report-detail d-none'>" + obj["s" + i] + "s</span></td>";
+                //         } else if (obj["s" + i] > 10 * 60) {  //10min
+                //             step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize2' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><br><span class='report-detail d-none'>" + obj["s" + i] + "s</span></td>";
+                //         } else if (obj["s" + i] > 5 * 60) {  //5 min
+                //             step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize1' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><br><span class='report-detail d-none'>" + obj["s" + i] + "s</span></td>";
+                //         } else if (obj["s" + i] > 0) {  //15 sec
+                //             step = step + "<td class='tdcenter'><span class ='labStep blue' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><br><span class='report-detail d-none'>" + obj["s" + i] + "s</span></td>";
+                //         }
+                //     } else {
+                //         step = step + "<td class='tdcenter'><span class ='labStep' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><br><span class='report-detail d-none'>0s</span></td>";
+                //     }
+                // }
+                let totalTime = 0;
                 for (let i = 0; i < getNumberOfSteps(); i++) {
-                    if (obj["s" + i] != null) {
-                        if (obj["s" + i] > 20 * 60) {  //20 min
-                            step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize3' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><br><span class='report-detail d-none'>" + obj["s" + i] + "s</span></td>";
-                        } else if (obj["s" + i] > 10 * 60) {  //10min
-                            step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize2' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><br><span class='report-detail d-none'>" + obj["s" + i] + "s</span></td>";
-                        } else if (obj["s" + i] > 5 * 60) {  //5 min
-                            step = step + "<td class='tdcenter'><span class ='labStep blue labStepSize1' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><br><span class='report-detail d-none'>" + obj["s" + i] + "s</span></td>";
-                        } else if (obj["s" + i] > 0) {  //15 sec
-                            step = step + "<td class='tdcenter'><span class ='labStep blue' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><br><span class='report-detail d-none'>" + obj["s" + i] + "s</span></td>";
+                    let time = obj["s" + i]
+
+                    if (time) {
+                        totalTime = totalTime + time;
+                        if (time > 20 * 60) {  //20 min
+                            step = step + "<span class ='labStep labStepColor4' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + time + "s" + "</span> ";
+                        } else if (time > 10 * 60) {  //10min
+                            step = step + "<span class ='labStep labStepColor3' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + time + "s" + "</span> ";
+                        } else if (time > 5 * 60) {  //5 min
+                            step = step + "<span class ='labStep labStepColor2' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + time + "s" + "</span> ";
+                        } else if (time > 0) {  //15 sec
+                            step = step + "<span class ='labStep labStepColor1' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>" + time + "s" + "</span> ";
                         }
                     } else {
-                        step = step + "<td class='tdcenter'><span class ='labStep' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><br><span class='report-detail d-none'>0s</span></td>";
+                        step = step + "<span class ='labStep' id=" + doc.id + "_" + i + ">" + (i + 1) + "</span><span class='report-detail d-none'>0s</span> ";
                     }
                 }
-                s = s + step;
-                let tdThreeDots = "<td class='text-right align-middle'><a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + doc.id + "\")'>Xóa</a> </div></td>";
+                //s = s + step;
+                let tdThreeDots = totalTime + "<a href='#' class='bi bi-three-dots-vertical' data-bs-toggle='dropdown'></a> <div class='dropdown-menu'><a class='dropdown-item' href='#' onclick='deleteUserReport(\"" + doc.id + "\")'>Xóa</a> </div>";
 
-                let stInfo = "<td class='user-name font14'>" + obj.userName + " <span class='report-detail d-none'><br>" + obj.email + "</span></td>" + s + tdThreeDots;
+                let stInfo = "<span class='user-name font14'>" + obj.userName + " <span class='report-detail d-none'><br>" + obj.email + "</span></span>" + s + tdThreeDots;
 
                 if (change.type === "added") {  //Thêm
-                    $("#tbody-report-practice").append("<tr  id='tr-report-" + doc.id + "'>" + stInfo + "</tr>")
+                    //   $("#tbody-report-practice").append("<tr  id='tr-report-" + doc.id + "'>" + stInfo + "</tr>")
+                    var firstName = obj.userName.split(' ').slice(0, -1).join(' ');
+                    var lastName = obj.userName.split(' ').slice(-1).join(' ');
+                    t.row.add([
+                        firstName,
+                        lastName,
+                        obj.email,
+                        s,
+                        step,
+                        tdThreeDots
+
+                    ]).draw(false);
+                    t.columns.adjust().draw();
+
                 }
                 if (change.type === "modified") {  //Sửa
                     $('#tr-report-' + doc.id).empty()  //Xóa bài đã làm
@@ -1022,6 +1053,8 @@ $(function () {
                 }
 
                 $("#table-report-practice").removeClass("d-none");
+
+
             });
             if ($('#switch-showdetail').is(':checked')) {
                 $(".report-detail").removeClass("d-none")
@@ -1125,7 +1158,18 @@ $(function () {
         showWheel(true)
     });
 
+    t = $('#example').DataTable({
+        "columnDefs": [
+            {"width": "40%", "targets": 4},
+            {"className": "dt-center", "targets": "_all"},
+
+        ],
+        "pageLength": 100
+    });
+
 
 });
+var t;
+
 
 

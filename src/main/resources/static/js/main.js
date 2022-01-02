@@ -34,32 +34,75 @@ var uiConfig = {
     },
 };
 
+let edit_name_mode = false;
+
+function editName() {
+    if (edit_name_mode === false) {
+        $("#name-edit").removeClass("d-none");
+        $("#name-current").addClass("d-none");
+        $("#name-button").text("Lưu tên");
+        $("#name-edit").val($("#name-current").text())
+        edit_name_mode = true
+    } else {
+        let newName = $("#name-edit").val();
+        currentUser.newName = newName;
+        $("#name-button").addClass("d-none");
+        firebase.firestore().collection("users").doc(currentUser.uid).set({
+            displayName: currentUser.displayName,
+            photoURL: currentUser.photoURL,
+            email: currentUser.email,
+            phoneNumber: currentUser.phoneNumber,
+            newName: newName
+        }).then(function () {
+            $("#name-current").removeClass("d-none");
+            $("#name-edit").addClass("d-none");
+            $("#name-button").text("Sửa tên");
+            $("#name-current").text(newName)
+            $("#name-button").removeClass("d-none");
+            edit_name_mode = false
+        });
+
+    }
+}
+
+
 function afterLogin(user) {
     $(".user").removeClass("d-none")
     $(".guest").addClass("d-none")
     $('#loginModal').modal('hide')
-    $("#name").text(user.displayName);
+    $("#name").html("<span id='name-current' class='align-self-center  fs-5'>...</span><input id='name-edit' class='d-none'/><a id='name-button' class='ms-2 d-none' href='#' onclick='editName()'>Sửa tên</a>");
     $("#email").text(user.email);
     $("#phone").text(user.phoneNumber);
-
     if (user.photoURL) {
         $(".avatar").attr("src", user.photoURL);
     } else {
         $(".avatar").attr("src", "/images/user.svg");
     }
 
-    $('#profileName').text(user.displayName)
-    $('#profileEmail').text(user.email)
-    if (hashCode(user.email) == "-448897477") {
-        $(".lpx").removeClass("d-none")
-    }
-    if (page === "lab") {
-        if (window.location.pathname.startsWith("/lab"))
-            enterLab(user);
-        if (window.location.pathname.startsWith("/room") || window.location.pathname.endsWith("lab.html"))
-            enterRoom(user);
-    } else if (page === "mylabs")
-        loadLabs(user);
+    firebase.firestore().collection("users").doc(currentUser.uid).get().then(doc => {
+        let obj = doc.data();
+        if (obj && obj.newName) {
+            $("#name-current").text(obj.newName)
+            currentUser.newName = obj.newName
+        } else
+            $("#name-current").text(user.displayName)
+        $("#name-button").removeClass("d-none");
+
+
+        //Tai thong tin xong thi moi cho vao phong
+        $('#profileName').text(user.displayName)
+        $('#profileEmail').text(user.email)
+        if (hashCode(user.email) == "-448897477") {
+            $(".lpx").removeClass("d-none")
+        }
+        if (page === "lab") {
+            if (window.location.pathname.startsWith("/lab"))
+                enterLab(user);
+            if (window.location.pathname.startsWith("/room") || window.location.pathname.endsWith("lab.html"))
+                enterRoom(user);
+        } else if (page === "mylabs")
+            loadLabs(user);
+    })
 
 
 }
@@ -405,12 +448,12 @@ function presence(user) {
     let isOfflineForDatabase = {
         state: 'offline',
         last_changed: firebase.database.ServerValue.TIMESTAMP,
-        uname: user.displayName
+        uname: getUserName()
     };
     let isOnlineForDatabase = {
         state: 'online',
         last_changed: firebase.database.ServerValue.TIMESTAMP,
-        uname: user.displayName
+        uname: getUserName()
     };
     firebase.database().ref('.info/connected').on('value', function (snapshot) {
         if (snapshot.val() == false)
@@ -419,6 +462,13 @@ function presence(user) {
             userStatusDatabaseRef.set(isOnlineForDatabase);
         });
     });
+}
+
+function getUserName() {
+    if (currentUser.newName)
+        return currentUser.newName;
+    else
+        return currentUser.displayName;
 }
 
 function makeid(length) {
@@ -447,11 +497,7 @@ var TimeAgo = (function () {
         hour: 'about an hour',
         hours: 'about %d hours',
         day: 'a day',
-        days: '%d days',
-        month: 'about a month',
-        months: '%d months',
-        year: 'about a year',
-        years: '%d years'
+        days: '%d days'
     };
 
     self.inWords = function (timeAgo) {
@@ -460,8 +506,6 @@ var TimeAgo = (function () {
             words = this.locales.prefix + separator,
             interval = 0,
             intervals = {
-                year: seconds / 31536000,
-                month: seconds / 2592000,
                 day: seconds / 86400,
                 hour: seconds / 3600,
                 minute: seconds / 60

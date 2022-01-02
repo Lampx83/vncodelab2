@@ -33,12 +33,16 @@
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css"/>
+
+
+    <link href="../static/css/dataTables.bootstrap5.min.css" th:href="@{/css/dataTables.bootstrap5.min.css}" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <link href="../static/css/login-register.css" th:href="@{/css/login-register.css}" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link href="../static/css/chat.css" th:href="@{/css/chat.css}" rel="stylesheet"/>
     <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet"/>
+
     <link href="../static/css/hightlight-default.min.css" th:href="@{/css/hightlight-default.min.css}" rel="stylesheet"/>
 
 </head>
@@ -99,7 +103,7 @@
 
         <div class="btn-group  d-none teacher">
 
-            <button type="button"  class="btn btn-success dropdown-toggle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 <?xml version="1.0" encoding="iso-8859-1"?>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" fill="#ffffff">
                     <path d="M0,0h142.4v142.4H0V0z"/>
@@ -175,9 +179,9 @@
                                 <img th:src="@{/images/user.svg}" src="../../images/user.svg" width="110px" height="110px" class="avatar rounded-circle">
                             </div>
                             <div class="flex-grow-1  d-flex flex-column align-self-center me-4">
-                                <div id="name" class="align-self-center text-primary fs-5">Name</div>
-                                <div id="email" class="align-self-center ">Email</div>
+                                <div id="email" class="align-self-center">Email</div>
                                 <div id="phone">Phone</div>
+                                <div id="name" class="align-self-center">Name</div>
                             </div>
                         </div>
                     </div>
@@ -293,12 +297,21 @@
                         <div class="d-flex justify-content-center">
                             <div class="spinner-border" role="status" id="practice-spinner"></div>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table table-borderless d-none" id="table-report-practice">
-                                <tbody id="tbody-report-practice">
-                                </tbody>
-                            </table>
-                        </div>
+                        <table id="example" class="table table-striped" style="width:100%; font-size:0.8em">
+                            <thead>
+                            <tr>
+                                <th>Họ đệm</th>
+                                <th>Tên</th>
+                                <th>Email</th>
+                                <th>Truy cập</th>
+                                <th>Bước thực hành</th>
+                                <th>Tổng thời gian</th>
+                            </tr>
+                            <tbody id="tbody-report-practice">
+                            </tbody>
+                            </thead>
+                        </table>
+
                     </div>
 
                     <div class="tab-pane  show  pt-3" id="home" role="tabpanel" aria-labelledby="raisehand-tab">
@@ -432,6 +445,11 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 <script type="text/javascript" src="../static/js/wheel.js" th:src="@{/js/wheel.js}"></script>
+
+
+<script type="text/javascript" src="../static/js/jquery.dataTables.min.js" th:src="@{/js/jquery.dataTables.min.js}"></script>
+<script type="text/javascript" src="../static/js/dataTables.bootstrap5.min.js" th:src="@{/js/dataTables.bootstrap5.min.js}"></script>
+
 <script type="text/javascript" src="../static/js/ei.js" th:src="@{/js/ei.js}"></script>
 <script type="text/javascript" src="../static/js/main.js" th:src="@{/js/main.js}"></script>
 
