@@ -1,0 +1,79 @@
+{
+  "draw": 0,
+  "recordsTotal": 57,
+  "recordsFiltered": 57,
+  "data": [
+    [
+      "Tiger",
+      "Nixon",
+      "System Architect",
+      "Edinburgh",
+      "25th Apr 11",
+      "$320,800"
+    ],
+    [
+      "Garrett",
+      "Winters",
+      "Accountant",
+      "Tokyo",
+      "25th Jul 11",
+      "$170,750"
+    ],
+    [
+      "Ashton",
+      "Cox",
+      "Junior Technical Author",
+      "San Francisco",
+      "12th Jan 09",
+      "$86,000"
+    ],
+    [
+      "Cedric",
+      "Kelly",
+      "Senior Javascript Developer",
+      "Edinburgh",
+      "29th Mar 12",
+      "$433,060"
+    ],
+    [
+      "Airi",
+      "Satou",
+      "Accountant",
+      "Tokyo",
+      "28th Nov 08",
+      "$162,700"
+    ],
+    [
+      "Brielle",
+      "Williamson",
+      "Integration Specialist",
+      "New York",
+      "2nd Dec 12",
+      "$372,000"
+    ],
+    [
+      "Herrod",
+      "Chandler",
+      "Sales Assistant",
+      "San Francisco",
+      "6th Aug 12",
+      "$137,500"
+    ],
+    [
+      "Rhona",
+      "Davidson",
+      "Integration Specialist",
+      "Tokyo",
+      "14th Oct 10",
+      "$327,900"
+    ],
+    [
+      "Colleen",
+      "Hurst",
+      "Javascript Developer",
+      "San Francisco",
+      "15th Sep 09",
+      "$205,500"
+    ]
+  ]
+}
