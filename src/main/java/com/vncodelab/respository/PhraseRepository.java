@@ -1,12 +1,17 @@
 package com.vncodelab.respository;
 
 import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 import com.vncodelab.entity.ischolar.Item;
+import com.vncodelab.model.ischolar.JournalList;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 @Repository
 public class PhraseRepository extends AbsRepository {
@@ -26,6 +31,27 @@ public class PhraseRepository extends AbsRepository {
         ArrayList<Item> list = new ArrayList<>();
         result.forEach(list::add);
         return list;
+    }
+
+
+    public JournalList getJournal(int draw, int start, int length) {
+        JournalList journalList = new JournalList();
+        journalList.setDraw(draw);
+        journalList.setRecordsFiltered(59300);
+        journalList.setRecordsTotal(59300);
+
+        Bson filter = new Document();
+        MongoCollection<Document> collection = getDB().getCollection("scopus_journal");
+        FindIterable<Document> result = collection.find(filter).skip(start).limit(length);
+        result.forEach(document -> {
+            ArrayList item = new ArrayList();
+            item.add(document.getString("Title"));
+            item.add(document.getString("SJR"));
+            journalList.getData().add(item);
+        });
+
+
+        return journalList;
     }
 
 //    public Row getSectionByID(String sectionsName) {
