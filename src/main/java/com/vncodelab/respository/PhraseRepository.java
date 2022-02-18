@@ -40,7 +40,7 @@ public class PhraseRepository extends AbsRepository {
 
     public JournalList getJournal(DataTableRequest dr, String type) {
 
-        String[] cols = {"Title", "Scopus Sub-Subject Area", "CiteScore 2020", "Publisher", "E-ISSN", "Open Access", "Percent Cited", "Percentile", "Quartile", "RANK", "Rank Out Of", "SJR", "SNIP", "Scholarly Output", "Scopus ASJC Code (Sub-subject Area)", "Scopus Source ID", "Top 10% (CiteScore Percentile)", "URL Scopus Source ID", "Homepage", "Contact", "How_to_publish"};
+        String[] cols = {"Quartile", "Title", "Scopus Sub-Subject Area", "Publisher", "CiteScore 2020", "E-ISSN", "Open Access", "Percent Cited", "Percentile", "RANK", "SJR", "SNIP", "Scholarly Output", "Scopus ASJC Code (Sub-subject Area)", "Scopus Source ID", "Top 10% (CiteScore Percentile)", "URL Scopus Source ID", "Homepage", "Contact", "How_to_publish"};
         JournalList journalList = new JournalList();
         journalList.setDraw(dr.getDraw());
 
@@ -55,10 +55,12 @@ public class PhraseRepository extends AbsRepository {
                 }
             }
         }
-        filter.append("Type", type);
+
 
         MongoCollection<Document> collection = getDB().getCollection("scopus_journal");
         long nor = collection.countDocuments(filter);
+        if (nor > 9999)
+            nor = 9999;
         journalList.setRecordsFiltered(nor);
         journalList.setRecordsTotal(nor);
 
