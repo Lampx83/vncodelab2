@@ -2,6 +2,7 @@ package com.vncodelab.controller;
 
 import com.vncodelab.entity.ischolar.Item;
 import com.vncodelab.json.ischolar.Jsmind;
+import com.vncodelab.model.ischolar.DataTableRequest;
 import com.vncodelab.model.ischolar.JournalList;
 import com.vncodelab.respository.PhraseRepository;
 import com.vncodelab.service.ischolar.GenDocService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @RestController
 @CrossOrigin
@@ -47,15 +49,11 @@ public class IScholarController {
 
     @RequestMapping(
             value = "/test",
-            method = RequestMethod.GET,
+            method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    JournalList journal(@RequestParam(value = "draw", defaultValue = "0") int draw,
-                @RequestParam(value = "start", defaultValue = "0") int start,
-               @RequestParam(value = "length", defaultValue = "10") int length
-    ) {
-
-        return phraseRepository.getJournal(draw,start,length);
+    JournalList journal(@RequestBody DataTableRequest datatableRequest, @RequestParam("c") String c) {
+        return phraseRepository.getJournal(datatableRequest,c);
     }
 
 

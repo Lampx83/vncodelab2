@@ -8,7 +8,7 @@ import java.util.ArrayList;
 @Data
 public class JournalList {
     int draw;
-    int recordsTotal;
-    int recordsFiltered;
+    long recordsTotal;
+    long recordsFiltered;
     ArrayList<ArrayList<String>> data = new ArrayList<>();
 }
