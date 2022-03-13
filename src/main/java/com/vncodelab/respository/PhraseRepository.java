@@ -98,14 +98,22 @@ public class PhraseRepository extends AbsRepository {
 
     public ArrayList<Item> getSectionByID(String sectionsName) {
 
-        AggregateIterable<Item> result = getDB().getCollection("phrase", Item.class).aggregate(Arrays.asList(
-                new Document("$match", new Document("section", sectionsName)),
-                new Document("$group",
-                        new Document("_id", "$item")
-                                .append("phrases",
-                                        new Document("$push",
-                                                new Document("option", "$option")
-                                                        .append("description", "$description"))))));
+        AggregateIterable<Item> result = getDB().getCollection("phrase", Item.class).aggregate(
+
+                Arrays.asList(new Document("$match",
+                                new Document("section", sectionsName)),
+                        new Document("$group",
+                                new Document("_id", "$item")
+                                        .append("phrases",
+                                                new Document("$push",
+                                                        new Document("option", "$option")
+                                                                .append("description", "$description")))
+                                        .append("order",
+                                                new Document("$sum", "$item_id"))),
+                        new Document("$sort",
+                                new Document("order", 1L))));
+
+
         ArrayList<Item> list = new ArrayList<>();
         result.forEach(list::add);
         return list;
