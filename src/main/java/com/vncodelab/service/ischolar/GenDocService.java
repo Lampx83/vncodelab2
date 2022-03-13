@@ -32,7 +32,7 @@ public class GenDocService {
         try {
             String template = "/Docx/Paper.docx";
             if (jsmind.docType == 1) {
-                template = "/Docx/Report.docx";
+                template = "/Docx/Paper.docx";
             } else if (jsmind.docType == 2) {
                 template = "/Docx/Đề án.docx";
             }
