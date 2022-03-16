@@ -7,6 +7,10 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
@@ -15,9 +19,14 @@ public abstract class AbsRepository {
 
     MongoDatabase getDB() {
         if (db == null) {
-          //     ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017");
-          //  ConnectionString connectionString = new ConnectionString("mongodb+srv://root:root@cluster0.lh5rj.mongodb.net"); //Lampx
-            ConnectionString connectionString = new ConnectionString("mongodb+srv://nckh:nckh@buithithom.j0du0.mongodb.net"); //NCKHSV
+            String host = "localhost";
+            ConnectionString connectionString;
+            if (host.equals("localhost"))
+                connectionString = new ConnectionString("mongodb://localhost:27017");
+            else
+                connectionString = new ConnectionString("mongodb+srv://nckh:nckh@buithithom.j0du0.mongodb.net"); //NCKHSV
+
+            //  ConnectionString connectionString = new ConnectionString("mongodb+srv://root:root@cluster0.lh5rj.mongodb.net"); //Lampx
             MongoClientSettings settings = MongoClientSettings.builder()
                     .applyConnectionString(connectionString)
                     .codecRegistry(fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), fromProviders(PojoCodecProvider.builder().automatic(true).build())))

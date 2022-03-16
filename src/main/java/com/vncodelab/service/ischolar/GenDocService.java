@@ -9,7 +9,6 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,15 +41,16 @@ public class GenDocService {
             Map<String, String> phList = new HashMap<>();
             //  Research research = new Research();
 
-            phList.put("organization", jsmind.meta.author_affiliation);
+
             phList.put("type", jsmind.docType + "");
             phList.put("title", jsmind.meta.title);
             phList.put("student", jsmind.meta.student_name);
             phList.put("teacher", jsmind.meta.teacher_name);
 
-            phList.put("author", jsmind.meta.author_name);
-            phList.put("email", jsmind.meta.author_email);
-            phList.put("affiliation", jsmind.meta.author_affiliation);
+//            phList.put("organization", jsmind.meta.author_affiliation);
+            phList.put("author", jsmind.meta.getListAuthorName());
+            phList.put("email", jsmind.meta.getListAuthorEmail());
+            phList.put("affiliation", jsmind.meta.getListAuthorAffiliation());
 
             phantach(phList, "literature", jsmind.data.getChild("Literature"));
             phantach(phList, "method", jsmind.data.getChild("Methodology"));
@@ -135,8 +135,12 @@ public class GenDocService {
                     int r = new Random().nextInt(item.getPhrases().size());
                     if (jsmind.meta.language.equals("English")) {
                         s = s + item.getPhrases().get(r).getOption().trim() + " "; //Vietnam
-                    } else
-                        s = s + item.getPhrases().get(r).getDescription().trim() + " "; //English
+                    } else {
+                        if (item.getPhrases().get(r).getDescription() != null) {
+                            s = s + item.getPhrases().get(r).getDescription().trim() + " "; //English
+                        }
+
+                    }
                 }
             s = s + "\n";
         }
