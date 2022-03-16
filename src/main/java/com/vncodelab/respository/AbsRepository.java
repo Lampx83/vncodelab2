@@ -21,9 +21,9 @@ public abstract class AbsRepository {
         if (db == null) {
             String host = "localhost";
             ConnectionString connectionString;
-            if (host.equals("localhost"))
-                connectionString = new ConnectionString("mongodb://localhost:27017");
-            else
+//            if (host.equals("localhost"))
+//                connectionString = new ConnectionString("mongodb://localhost:27017");
+//            else
                 connectionString = new ConnectionString("mongodb+srv://nckh:nckh@buithithom.j0du0.mongodb.net"); //NCKHSV
 
             //  ConnectionString connectionString = new ConnectionString("mongodb+srv://root:root@cluster0.lh5rj.mongodb.net"); //Lampx
