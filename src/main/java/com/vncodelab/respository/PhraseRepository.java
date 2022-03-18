@@ -11,7 +11,6 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.springframework.stereotype.Repository;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -97,18 +96,21 @@ public class PhraseRepository extends AbsRepository {
 //    }
 
 
-    public ArrayList<Item> getSectionByID(String sectionsName) {
+    public ArrayList<Item> getSectionByID(String sectionsName, String lang) {
+        String option = "$option";
+        if (lang.equals("vn"))
+            option = "$description";
 
         AggregateIterable<Item> result = getDB().getCollection("phrase", Item.class).aggregate(
-
                 Arrays.asList(new Document("$match",
                                 new Document("section", sectionsName)),
                         new Document("$group",
                                 new Document("_id", "$item")
                                         .append("phrases",
                                                 new Document("$push",
-                                                        new Document("option", "$option")
-                                                                .append("description", "$description")))
+                                                        new Document("option", option)))
+                                        //              new Document("option", "$option").append("description", "$description")))
+
                                         .append("order",
                                                 new Document("$sum", "$item_id"))),
                         new Document("$sort",

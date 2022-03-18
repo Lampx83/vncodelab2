@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -155,6 +156,26 @@ public class VncodelabController {
     String getHost(HttpServletRequest request) throws MalformedURLException {
         URL url = new URL(request.getRequestURL().toString());
         return url.getHost();
+    }
+    @GetMapping(path = "/post/{docID}")
+    public String post(Model model, @PathVariable(name = "docID") String docID)  {
+        String url = "https://docs.google.com/feeds/download/documents/export/Export?id="+docID+"&exportFormat=html";
+        StringBuilder textBuilder = new StringBuilder();
+        try {
+            InputStream inputStream = new URL(url).openStream();
+
+            try (Reader reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName(StandardCharsets.UTF_8.name())))) {
+                int c = 0;
+                while ((c = reader.read()) != -1) {
+                    textBuilder.append((char) c);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        model.addAttribute("content", textBuilder.toString());
+        return "post";
     }
 
     @PostMapping("/createLab")

@@ -35,8 +35,8 @@ public class IScholarController {
     //https://localhost//api/v1/phrases?sectionID=Abstract
     @GetMapping(value = "/phrases")
     @ResponseBody
-    public ArrayList<Item> getPhrasesBySectionID(@RequestParam("sectionID") String sectionID) {
-        return phraseRepository.getSectionByID(sectionID);
+    public ArrayList<Item> getPhrasesBySectionID(@RequestParam("sectionID") String sectionID, @RequestParam("lang") String lang) {
+        return phraseRepository.getSectionByID(sectionID,lang);
     }
 
 
