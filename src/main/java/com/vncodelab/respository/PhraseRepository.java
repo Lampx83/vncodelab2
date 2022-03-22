@@ -28,6 +28,7 @@ public class PhraseRepository extends AbsRepository {
                                                 new Document("option", "$option")
                                                         .append("description", "$description")
                                                         .append("section", "$section")
+                                                        .append("item_vi", "$item_vi")
                                         )
                                 )
                 )
@@ -98,14 +99,17 @@ public class PhraseRepository extends AbsRepository {
 
     public ArrayList<Item> getSectionByID(String sectionsName, String lang) {
         String option = "$option";
-        if (lang.equals("vn"))
+        String item = "$item";
+        if (lang.equals("vn")) {
             option = "$description";
+            item = "$item_vi";
+        }
 
         AggregateIterable<Item> result = getDB().getCollection("phrase", Item.class).aggregate(
                 Arrays.asList(new Document("$match",
                                 new Document("section", sectionsName)),
                         new Document("$group",
-                                new Document("_id", "$item")
+                                new Document("_id", item)
                                         .append("phrases",
                                                 new Document("$push",
                                                         new Document("option", option)))

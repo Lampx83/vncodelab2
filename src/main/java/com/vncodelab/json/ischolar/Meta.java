@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 
 public class Meta {
     public String id;
-    public String title;
+    public Integer docType = 0;
+    public String researchtitle;
     public String teacher_name;
-    public String student_name;
     public ArrayList<Author> authors;
     public String version;
 

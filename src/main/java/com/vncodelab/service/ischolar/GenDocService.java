@@ -4,6 +4,7 @@ import com.vncodelab.entity.ischolar.Item;
 import com.vncodelab.entity.ischolar.Option;
 import com.vncodelab.json.ischolar.Jsmind;
 import com.vncodelab.respository.PhraseRepository;
+import org.apache.poi.xwpf.usermodel.BreakClear;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -30,11 +31,10 @@ public class GenDocService {
     public ResponseEntity<InputStreamResource> genDoc(Jsmind jsmind) {
         try {
             String template = "/Docx/Paper.docx";
-            if (jsmind.docType == 1) {
-                template = "/Docx/Paper.docx";
-            } else if (jsmind.docType == 2) {
+            if (jsmind.meta.docType == 1)
                 template = "/Docx/Đề án.docx";
-            }
+            else if (jsmind.meta.docType == 2)
+                template = "/Docx/Research Report - ThuongMai University.docx";
 
             XWPFDocument doc = new XWPFDocument(GenDocService.class.getResourceAsStream(template)); //Appengine
             //   XWPFDocument doc = new XWPFDocument(new FileInputStream(new File(getClass().getClassLoader().getResource("Paper.docx").getFile()))); //Appengine
@@ -42,9 +42,8 @@ public class GenDocService {
             //  Research research = new Research();
 
 
-            phList.put("type", jsmind.docType + "");
-            phList.put("title", jsmind.meta.title);
-            phList.put("student", jsmind.meta.student_name);
+            phList.put("type", jsmind.meta.docType + "");
+            phList.put("title", jsmind.meta.researchtitle);
             phList.put("teacher", jsmind.meta.teacher_name);
 
 //            phList.put("organization", jsmind.meta.author_affiliation);
@@ -90,7 +89,7 @@ public class GenDocService {
             headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
             headers.add("Pragma", "no-cache");
             headers.add("Expires", "0");
-            String fileName = jsmind.meta.title.trim() + ".docx";
+            String fileName = jsmind.meta.researchtitle.trim() + ".docx";
             headers.add("Content-Disposition", "attachment; filename=" + fileName);
 
             doc.close();
