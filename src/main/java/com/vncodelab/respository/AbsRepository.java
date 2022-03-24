@@ -19,7 +19,7 @@ public abstract class AbsRepository {
 
     MongoDatabase getDB() {
         if (db == null) {
-            String host = "localhost";
+            String host = "localhost1";
             ConnectionString connectionString;
             if (host.equals("localhost"))
                 connectionString = new ConnectionString("mongodb://localhost:27017");
