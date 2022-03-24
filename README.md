@@ -15,6 +15,7 @@ cd vncodelab2
 sudo mvn spring-boot:run
 ss -ltn  => kiểm tra cổng
 $ sudo ufw allow from any to any port 8080 proto tcp  => Mở cổng 8080 nếu cần
+mongod --dbpath /Users/xuanlam/data/db 
 ```
 ps -ef|grep -E "apache|httpd" | grep -v "grep"
 

@@ -27,8 +27,8 @@ public class IScholarController {
     GenDocService genDocService;
 
     @GetMapping("/phrases/all")
-    public Object getAllPhrases() {
-        return phraseRepository.getAllPhrases();
+    public Object getAllPhrases(String lang) {
+        return phraseRepository.getAllPhrases(lang);
     }
 
     //Example

@@ -20,24 +20,6 @@ import static com.mongodb.client.model.Filters.eq;
 @Repository
 public class PhraseRepository extends AbsRepository {
 
-    public ArrayList<Item> getAllPhrases() {  //Items are Sub of Abstract
-        AggregateIterable<Item> result = getDB().getCollection("phrase", Item.class).aggregate(Arrays.asList(
-                new Document("$group",
-                        new Document("_id", "$item")
-                                .append("phrases", new Document("$push",
-                                                new Document("option", "$option")
-                                                        .append("description", "$description")
-                                                        .append("section", "$section")
-                                                        .append("item_vi", "$item_vi")
-                                        )
-                                )
-                )
-        ));
-        ArrayList<Item> list = new ArrayList<>();
-        result.forEach(list::add);
-        return list;
-    }
-
 
     public JournalList getJournal(DataTableRequest dr, String type) {
 
@@ -96,6 +78,35 @@ public class PhraseRepository extends AbsRepository {
 //        return row;
 //    }
 
+    public ArrayList<Item> getAllPhrases(String lang) {  //Items are Sub of Abstract
+        String option = "$option";
+        String item = "$item";
+        if (lang.equals("vn")) {
+            option = "$description";
+            item = "$item_vi";
+        }
+        AggregateIterable<Item> result = getDB().getCollection("phrase", Item.class).aggregate(Arrays.asList(
+                        new Document("$group",
+                                new Document("_id", item)
+                                        .append("phrases",
+                                                new Document("$push",
+                                                        new Document("option", option)
+                                                                .append("section", "$section")
+                                                )
+                                        )
+                                        .append("order",
+                                                new Document("$sum", "$item_id"))),
+                        new Document("$sort",
+                                new Document("order", 1L)
+                        )
+                )
+
+        );
+        ArrayList<Item> list = new ArrayList<>();
+        result.forEach(list::add);
+        return list;
+    }
+
 
     public ArrayList<Item> getSectionByID(String sectionsName, String lang) {
         String option = "$option";
@@ -105,21 +116,22 @@ public class PhraseRepository extends AbsRepository {
             item = "$item_vi";
         }
 
-        AggregateIterable<Item> result = getDB().getCollection("phrase", Item.class).aggregate(
-                Arrays.asList(new Document("$match",
+        AggregateIterable<Item> result = getDB().getCollection("phrase", Item.class).aggregate(Arrays.asList(new Document("$match",
                                 new Document("section", sectionsName)),
                         new Document("$group",
                                 new Document("_id", item)
                                         .append("phrases",
                                                 new Document("$push",
-                                                        new Document("option", option)))
-                                        //              new Document("option", "$option").append("description", "$description")))
-
+                                                        new Document("option", option)
+                                                )
+                                        )
                                         .append("order",
                                                 new Document("$sum", "$item_id"))),
                         new Document("$sort",
-                                new Document("order", 1L))));
-
+                                new Document("order", 1L)
+                        )
+                )
+        );
 
         ArrayList<Item> list = new ArrayList<>();
         result.forEach(list::add);

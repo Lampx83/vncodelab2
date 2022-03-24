@@ -4,7 +4,6 @@ import com.vncodelab.entity.ischolar.Item;
 import com.vncodelab.entity.ischolar.Option;
 import com.vncodelab.json.ischolar.Jsmind;
 import com.vncodelab.respository.PhraseRepository;
-import org.apache.poi.xwpf.usermodel.BreakClear;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
@@ -30,13 +29,15 @@ public class GenDocService {
 
     public ResponseEntity<InputStreamResource> genDoc(Jsmind jsmind) {
         try {
-            String template = "/Docx/Paper.docx";
+            String template = "Paper.docx";
             if (jsmind.meta.docType == 1)
-                template = "/Docx/Đề án.docx";
+                template = "Graduation thesis - National Economics University.docx";
             else if (jsmind.meta.docType == 2)
-                template = "/Docx/Research Report - ThuongMai University.docx";
+                template = "Research Report - ThuongMai University.docx";
+            else if (jsmind.meta.docType == 3)
+                template = "Graduation thesis - National Economics University.docx";
 
-            XWPFDocument doc = new XWPFDocument(GenDocService.class.getResourceAsStream(template)); //Appengine
+            XWPFDocument doc = new XWPFDocument(GenDocService.class.getResourceAsStream("/Docx/" + template)); //Appengine
             //   XWPFDocument doc = new XWPFDocument(new FileInputStream(new File(getClass().getClassLoader().getResource("Paper.docx").getFile()))); //Appengine
             Map<String, String> phList = new HashMap<>();
             //  Research research = new Research();
@@ -57,7 +58,7 @@ public class GenDocService {
 
             //  InputStream is = SectionRepository.class.getResourceAsStream("/A_phrase.json"); //Appengine1
 
-            ArrayList<Item> listPhrases = phraseRepository.getAllPhrases();
+            ArrayList<Item> listPhrases = phraseRepository.getAllPhrases(jsmind.meta.language);
 
             //   AppData appData = new Gson().fromJson(new InputStreamReader(new ClassPathResource("Sections_phrase.json").getInputStream(), "UTF-8"), AppData.class);
             for (XWPFParagraph p : doc.getParagraphs()) {
@@ -111,7 +112,6 @@ public class GenDocService {
         for (int i = 0; i < arr.length; i++) {
             phList.put(authorKey + (i + 1), arr[i].trim());
         }
-
     }
 
     private String lookUp(ArrayList<Item> listPhrases, String key, Jsmind jsmind) {
@@ -126,20 +126,15 @@ public class GenDocService {
                     break;
             }
         }
-
+        if(key.equals("Introduction-1")){
+            System.out.println("a");
+        }
         for (Item item : list) {
             s = s + " (" + item.getId().trim() + ") ";
             for (int i = 1; i <= jsmind.meta.number_of_sample; i++)
                 if (list.size() > 0) {
                     int r = new Random().nextInt(item.getPhrases().size());
-                    if (jsmind.meta.language.equals("English")) {
-                        s = s + item.getPhrases().get(r).getOption().trim() + " "; //Vietnam
-                    } else {
-                        if (item.getPhrases().get(r).getDescription() != null) {
-                            s = s + item.getPhrases().get(r).getDescription().trim() + " "; //English
-                        }
-
-                    }
+                    s = s + item.getPhrases().get(r).getOption().trim() + " ";
                 }
             s = s + "\n";
         }
@@ -149,7 +144,6 @@ public class GenDocService {
     public void buildPH(XWPFParagraph p, Map<String, String> data, ArrayList<Item> listPhrases, Jsmind jsmind) {
         String pText = p.getText(); // complete paragraph as string
         if (pText.contains("${")) { // if paragraph does not include our pattern, ignore
-            TreeMap<Integer, XWPFRun> posRuns = getPosToRuns(p);
             Pattern pat = Pattern.compile("\\$\\{(.+?)\\}");
             Matcher m = pat.matcher(pText);
             while (m.find()) { // for all patterns in the paragraph
