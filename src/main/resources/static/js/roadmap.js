@@ -3,6 +3,148 @@ function getRoadMapID() {
     return arr[arr.length - 1]
 }
 
+function Android() {
+    return [
+        {
+            "text": "Android Studio and Hello World",
+            "lab": [
+                {
+                    "name": "Android Studio and Hello World",
+                    "roomID": "9pEArn"
+                }
+            ]
+        },
+        {
+            "text": "Your first interactive UI",
+            "lab": [
+                {
+                    "name": "Your first interactive UI",
+                    "roomID": "8y1EqS"
+                }
+            ],
+        },
+        {
+            "text": "The layout editor",
+            "lab": [
+                {
+                    "name": "The layout editor",
+                    "roomID": "lTf8NL"
+                }
+            ],
+        },
+        {
+            "text": "Text and scrolling views",
+            "lab": [
+                {
+                    "name": "Learn to help yourself",
+                    "roomID": "F9iCzh"
+                },
+                {
+                    "name": "Text and scrolling views",
+                    "roomID": "S3bFlZ"
+                }
+            ],
+        },
+        {
+            "text": "Activities and intents",
+            "lab": [
+                {
+                    "name": "Activities and intents",
+                    "roomID": "n5uyfM"
+                },
+                {
+                    "name": "Activity lifecycle and state",
+                    "roomID": "BrAxLA"
+                },
+                {
+                    "name": "Implicit intents",
+                    "roomID": "uhveDu"
+                }
+            ],
+        },
+        {
+            "text": "The debugger",
+            "lab": [
+                {
+                    "name": "The debugger",
+                    "roomID": "8tqaa3"
+                },
+                {
+                    "name": "Unit Test",
+                    "roomID": "081lQb"
+                }
+            ],
+        },
+        {
+            "text": "User interaction",
+            "lab": [
+                {
+                    "name": "Clickable images",
+                    "roomID": "f9ttDt"
+                },
+                {
+                    "name": "Input controls",
+                    "roomID": "hHbdGt"
+                },
+                {
+                    "name": "Menus and pickers",
+                    "roomID": "iTPR8k"
+                },
+                {
+                    "name": "User navigation",
+                    "roomID": "elc28s"
+                }
+            ],
+        },
+        {
+            "text": "RecyclerView",
+            "lab": [
+                {
+                    "name": "RecyclerView",
+                    "roomID": "y28gDX"
+                }
+            ],
+        },
+        {
+            "text": "Background Tasks",
+            "lab": [
+                {
+                    "name": "Background Tasks",
+                    "roomID": "hh91Zy"
+                }
+            ],
+        },
+        {
+            "text": "Shared preferences",
+            "lab": [
+                {
+                    "name": "Shared preferences",
+                    "roomID": "EbE5Wk"
+                }
+            ],
+        },
+        {
+            "text": "Room, LiveData, and ViewModel",
+            "lab": [
+                {
+                    "name": "Room, LiveData, and ViewModel",
+                    "roomID": "yDyLvU"
+                }
+            ],
+        },
+        {
+            "text": "Final",
+            "icon": "/images/idea.svg",
+            // "report": [
+            //     {
+            //         "name": "Participant",
+            //         "roomID": "5"
+            //     }
+            // ],
+        }
+    ];
+}
+
 function MongoDB() {
     return [
         {
@@ -1187,7 +1329,10 @@ else if (getRoadMapID() === "4")
     chart.data = JavaCoreNEU2();
 else if (getRoadMapID() === "5")
     chart.data = WebNEU();
+else if (getRoadMapID() === "6")
+    chart.data = Android();
 else
+
     chart.data = tempalate()
 
 
